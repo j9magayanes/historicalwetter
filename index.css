@@ -1,0 +1,118 @@
+
+:root {
+  --clr-white: #ffffff;
+  --clr-black: #000000;
+  --clr-gray: #999999;
+  --clr-gray-light: #e5e5e5;
+  --clr-red: #dd0000;
+  --clr-red-light: #e3acac;
+  --clr-navy: #184482;
+  --clr-navy-light: #80caff;
+
+  --fs-base: 16px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Gotham Condensed Book";
+  color: var(--clr-black);
+}
+
+.card {
+  --max-width: 1000px;
+  --clr-background: var(--clr-gray-light);
+  width: min(var(--max-width), 100vw);
+  background-color: var(--clr-background);
+  font-size: var(--fs-base);
+}
+
+.card-body {
+  --padding-x: 0.75em;
+  --padding-y: 0.75em;
+  --gap: 0.75em;
+  padding: var(--padding-y) var(--padding-x);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.search {
+  --font-size: calc(var(--fs-base) * 2.5);
+  --padding-y: 0;
+  --padding-x: 0.25em;
+  --icon-size: calc(var(--font-size) * 0.75);
+  --input-width: 12ch;
+  display: flex;
+  align-items: stretch;
+}
+
+.search-input {
+  font-size: var(--font-size);
+  line-height: 1;
+  padding: var(--padding-y) var(--padding-x);
+  font-family: "Gotham Condensed Bold";
+  background-color: var(--clr-red);
+  color: var(--clr-white);
+  border: none;
+  width: var(--input-width);
+}
+
+.search-btn {
+  font-size: var(--font-size);
+  line-height: 1;
+  cursor: pointer;
+  padding: var(--padding-y) var(--padding-x);
+  background-color: transparent;
+  color: var(--clr-black);
+  border: none;
+}
+
+.search-btn > svg {
+  display: block;
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
+
+.question {
+  --font-size: calc(var(--fs-base) * 1.75);
+  --max-width: 24ch;
+  font-size: var(--font-size);
+  max-width: var(--max-width);
+  line-height: 1;
+  text-align: center;
+  margin-inline: auto;
+}
+
+.today {
+  --font-size: calc(var(--fs-base) * 1.75);
+  --padding-x: 0.25em;
+  --padding-y: 0.125em;
+  --icon-size: calc(var(--font-size) * 0.5);
+  --gap: 4px;
+  font-size: var(--font-size);
+  padding: var(--padding-y) var(--padding-x);
+  color: var(--clr-white);
+  background-color: var(--clr-red);
+  line-height: 1;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: var(--gap);
+  font-family: "Gotham Condensed Bold";
+  margin-inline: auto;
+}
+
+.today > svg {
+  height: var(--icon-size);
+}
