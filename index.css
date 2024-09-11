@@ -157,3 +157,211 @@ body {
 .today > svg {
   height: var(--icon-size);
 }
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 992px;
+  height: 327px;
+  overflow: auto;
+  justify-items: center;
+  background-color: #fefefe;
+  margin: 0 auto;
+  flex-direction: column;
+}
+
+.modal-items {
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+  justify-items: center;
+  align-items: center;
+}
+
+.modal-title {
+  font-family: 'Gotham Condensed Bold';
+  font-size: 58px;
+  font-weight: 700;
+  line-height: 56.26px;
+  text-align: center;
+  justify-items: center;
+  align-items: center;
+  display: flex;
+}
+
+.modal-input {
+  border: #ced4da 2.56px;
+  width: 734.55px;
+  height: 59px;
+  margin-top: 30px;
+  left: 33px;
+  gap: 9.88px;
+  opacity: 0px;
+  border-style: solid;
+  padding: 14.83px 19.77px 14.83px 19.77px;
+  gap: 4.94px;
+  border-radius: 10.26px;
+  font-family: Gotham XNarrow;
+  background-image: url("./assets/icon.svg") center / contain no-repeat;
+  font-size: 25.32px;
+  font-weight: 400;
+  line-height: 32.92px;
+  text-align: left;
+}
+
+.modal-text {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 48.47px;
+}
+
+.modal-text-close {
+  font-weight: 700;
+  width: 340px;
+  height: 60px;
+  margin-right: 54.55px;
+  line-height: 31.2px;
+  color: var(--clr-gray-dark);
+  background-color: transparent;
+  border: none;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Gotham Narrow Medium';
+  font-size: 28.67px;
+  font-weight: 700;
+  line-height: 34.45px;
+  letter-spacing: 0.03em;
+  text-align: center;
+}
+
+.modal-text-search {
+  align-items: center;
+  justify-content: center;
+  width: 340px;
+  height: 60px;
+  border-radius: 9.99px;
+  opacity: 0px;
+  background-color: #dd0000;
+  border: none;
+  font-family: 'Gotham Narrow Medium';
+  color: #ffffff;
+  font-size: 28.67px;
+  font-weight: 700;
+  line-height: 34.45px;
+  letter-spacing: 0.03em;
+  text-align: center;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.info {
+  display: none;
+  position: fixed;
+  z-index: 4;
+  left: 0;
+  width: 934px;
+  height: 327px;
+  overflow: auto;
+  justify-items: center;
+  background-color: #fefefe;
+  margin-left: 30px;
+  margin-top: 64px;
+  flex-direction: column;
+  border-radius: 20px;
+}
+
+.info-items {
+  display: flex;
+  margin: 50px 60px;
+  flex-direction: column;
+  justify-items: center;
+}
+
+.info-title {
+  font-family: 'Gotham Condensed Bold';
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 56.26px;
+  display: flex;
+}
+
+.info-details {
+  font-size: 21px;
+  line-height: 27.3px;
+  margin-top: 28px;
+  font-family: 'Gotham Narrow Book';
+  font-weight: 900;
+}
+
+.info-btn {
+  background-color: transparent;
+  border: none;
+}
+
+.autocomplete-suggestions {
+  position: absolute;
+  width: 734.55px;
+  height: 200px;
+  border: 1px solid #ccc;
+  border-top: none;
+  background-color: #FFFFFF; /* Black background */
+  color: #495057; /* White text for better contrast */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 1000; /* Ensure it overlays above other content */
+  list-style-type: none;
+  padding: 10px;
+  margin: 150px;
+  display: none; /* Hidden by default */
+}
+
+.option span {
+  padding-left: 10px;
+  margin-bottom: 20px;
+  font-size: 25.32px;
+}
+
+.scroll-left, .scroll-right {
+  width: 24px;
+  height: 24px;
+  background-color: #999999;
+  gap: 0px;
+  opacity: 0px;
+  border: none;
+  border-radius: 50%;
+}
+
+.bottom-legend {
+  width: 104%;
+  display: flex;
+  justify-content: space-between;
+}
+
+#overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  z-index: 4; /* Place it behind the modal */
+}
+
