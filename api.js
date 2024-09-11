@@ -23,7 +23,7 @@ let city = "Berlin";
 let lat = 53.4661983935898;
 let lon = 9.69158914791978;
 const base_url = (zipcode) => {
-  //return `https://api.bild.de/historicalweatherdata/get_weatherdata_json_object?path=weatherdata/100y&file=plz_${zipcode}`;
+  return `https://api.bild.de/historicalweatherdata/get_weatherdata_json_object?path=weatherdata/100y&file=plz_${zipcode}`;
  };
 
 const modal = document.getElementById("search-modal");
@@ -159,7 +159,7 @@ window.onclick = function (event) {
 
 // Get list of all the city and zip
 async function getCityData() {
-  // const response = await fetch("https://api.bild.de/historicalweatherdata/get_weatherdata_json_object?path=weatherdata&file=PLZ");
+  const response = await fetch("https://api.bild.de/historicalweatherdata/get_weatherdata_json_object?path=weatherdata&file=PLZ");
   const data = await response.json();
 
   const cityMap = new Map();
@@ -218,7 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
         textSpan.textContent = suggestion;
 
         const svg = document.createElementNS(
-          "http://www.w3.org/2000/svg",
+          "",
           "svg"
         );
         svg.setAttribute("width", "20");

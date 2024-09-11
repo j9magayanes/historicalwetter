@@ -69,9 +69,9 @@ body {
   background-color: var(--clr-red);
   color: var(--clr-white);
   border: none;
-  width: auto; /* Allow width to be adjusted */
-  min-width: 4ch; /* Set a minimum width */
-  max-width: 30ch; /* Set a reasonable max width to avoid overflow */
+  width: auto; 
+  min-width: 4ch; 
+  max-width: 30ch; 
 }
 
 .search-btn {
@@ -90,8 +90,7 @@ body {
 
 .vertical-line {
   border-left: 2px solid white;
-  height: 37.42px;
-  margin-top: 4.79px;
+  height: 100%;
 }
 
 .search-btn > svg {
@@ -100,27 +99,53 @@ body {
   height: var(--icon-size);
 }
 
+.headline-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.headline {
+  position: absolute;
+  z-index: 4;
+  width: 400px;
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  top: calc(14px + ((992px - 100vw) * 0.05));
+}
+
 .question {
-  --font-size: calc(var(--fs-base) * 1.75);
-  --max-width: 24ch;
-  font-size: var(--font-size);
-  max-width: var(--max-width);
+  font-family: 'Gotham Condensed Book';
+  font-size: clamp(15px, 5vw, 20px);
+  width: clamp(100px, 50vw, 100%);  
   line-height: 1;
   text-align: center;
-  margin-inline: auto;
+  margin: 20 auto;
+}
+
+.subline {
+  display: inline-block;
+  vertical-align: middle; 
+  white-space: nowrap;
+  align-items: center;
+  line-height: 1;
+  padding: var(--padding-y) var(--padding-x);
 }
 
 .today {
-  --font-size: calc(var(--fs-base) * 1.75);
+  --font-size: calc(20px - ((992px - 100vw) * 0.01));
   --padding-x: 0.25em;
   --padding-y: 0.125em;
-  --icon-size: calc(var(--font-size) * 0.5);
-  --gap: 4px;
-  font-size: var(--font-size);
+  --icon-size: calc(var(--font-size) * 0.4);
+  font-size:  var(--font-size);
   padding: var(--padding-y) var(--padding-x);
   color: var(--clr-white);
   background-color: var(--clr-red);
   line-height: 1;
+  left: 50%;
   text-align: center;
   display: flex;
   align-items: center;
@@ -131,9 +156,4 @@ body {
 
 .today > svg {
   height: var(--icon-size);
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
 }
