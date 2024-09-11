@@ -8,7 +8,8 @@ function tempChart({ element, data }) {
     pointsData,
     totalDays;
 
-  const height = 240;
+  // Chart dimensions and style constants
+  const height = 200;
   const focusDotSize = 4;
   const lineStrokeWidth = 2;
   const dayDotSize = 2;
@@ -24,15 +25,18 @@ function tempChart({ element, data }) {
   const marginLeft = focusDotSize;
   const thresholds = [400, 640];
 
+  // Accessor functions for data
   const xAccessor = (d) => d.date;
   const y1Accessor = (d) =>
     Number.isFinite(d.maxMaxThisYear) ? d.maxMaxThisYear : undefined;
   const y2Accessor = (d) => (Number.isFinite(d.avgMax) ? d.avgMax : undefined);
 
+  // Formatting values for tooltip
   const valueFormat = new Intl.NumberFormat("de-DE", {
     maximumFractionDigits: 1,
   }).format;
 
+  // Month names for labels
   const monthNames = [
     "Januar",
     "Februar",
@@ -48,9 +52,11 @@ function tempChart({ element, data }) {
     "Dezember",
   ];
 
+  // Scales for the chart
   const x = d3.scaleUtc();
   const y = d3.scaleLinear().range([height - marginBottom, marginTop]);
 
+  // Area and line generators
   const areaGenerator = d3
     .area()
     .x((d) => x(d[0]))
@@ -60,6 +66,9 @@ function tempChart({ element, data }) {
     .defined((d) => d[1] !== undefined);
   const lineGenerator = areaGenerator.lineY1();
 
+      // Clear any existing elements in the container
+
+  // Create the main container
   const container = d3.select(element).attr("class", "temp-chart");
   const chartContainer = container
     .append("div")
@@ -79,18 +88,23 @@ function tempChart({ element, data }) {
     .append("div")
     .attr("class", "swatches-container");
   renderSwatches();
+
+  // Tooltip element
   const tooltip = container.append("div").attr("class", "tip");
 
   wrangle();
 
   new ResizeObserver(resized).observe(scrollContainer.node());
 
+  // Process and organize data
   function wrangle() {
     ({ groupedData, flattenedData, pointsData } = processData(data));
     totalDays = flattenedData.length;
 
     x.domain(d3.extent(flattenedData, xAccessor));
     y.domain(getYExtent()).nice();
+
+  // Calculate the extent for y-axis
     function getYExtent() {
       let yMin = d3.min(flattenedData, (d) =>
         d3.min([y1Accessor(d), y2Accessor(d)])
@@ -103,10 +117,10 @@ function tempChart({ element, data }) {
       yMax += padding;
       return [yMin, yMax];
     }
-
     if (!!noScrollWidth) resized();
   }
 
+  // Resize handler
   function resized() {
     noScrollWidth = scrollContainer.node().clientWidth;
     const boundedWidth =
@@ -121,21 +135,23 @@ function tempChart({ element, data }) {
 
     x.range([marginLeft, scrollWidth - marginRight]);
 
+    // Create Delaunay triangulation for interaction
     delaunay = d3.Delaunay.from(
       pointsData,
       (d) => x(d[0]),
       (d) => y(d[1])
     );
 
+    // Set dimensions for y-axis and main SVG
     yAxisSvg.attr("width", noScrollWidth).attr("height", height);
-
     svg.attr("width", scrollWidth).attr("height", height);
 
+    // Render the chart
     renderChart();
-
     scrollContainer.node().scrollLeft = scrollContainer.node().scrollWidth;
   }
 
+  // Main render function
   function renderChart() {
     renderYAxis();
     renderSeries();
@@ -144,6 +160,7 @@ function tempChart({ element, data }) {
     renderTooltip();
   }
 
+  // Render y-axis grid
   function renderYAxis() {
     const g = yAxisSvg
       .selectAll(".y-axis-g")
@@ -187,6 +204,7 @@ function tempChart({ element, data }) {
       .call((g) => g.select("text").text((d) => d.toLocaleString()));
   }
 
+   // Render series data (area and lines)
   function renderSeries() {
     svg
       .selectAll(".area-path-1")
@@ -237,6 +255,7 @@ function tempChart({ element, data }) {
       .attr("d", lineGenerator);
   }
 
+  // Render x-axis
   function renderXAxis() {
     const g = svg
       .selectAll(".x-axis-g")
@@ -349,6 +368,7 @@ function tempChart({ element, data }) {
       );
   }
 
+  // Render color swatches for legend
   function renderSwatches() {
     swatchesContainer
       .selectAll(".swatch")
@@ -372,6 +392,7 @@ function tempChart({ element, data }) {
       );
   }
 
+  // Render points on Focus /Click
   function renderFocus() {
     yAxisSvg
       .selectAll(".focus-circle")
@@ -392,6 +413,7 @@ function tempChart({ element, data }) {
       );
   }
 
+    // Render tooltip
   function renderTooltip() {
     if (tooltipDatumIndex === undefined) {
       tooltip.classed("is-visible", false);
