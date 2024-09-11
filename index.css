@@ -61,6 +61,7 @@ body {
 }
 
 .search-input {
+  --input-width: 12ch;
   font-size: var(--font-size);
   line-height: 1;
   padding: var(--padding-y) var(--padding-x);
@@ -68,7 +69,9 @@ body {
   background-color: var(--clr-red);
   color: var(--clr-white);
   border: none;
-  width: var(--input-width);
+  width: auto; /* Allow width to be adjusted */
+  min-width: 4ch; /* Set a minimum width */
+  max-width: 30ch; /* Set a reasonable max width to avoid overflow */
 }
 
 .search-btn {
@@ -76,9 +79,19 @@ body {
   line-height: 1;
   cursor: pointer;
   padding: var(--padding-y) var(--padding-x);
-  background-color: transparent;
+  background-color: var(--clr-red);
   color: var(--clr-black);
   border: none;
+}
+
+.vertical-line-bg {
+  background-color: var(--clr-red); 
+}
+
+.vertical-line {
+  border-left: 2px solid white;
+  height: 37.42px;
+  margin-top: 4.79px;
 }
 
 .search-btn > svg {
@@ -118,4 +131,9 @@ body {
 
 .today > svg {
   height: var(--icon-size);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
 }
