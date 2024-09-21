@@ -87,7 +87,7 @@ function tempChart({ element, data }) {
   const swatchesContainer = container
     .append("div")
     .attr("class", "swatches-container");
-  renderSwatches();
+ // renderSwatches();
 
   // Tooltip element
   const tooltip = container.append("div").attr("class", "tip");

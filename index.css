@@ -186,6 +186,60 @@ body {
   height: var(--icon-size);
 }
 
+.swatches-container {
+  --font-size:  calc(20px - ((992px - 100vw) * 0.01));
+  --gap-x: 1em;
+  --swatch-width: 1.5em;
+  --swatch-height: 2px;
+  font-size: var(--font-size);
+  line-height: 1;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0 var(--gap-x);   
+}
+
+.swatch {
+  display: flex;
+  align-items: center
+}
+
+.swatch-label {
+  margin-right: 24px;
+}
+
+.swatch-red {
+  width: 27.94px;
+  height: 2px;
+  top: 11.67px;
+  left: 0.5px;
+  gap: 0px;
+  border: 2px 0px 0px 0px;
+  opacity: 0px;
+  background-color: var(--clr-red);
+  margin-right: 0.25em;
+}
+
+.swatch-blue {
+  width: 27.94px;
+  height: 19.79px;
+  left: 0.5px;
+  gap: 0px;
+  opacity: 0px;
+  background-color: var(--clr-navy-light);
+  border-top: 3px solid var(--clr-navy) !important;
+  margin-right: 0.25em;
+  align-items: flex-end;
+  position: relative;
+}
+
+.dotted-line {
+  border-top: 1px dotted black;
+  position: absolute;
+  top: 50%;
+  width: 100%;
+}
+
 .modal {
   display: none;
   position: fixed;
