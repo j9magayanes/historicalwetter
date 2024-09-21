@@ -246,14 +246,12 @@ body {
   z-index: 100;
   top: 0;
   left: 0;
-  right: 0;
   width: 992px;
   height: 327px;
   overflow: auto;
   justify-items: center;
   background-color: #fefefe;
-  margin: 0 auto;
-  flex-direction: column;
+
 }
 
 .modal-items {
@@ -362,8 +360,8 @@ body {
   overflow: auto;
   justify-items: center;
   background-color: #fefefe;
-  margin-left: 30px;
-  margin-top: 64px;
+  top: 30px;
+  left: 25px;
   flex-direction: column;
   border-radius: 20px;
 }
