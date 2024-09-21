@@ -1,3 +1,31 @@
+@font-face {
+  font-family: 'Gotham Condensed Book';
+  src: url('./fonts/GothamCond-Book.otf');
+}
+@font-face {
+  font-family: 'Gotham Condensed Bold';
+  src: url('./fonts/GothamCond-Bold.otf');
+}
+@font-face {
+  font-family: 'Gotham Narrow Black';
+  src: url('./fonts/GothamXNarrow-Black-Bold.otf');
+}
+@font-face {
+  font-family: 'Gotham Narrow Medium';
+  src: url('./fonts/GothamXNarrow-Medium.otf');
+}
+@font-face {
+  font-family: 'Gotham Narrow Light';
+  src: url('./fonts/GothamNarrow-Light.otf');
+}
+@font-face {
+  font-family: 'Gotham Narrow Book';
+  src: url('./fonts/GothamXNarrow-Book.otf');
+}
+@font-face {
+  font-family: 'Gotham Narrow Bold';
+  src: url('./fonts/GothamXNarrow-Bold.otf');
+}
 
 :root {
   --clr-white: #ffffff;
