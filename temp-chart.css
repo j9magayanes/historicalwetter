@@ -24,6 +24,7 @@
 .temp-chart .scroll-container {
   overflow-x: auto;
   overscroll-behavior: contain;
+  scrollbar-width: none;
 }
 
 .temp-chart .main-svg {
@@ -112,4 +113,13 @@
 .temp-chart .tip img {
   display: block;
   width: var(--icon-size);
+}
+
+.arrow-svg-left {
+  padding-top: 4px;
+}
+
+.arrow-svg-right {
+  padding-top: 4px;
+  padding-left: 3px;
 }

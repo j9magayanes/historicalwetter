@@ -148,6 +148,7 @@ function tempChart({ element, data }) {
 
     // Render the chart
     renderChart();
+    renderButtons();
     scrollContainer.node().scrollLeft = scrollContainer.node().scrollWidth;
   }
 
@@ -254,6 +255,46 @@ function tempChart({ element, data }) {
       )
       .attr("d", lineGenerator);
   }
+
+// Render Buttons
+function renderButtons() {
+  const container = d3.select(element).attr('class', 'temp-chart');
+
+  // Ensure buttons are appended only once
+  container.selectAll('.scroll-left, .scroll-right').remove();
+  container.append('button')
+    .attr('class', 'scroll-left')
+    .style('position', 'absolute')
+    .style('left', '-27px')
+    .style('bottom', '34px')
+    .attr('transform', `translate(0,${height - marginBottom})`)  
+    .on('click', () => {
+      scrollContainer.node().scrollBy({ left: -scrollContainer.node().offsetWidth / 2, behavior: 'smooth' });
+    })
+    .append('svg')
+      .attr('width', '24')
+      .attr('class', 'arrow-svg-left')
+      .attr('height', '24')
+      .append('image')
+        .attr('href', './assets/left_arrow.svg') 
+
+  container.append('button')
+    .attr('class', 'scroll-right')
+    .style('position', 'absolute')
+    .style('right', '-8px')
+    .style('bottom', '34px')
+
+    .on('click', () => {
+      scrollContainer.node().scrollBy({ left: scrollContainer.node().offsetWidth / 2, behavior: 'smooth' });
+    })
+    .append('svg')
+    .attr('width', '24')
+    .attr('height', '24')
+    .attr('class', 'arrow-svg-right')
+    .append('image')
+      .attr('href', './assets/right_arrow.svg')
+  }
+
 
   // Render x-axis
   function renderXAxis() {
@@ -422,7 +463,7 @@ function tempChart({ element, data }) {
       const src = `./assets/temp_${d.seriesId === 1 ? "up" : "down"}.svg`;
       tooltip
         .html(
-          `<img src="${src}" /> <span style="color: var(--clr-series-${
+          ` <span style="color: var(--clr-series-${
             d.seriesId
           })">${valueFormat(d[1])}<span>`
         )
