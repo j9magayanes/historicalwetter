@@ -26,7 +26,7 @@ const tempImage = document.getElementById("tempImage");
 async function getMaxTemp(lat, long) {
   let dateToday = new Date();
   let formattedDate = dateToday.toISOString().split("T")[0];
-  let url = `https://api.brightsky.dev/weather?lat=${lat}&lon=${long}&date=${formattedDate}`;
+  //let url = `https://api.brightsky.dev/weather?lat=${lat}&lon=${long}&date=${formattedDate}`;
   const urlResponse = await fetch(url);
   //const urlResponse = await fetch('Berlin.json');
   if (!urlResponse.ok) {

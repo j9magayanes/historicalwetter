@@ -98,7 +98,7 @@ function tempChart({ element, data }) {
 
   // Process and organize data
   function wrangle() {
-    ({ groupedData, flattenedData, pointsData } = processData(data));
+    ({ groupedData, flattenedData, pointsData, latestDay } = processData(data));
     totalDays = flattenedData.length;
 
     x.domain(d3.extent(flattenedData, xAccessor));
@@ -148,7 +148,7 @@ function tempChart({ element, data }) {
 
     // Render the chart
     renderChart();
-    renderButtons();
+
     scrollContainer.node().scrollLeft = scrollContainer.node().scrollWidth;
   }
 
@@ -158,6 +158,8 @@ function tempChart({ element, data }) {
     renderSeries();
     renderXAxis();
     renderFocus();
+    renderButtons();
+    renderPoints();
     renderTooltip();
   }
 
@@ -433,6 +435,72 @@ function renderButtons() {
       );
   }
 
+  // Render points on load  
+  function renderPoints() {
+    // Start with today's date
+    let currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0); // Normalize to midnight
+  
+    let validData = null;
+  
+    // Function to check if a data point has a valid `maxMaxThisYear` value
+    function findValidData() {
+      // Filter pointsData for the current date
+      const currentData = pointsData.filter(d => {
+        const dataDate = new Date(d.data.date); // Adjust based on your data structure
+        dataDate.setHours(0, 0, 0, 0); // Normalize to midnight
+        return dataDate.getTime() === currentDate.getTime(); // Match the current date
+      });
+  
+      // Check if any of the data points have a valid `maxMaxThisYear` value
+      validData = currentData.find(
+        d =>
+          d.data.maxMaxThisYear !== undefined &&
+          d.data.maxMaxThisYear !== null &&
+          d.data.maxMaxThisYear !== "" // Ensure it's not an empty string
+      );
+  
+      // If no valid data, step back one day and search again
+      if (!validData) {
+        currentDate.setDate(currentDate.getDate() - 1); // Go back one day
+        findValidData(); // Recursively check previous days
+      }
+    }
+  
+    // Start searching for valid data
+    findValidData();
+  
+    // If no valid data is found, exit early (optional safeguard)
+    if (!validData) {
+      console.warn('No valid data found for rendering.');
+      return;
+    }
+  
+    console.log(validData); // Debug: Log the found valid data point
+  
+    // Render the circle for the found valid data
+    svg
+      .selectAll('.point-circle')
+      .data([validData]) // Use the found valid data
+      .join(
+        (enter) =>
+          enter
+            .append('circle')
+            .attr('class', 'point-circle')
+            .attr('r', focusDotSize)
+            .style('z-index', 5)
+            .attr('fill', 'white')
+            .attr('transform', (d) => `translate(${x(d[0])}, ${y(d.data.maxMaxThisYear)})`),
+        (update) => update,
+        (exit) => exit.remove()
+      );
+  }
+  
+  
+  
+  
+
+
   // Render points on Focus /Click
   function renderFocus() {
     yAxisSvg
@@ -503,11 +571,19 @@ function renderButtons() {
   }
 
   function processData(data) {
-    const currentMonth = new Date().getUTCMonth() + 1;
-    const currentYear = new Date().getFullYear();
+    const currentDate = new Date();
+    const currentMonth = currentDate.getUTCMonth() + 1;
+    const currentYear = currentDate.getFullYear();
+    const startOfYear = new Date(currentDate.getFullYear(), 0, 1);
+    const numberOfDays = Math.floor((currentDate - startOfYear) / (1000 * 60 * 60 * 24)) + 1;
+    const currentDay = currentDate.getUTCDate() - 6;
+  
+    // Filter data for the last three months
     const filtered = data.months.filter(
       ({ month }) => month <= currentMonth && month >= currentMonth - 3
     );
+  
+    // Map the filtered data to include date objects
     const groupedData = filtered.map(({ month, days }) => ({
       month,
       days: days.map((d) => ({
@@ -515,28 +591,51 @@ function renderButtons() {
         date: new Date(Date.UTC(currentYear, month - 1, d.day)),
       })),
     }));
+  
+    // Flatten the days data
     const flattenedData = groupedData.flatMap(({ days }) => days);
-    const pointsData = [
-      ...flattenedData
-        .map((d) => {
-          const p = [xAccessor(d), y1Accessor(d)];
-          p.seriesId = 1;
-          p.data = d;
-          return p;
-        })
-        .filter((p) => p[1] !== undefined),
-      ...flattenedData
-        .map((d) => {
-          const p = [xAccessor(d), y2Accessor(d)];
-          p.seriesId = 2;
-          p.data = d;
-          return p;
-        })
-        .filter((p) => p[1] !== undefined),
+  
+    // Find the latest day in the flattenedData
+    const latestDay = flattenedData.reduce((latest, current) => {
+      return current.date > latest.date ? current : latest;
+    }, { date: new Date(0) });
+  
+    const todayData = flattenedData.filter(d => d.day === currentDay);
+  
+    // Create arrays of pointsData containing x, y coordinates and series information
+    const displayData = [
+      ...todayData.map((d) => {
+        const p = [xAccessor(d), y1Accessor(d)];
+        p.seriesId = 1;
+        p.data = d;
+        return p;
+      }).filter((p) => p[1] !== undefined),
+      ...todayData.map((d) => {
+        const p = [xAccessor(d), y2Accessor(d)];
+        p.seriesId = 2;
+        p.data = d;
+        return p;
+      }).filter((p) => p[1] !== undefined),
     ];
-    return { groupedData, flattenedData, pointsData };
+  
+    const pointsData = [
+      ...flattenedData.map((d) => {
+        const p = [xAccessor(d), y1Accessor(d)];
+        p.seriesId = 1;
+        p.data = d;
+        return p;
+      }).filter((p) => p[1] !== undefined),
+      ...flattenedData.map((d) => {
+        const p = [xAccessor(d), y2Accessor(d)];
+        p.seriesId = 2;
+        p.data = d;
+        return p;
+      }).filter((p) => p[1] !== undefined),
+    ];
+  
+    return { groupedData, flattenedData, pointsData, displayData, latestDay };
   }
-
+  
   function update(_) {
     data = _;
     wrangle();

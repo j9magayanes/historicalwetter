@@ -115,6 +115,12 @@
   width: var(--icon-size);
 }
 
+.point-circle {
+  stroke: var(--clr-red); 
+  stroke-width: 1.83px;
+  z-index: 4;
+}
+
 .arrow-svg-left {
   padding-top: 4px;
 }
