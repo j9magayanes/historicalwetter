@@ -29,7 +29,12 @@ function tempChart({ element, data }) {
   const xAccessor = (d) => d.date;
   const y1Accessor = (d) =>
     Number.isFinite(d.maxMaxThisYear) ? d.maxMaxThisYear : undefined;
-  const y2Accessor = (d) => (Number.isFinite(d.avgMax) ? d.avgMax : undefined);
+  const y2Accessor = (d) => (Number.isFinite(d.maxMax) ? d.maxMax : undefined);
+  const y0Accessor = (d) => (Number.isFinite(d.minMin) ? d.minMin : undefined);
+  const y3Accessor = (d) => (Number.isFinite(d.avgMax) ? d.avgMax : undefined);
+  const y4Accessor = (d) => (Number.isFinite(d.avgMin) ? d.avgMin : undefined);
+
+
 
   // Formatting values for tooltip
   const valueFormat = new Intl.NumberFormat("de-DE", {
@@ -68,6 +73,7 @@ function tempChart({ element, data }) {
 
       // Clear any existing elements in the container
 
+
   // Create the main container
   const container = d3.select(element).attr("class", "temp-chart");
   const chartContainer = container
@@ -98,25 +104,26 @@ function tempChart({ element, data }) {
 
   // Process and organize data
   function wrangle() {
-    ({ groupedData, flattenedData, pointsData, latestDay } = processData(data));
+    ({ groupedData, flattenedData, pointsData, latestDay, displayData } = processData(data));
     totalDays = flattenedData.length;
 
     x.domain(d3.extent(flattenedData, xAccessor));
     y.domain(getYExtent()).nice();
 
   // Calculate the extent for y-axis
-    function getYExtent() {
-      let yMin = d3.min(flattenedData, (d) =>
-        d3.min([y1Accessor(d), y2Accessor(d)])
-      );
-      let yMax = d3.max(flattenedData, (d) =>
-        d3.max([y1Accessor(d), y2Accessor(d)])
-      );
-      const padding = (yMax - yMin) * 0.1;
-      yMin -= padding;
-      yMax += padding;
-      return [yMin, yMax];
-    }
+  function getYExtent() {
+    let yMin = d3.min(flattenedData, (d) =>
+      d3.min([y0Accessor(d), y2Accessor(d)])
+    );
+    let yMax = d3.max(flattenedData, (d) =>
+      d3.max([y1Accessor(d), y2Accessor(d)])
+    );
+    const padding = (yMax - yMin) * 0.1;
+    // Ensure the minimum y value does not exceed -10
+    yMin = Math.min(yMin - padding, -40);
+    yMax += padding;
+    return [yMin, yMax];
+  }
     if (!!noScrollWidth) resized();
   }
 
@@ -163,100 +170,140 @@ function tempChart({ element, data }) {
     renderTooltip();
   }
 
-  // Render y-axis grid
+ // Render y-axis grid
   function renderYAxis() {
     const g = yAxisSvg
-      .selectAll(".y-axis-g")
+      .selectAll('.y-axis-g')
       .data([0])
-      .join((enter) => enter.append("g").attr("class", "y-axis-g"))
-      .attr("transform", `translate(${noScrollWidth - marginRight},0)`);
+      .join((enter) => enter.append('g').attr('class', 'y-axis-g'))
+      .attr('transform', `translate(${noScrollWidth - marginRight},0)`);
 
-    g.selectAll(".bg-rect")
+    g.selectAll('.bg-rect')
       .data([0])
       .join((enter) =>
         enter
-          .append("rect")
-          .attr("class", "bg-rect")
-          .attr("height", height)
-          .attr("x", dayDotSize)
-          .attr("width", marginRight - dayDotSize + 1)
+          .append('rect')
+          .attr('class', 'bg-rect')
+          .attr('height', height)
+          .attr('x', dayDotSize)
+          .attr('width', marginRight - dayDotSize)
       );
 
-    const ticks = y.ticks((height - marginTop - marginBottom) / 32);
+    const ticks = y.ticks((height - marginTop - marginBottom) / 30);
 
-    g.selectAll(".tick")
+    g.selectAll('.tick')
       .data(ticks)
       .join((enter) =>
         enter
-          .append("g")
-          .attr("class", "tick")
-          .call((g) => g.append("line").attr("stroke", "currentColor"))
+          .append('g')
+          .attr('class', 'tick')
+          .call((g) => g.append('line').attr('stroke', 'currentColor'))
           .call((g) =>
             g
-              .append("text")
-              .attr("x", marginRight)
-              .attr("dy", "0.32em")
-              .attr("text-anchor", "end")
-              .attr("fill", "currentColor")
+              .append('text')
+              .attr('x', marginRight)
+              .attr('dy', '0.32em')
+              .attr('text-anchor', 'end')
+              .attr('fill', 'currentColor')
           )
       )
-      .attr("transform", (d) => `translate(0,${y(d)})`)
+      .attr('transform', (d) => `translate(0,${y(d)})`)
       .call((g) =>
-        g.select("line").attr("x1", -(noScrollWidth - marginLeft - marginRight))
+        g.select('line').attr('x1', -(noScrollWidth - marginLeft - marginRight))
       )
-      .call((g) => g.select("text").text((d) => d.toLocaleString()));
+      .call((g) => g.select('text').text((d) => d.toLocaleString()));
   }
 
-   // Render series data (area and lines)
+  // Render series data (area and lines)
   function renderSeries() {
+    const areaGenerator = d3
+    .area()
+    .x((d) => x(d[0])) // Use the x accessor for the x-coordinate
+    .y0((d) => y(d[1])) // Use y3Accessor for the lower boundary
+    .y1((d) => y(d[2])); // Use y4Accessor for the upper boundary
+
+  svg
+    .selectAll('.area-path-2')
+    .data([
+      flattenedData.map((d) => [xAccessor(d), y3Accessor(d), y4Accessor(d)]), // Prepare data with x, y3, and y4
+    ])
+    .join((enter) =>
+      enter
+        .append('path')
+        .attr('class', 'area-path-2')
+        .attr('fill', 'var(--clr-fill-series-2)')
+    )
+    .attr('d', areaGenerator); 
+//avg max
     svg
-      .selectAll(".area-path-1")
+      .selectAll('.line-path-6')
+      .data([flattenedData.map((d) => [xAccessor(d), y3Accessor(d)])])
+      .join((enter) =>
+        enter
+          .append('path')
+          .attr('class', 'line-path-2')
+          .attr('fill', 'none')
+          .attr('stroke', 'var(--clr-series-2)')
+          .attr('stroke-width', '2')
+      )
+      .attr('d', lineGenerator);
+//maxmax this year
+    svg
+      .selectAll('.line-path-1')
       .data([flattenedData.map((d) => [xAccessor(d), y1Accessor(d)])])
       .join((enter) =>
         enter
-          .append("path")
-          .attr("class", "area-path-1")
-          .attr("fill", "var(--clr-fill-series-1)")
+          .append('path')
+          .attr('class', 'line-path-1')
+          .attr('fill', 'none')
+          .attr('stroke', 'var(--clr-series-1)')
+          .attr('stroke-width', lineStrokeWidth)
       )
-      .attr("d", areaGenerator);
-
+      .attr('d', lineGenerator);
+//maxmax
     svg
-      .selectAll(".area-path-2")
+      .selectAll('.line-path-4')
       .data([flattenedData.map((d) => [xAccessor(d), y2Accessor(d)])])
-      .join((enter) =>
-        enter
-          .append("path")
-          .attr("class", "area-path-2")
-          .attr("fill", "var(--clr-fill-series-2)")
+      .join(
+        (enter) =>
+          enter
+            .append('path')
+            .attr('class', 'line-path-4')
+            .attr('fill', 'none')
+            .attr('stroke', '#174482') 
+            .attr('stroke-width', lineStrokeWidth)
+            .attr('stroke-dasharray', '2  3') 
       )
-      .attr("d", areaGenerator);
-
+      .attr('d', lineGenerator);
+//minmin
     svg
-      .selectAll(".line-path-2")
-      .data([flattenedData.map((d) => [xAccessor(d), y2Accessor(d)])])
+      .selectAll('.line-path-5')
+      .data([flattenedData.map((d) => [xAccessor(d), y0Accessor(d)])])
+      .join(
+        (enter) =>
+          enter
+            .append('path')
+            .attr('class', 'line-path-4')
+            .attr('fill', 'none')
+            .attr('stroke', '#174482') 
+            .attr('stroke-width', lineStrokeWidth)
+            .attr('stroke-dasharray', '2 3')
+      )
+      .attr('d', lineGenerator);
+    
+/*       svg
+      .selectAll('.point-circle')
+      .data([flattenedData.slice(-3).map((d) => [xAccessor(d), y0Accessor(d)])])
       .join((enter) =>
         enter
-          .append("path")
-          .attr("class", "line-path-2")
-          .attr("fill", "none")
-          .attr("stroke", "var(--clr-series-2)")
-          .attr("stroke-width", lineStrokeWidth)
+          .append('circle')
+          .attr('class', 'point-circle')
+          .attr('r', focusDotSize)
       )
-      .attr("d", lineGenerator);
-
-    svg
-      .selectAll(".line-path-1")
-      .data([flattenedData.map((d) => [xAccessor(d), y1Accessor(d)])])
-      .join((enter) =>
-        enter
-          .append("path")
-          .attr("class", "line-path-1")
-          .attr("fill", "none")
-          .attr("stroke", "var(--clr-series-1)")
-          .attr("stroke-width", lineStrokeWidth)
-      )
-      .attr("d", lineGenerator);
+      .attr('fill', 'white') */
+    
   }
+
 
 // Render Buttons
 function renderButtons() {
