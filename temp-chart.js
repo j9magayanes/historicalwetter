@@ -120,7 +120,8 @@ function tempChart({ element, data }) {
     );
     const padding = (yMax - yMin) * 0.1;
     // Ensure the minimum y value does not exceed -10
-    yMin = Math.min(yMin - padding, -40);
+    yMin = Math.min(yMin - padding, -20
+    );
     yMax += padding;
     return [yMin, yMax];
   }
