@@ -37,9 +37,15 @@ function tempChart({ element, data }) {
 
 
   // Formatting values for tooltip
-  const valueFormat = new Intl.NumberFormat("de-DE", {
+  const valueFormat = new Intl.NumberFormat('de-DE', {
     maximumFractionDigits: 1,
   }).format;
+
+  // Formatting year for tooltip
+  const yearFormat = (dateString) => {
+    const date = new Date(dateString);
+    return date.getUTCFullYear();
+  }
 
   // Month names for labels
   const monthNames = [
@@ -219,14 +225,14 @@ function tempChart({ element, data }) {
   function renderSeries() {
     const areaGenerator = d3
     .area()
-    .x((d) => x(d[0])) // Use the x accessor for the x-coordinate
-    .y0((d) => y(d[1])) // Use y3Accessor for the lower boundary
-    .y1((d) => y(d[2])); // Use y4Accessor for the upper boundary
+    .x((d) => x(d[0]))
+    .y0((d) => y(d[1])) 
+    .y1((d) => y(d[2])); 
 
   svg
     .selectAll('.area-path-2')
     .data([
-      flattenedData.map((d) => [xAccessor(d), y3Accessor(d), y4Accessor(d)]), // Prepare data with x, y3, and y4
+      flattenedData.map((d) => [xAccessor(d), y3Accessor(d), y4Accessor(d)]),
     ])
     .join((enter) =>
       enter
@@ -291,17 +297,6 @@ function tempChart({ element, data }) {
             .attr('stroke-dasharray', '2 3')
       )
       .attr('d', lineGenerator);
-    
-/*       svg
-      .selectAll('.point-circle')
-      .data([flattenedData.slice(-3).map((d) => [xAccessor(d), y0Accessor(d)])])
-      .join((enter) =>
-        enter
-          .append('circle')
-          .attr('class', 'point-circle')
-          .attr('r', focusDotSize)
-      )
-      .attr('fill', 'white') */
     
   }
 
@@ -544,56 +539,115 @@ function renderButtons() {
       );
   }
   
-  
-  
-  
-
-
   // Render points on Focus /Click
   function renderFocus() {
+    const focusData =
+      tooltipDatumIndex === undefined ? [] : [pointsData[tooltipDatumIndex]];
+    // First circle for the main data point
     yAxisSvg
-      .selectAll(".focus-circle")
-      .data(
-        tooltipDatumIndex === undefined ? [] : [pointsData[tooltipDatumIndex]]
-      )
+      .selectAll('.focus-circle')
+      .data(focusData)
       .join((enter) =>
         enter
-          .append("circle")
-          .attr("class", "focus-circle")
-          .attr("r", focusDotSize)
+          .append('circle')
+          .attr('class', 'focus-circle')
+          .attr('r', focusDotSize)
       )
-      .attr("fill", (d) => `var(--clr-series-${d.seriesId})`)
+      .attr('fill', (d) => `var(--clr-series-${d.seriesId})`)
       .attr(
-        "transform",
+        'transform',
         (d) =>
-          `translate(${x(d[0]) - scrollContainer.node().scrollLeft},${y(d[1])})`
+          `translate(${x(d[0]) - scrollContainer.node().scrollLeft}, ${y(
+            d[1]
+          )})`
+      );
+
+    // Second circle for the avgMax data point
+    yAxisSvg
+      .selectAll('.focus-circle-maxmax')
+      .data(focusData)
+      .join((enter) =>
+        enter
+          .append('circle')
+          .attr('class', 'focus-circle-maxmax')
+          .attr('r', focusDotSize)
+      )
+      .attr('fill', (d) => '#174482')
+      .attr(
+        'transform',
+        (d) =>
+          `translate(${x(d[0]) - scrollContainer.node().scrollLeft}, ${y(
+            d.data.maxMax
+          )})`
+      );
+    // Third circle for the avgMin data point
+    yAxisSvg
+      .selectAll('.focus-circle-minmin')
+      .data(focusData)
+      .join((enter) =>
+        enter
+          .append('circle')
+          .attr('class', 'focus-circle-minmin')
+          .attr('r', focusDotSize)
+      )
+      .attr('fill', (d) => '#174482')
+      .attr(
+        'transform',
+        (d) =>
+          `translate(${x(d[0]) - scrollContainer.node().scrollLeft}, ${y(
+            d.data.minMin
+          )})`
       );
   }
 
-    // Render tooltip
+  // Render tooltip
   function renderTooltip() {
     if (tooltipDatumIndex === undefined) {
-      tooltip.classed("is-visible", false);
+      tooltip.classed('is-visible', false);
+      console.log("falsy")
     } else {
-      const d = pointsData[tooltipDatumIndex];
-      const src = `./assets/temp_${d.seriesId === 1 ? "up" : "down"}.svg`;
+      const d = pointsData[tooltipDatumIndex]
+      const src = `./assets/temp_${d.seriesId === 1 ? 'down' : 'up'}.svg`;
       tooltip
         .html(
-          ` <span style="color: var(--clr-series-${
-            d.seriesId
-          })">${valueFormat(d[1])}<span>`
+          `<div class="tooltip-background">
+            <div class=tooltip-row>
+            <img src="./assets/temp_up_red.svg"/><span>
+            ${valueFormat(
+              d.data.maxMaxThisYear
+            )}
+          <span class="tooltip-value">${valueFormat(
+              d[1]
+            )}°<span>
+            </div>
+            <div class=tooltip-row>
+            <img src="./assets/temp_up_blue.svg"/><span>  ${
+              yearFormat(d.data.maxMaxDate)
+            }<span class="tooltip-value">${valueFormat(
+              d.data.maxMax
+            )}°<span>
+            </div>
+            <div class=tooltip-row>
+            <img src="./assets/temp_down.svg"/><span>${
+              yearFormat(d.data.minMinDate)
+            }<span class="tooltip-value">${valueFormat(
+              d.data.minMin
+            )}°<span>  
+            </div>
+            </div>`
         )
-        .classed("is-visible", true);
+        .classed('is-visible', true);
       const transX = x(d[0]) - scrollContainer.node().scrollLeft;
-      const transXOffset = transX < noScrollWidth / 2 ? "0%" : "-100%";
+      const transXOffset = transX < noScrollWidth / 2 ? '0%' : '-100%';
       const transY = y(d[1]) - focusDotSize;
       tooltip.style(
-        "transform",
+        'transform',
         `translate(calc(${transX}px + ${transXOffset}),calc(${transY}px - 100%))`
       );
     }
   }
-
+  
+  
   function mousemoved(event) {
     const [px, py] = d3.pointer(event, svg.node());
     if (
@@ -605,6 +659,7 @@ function renderButtons() {
     if (tooltipDatumIndex === i) return;
     tooltipDatumIndex = i;
     renderFocus();
+    renderPoints()
     renderTooltip();
   }
 
@@ -615,6 +670,7 @@ function renderButtons() {
   function mouseleft() {
     tooltipDatumIndex = undefined;
     renderFocus();
+    renderPoints()
     renderTooltip();
   }
 

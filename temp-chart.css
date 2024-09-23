@@ -115,10 +115,52 @@
   width: var(--icon-size);
 }
 
+.temp-chart .tooltip-background {
+  background-color: rgba(255, 255, 255, 0.8);
+  width: 110.52px;
+  height: 78.18px;
+  left: -0.11px;
+  padding: 2.92px 5.85px 2.92px 5.85px;
+  gap: 0px;
+  border-radius: 5.85px;
+  z-index: -1;
+}
+
+.focus-circle {
+  stroke: white; 
+  stroke-width: 1.83px;
+}
+
 .point-circle {
   stroke: var(--clr-red); 
   stroke-width: 1.83px;
   z-index: 4;
+}
+
+.focus-circle-maxmax, .focus-circle-minmin {
+  stroke: white; 
+  stroke-width: 1.83px;
+}
+
+.tooltip-row {
+  display: flex;
+  flex-direction: row;
+  color: black;
+  font-family: "Gotham Narrow Book";
+  font-size: 18px;
+}
+
+.tooltip-row img {
+    z-index: 3;
+}
+
+.tooltip-row span {
+  margin-left: 6px;
+}
+
+.tooltip-value {
+  font-family: "Gotham Narrow Bold";
+  font-size: 18px;
 }
 
 .arrow-svg-left {
