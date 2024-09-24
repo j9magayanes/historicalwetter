@@ -248,12 +248,13 @@ function tempChart({ element, data }) {
       .join((enter) =>
         enter
           .append('path')
-          .attr('class', 'line-path-2')
+          .attr('class', 'line-path-6')
           .attr('fill', 'none')
           .attr('stroke', 'var(--clr-series-2)')
           .attr('stroke-width', '2')
       )
       .attr('d', lineGenerator);
+
 //maxmax this year
     svg
       .selectAll('.line-path-1')
