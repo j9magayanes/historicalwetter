@@ -257,8 +257,8 @@ body {
   z-index: 100;
   top: 0;
   left: 0;
-  width: 992px;
-  height: 327px;
+  width: 100vw;
+  height: 100vh;
   overflow: auto;
   justify-items: center;
   background-color: #fefefe;
@@ -454,3 +454,40 @@ body {
   z-index: 4; /* Place it behind the modal */
 }
 
+@media (max-width: 991px) {
+  .modal {
+  }
+  
+  .modal-items {
+    margin-top: calc((15 / 992) * 100vw);;
+  }
+  
+  .modal-title {
+    font-size: calc((58 / 992) * 100vw);
+    font-weight: calc((500/ 992) * 100vw);
+  }
+  
+  .modal-input {
+    width: calc((734 / 992) * 100vw);
+    height: calc((59 / 992) * 100vw);
+    margin-top: calc((30 / 992) * 100vw);
+    left: calc((33 / 992) * 100vw);
+    font-size: calc((25.32/ 992) * 100vw);
+  }
+  
+  .modal-text {
+    margin-top: calc((48.47 / 992) * 100vw);
+  }
+  
+  .modal-text-close {
+    width: calc((340 / 992) * 100vw);
+    height: calc((60 / 992) * 100vw);
+    margin-right: calc((54.55/ 992) * 100vw);
+  }
+  
+  .modal-text-search {
+    width: calc((340 / 992) * 100vw);
+    height: calc((60 / 992) * 100vw);
+    border-radius: calc((9.99/ 992) * 100vw);
+  }
+} 
