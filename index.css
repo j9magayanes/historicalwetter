@@ -16,7 +16,7 @@
 }
 @font-face {
   font-family: 'Gotham Narrow Light';
-  src: url('./fonts/GothamNarrow-Light.otf') format("opentype");
+  src: url('./fonts/GothamXNarrow-Light.otf') format("opentype");
 }
 @font-face {
   font-family: 'Gotham Narrow Book';
@@ -110,7 +110,7 @@ body {
   max-width: 30ch; 
 }
 
-.search-btn {
+.search-button {
   font-size: var(--font-size);
   line-height: 1;
   cursor: pointer;
@@ -129,7 +129,7 @@ body {
   height: 100%;
 }
 
-.search-btn > svg {
+.search-button > svg {
   display: block;
   width: var(--icon-size);
   height: var(--icon-size);
@@ -446,6 +446,308 @@ body {
   background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
   z-index: 4; /* Place it behind the modal */
 }
+
+
+
+
+.search-page-container {
+  background-color: #f3f2f2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 992px;
+  height: 100%;
+  height: 238px;
+  padding: 0 50px;
+  overflow-y: hidden;
+}
+
+.search-page-header {
+  color: #000000;
+  font-family: 'Gotham Condensed Bold';
+  font-weight: 700;
+  font-size: 4rem;
+  margin: 0;
+  text-align: center;
+}
+
+.search-btns-container,
+.inputFieldContainer,
+#citySearchForm {
+  width: 100%;
+  max-width: 734px;
+}
+
+.search-btns-container,
+.inputFieldContainer {
+  height: 48px;
+}
+
+.search-btns-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.input-field-container {
+  position: relative;
+  border: 1px solid #495057;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+  max-width: 734px;
+  height: 48px;
+  box-sizing: border-box;
+  padding: 10px 0;
+  margin-top: -15px;
+}
+
+.input-magnifying {
+  width: 24px;
+  margin-left: 17px;
+}
+
+.input-field {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background: transparent;
+  font-family: 'Gotham Narrow Light';
+  font-weight: 400;
+  font-size: 1.125rem;
+  color: #212529;
+  align-items: center;
+}
+
+.inner-input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  gap: 5px;
+}
+
+.input-field::placeholder {
+  font-family: 'Gotham Narrow Light';
+  font-weight: 400;
+  font-size: 1.125rem;
+  color: #212529;
+}
+
+.input-field:focus::placeholder {
+  color: transparent;
+}
+
+.input-legend {
+  font-size: 1rem;
+  color: transparent;
+  z-index: 1;
+  transition: all 0.1s ease;
+  padding: 0 5px;
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.input-field-container:focus-within .input-legend,
+.input-field:not(:placeholder-shown) + .input-legend {
+  top: -3px;
+  left: 10px;
+  font-size: 0.75rem;
+  color: #212529;
+  font-family: 'Gotham Narrow Light';
+  font-weight: 400;
+  background: #f3f2f2;
+  padding: 0 5px;
+}
+
+.cancel-btn,
+.search-btn {
+  font-family: 'Gotham Narrow Medium';
+  font-weight: 700;
+  font-size: 1.25rem;
+  padding: 0px 40.15px 0px 40.15px;
+  width: 340px;
+  height: 48px;
+  outline: none;
+  border: none;
+}
+
+.cancel-btn {
+  color: #495057;
+  background-color: #f3f2f2;
+}
+
+.search-btn {
+  color: #ffffff;
+  background-color: #dd0000;
+  border-radius: 11.47px;
+}
+
+.close {
+  color: #495057;
+  background-color: transparent;
+  margin-right: 15px;
+}
+
+.suggestions-wrapper {
+  position: absolute;
+  top: 102%;
+  left: 0;
+  overflow-y: scroll;
+  width: 100%;
+  max-height: 75px;
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+#suggestions {
+  width: inherit;
+  border-radius: 8px;
+  margin: 0 0 -15px 0;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul li {
+  margin-top: 0;
+  height: 24px;
+  padding-top: 5px;
+}
+
+.suggestion-container {
+  display: flex;
+  align-items: center;
+  height: 24px;
+  margin-top: -10px;
+  padding-left: 10px;
+}
+
+.suggestion-container:hover {
+  background-color: #f8f9fa;
+}
+
+.suggestion-container.active {
+  background-color: #f8f9fa;
+  outline: none;
+}
+
+.suggestion-container:focus {
+  outline: none;
+}
+
+.suggestion-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 0.5rem;
+}
+
+.suggestion-element {
+  font-family: 'Gotham Narrow Light';
+  font-weight: 400;
+  color: #495057;
+  font-size: 1.125rem;
+  padding: 5px;
+}
+
+.input-warning {
+  position: absolute;
+  top: 103%;
+  left: 6%;
+  color: #dd0000;
+  font-family: 'Gotham Narrow Light';
+  font-weight: 400;
+  font-size: 1.125rem;
+  display: none;
+}
+
+@media (max-width: 586px) {
+  .layoutStyle {
+    flex-direction: column;
+  }
+  #container {
+    height: 360px;
+    max-width: 576px;
+    min-width: 360px;
+    overflow: hidden;
+  }
+
+  .search-container {
+    max-width: 360px;
+  }
+
+  #forecast-container {
+    margin-top: 25px;
+  }
+
+  #weather-video {
+    height: 100%;
+  }
+
+  .search-page-header {
+    font-size: 2.5rem;
+    width: 322px;
+  }
+
+  .search-page-container {
+    height: 360px;
+    justify-content: start;
+    max-width: 576px;
+    min-width: 360px;
+    gap: 25px;
+    padding: 0 0;
+  }
+
+  .search-btns-container {
+    flex-direction: column-reverse;
+    height: auto;
+  }
+
+  #city-search-form {
+    width: 300px;
+  }
+
+  .cancel-btn,
+  .searchBtn {
+    width: 300px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .input-field-container {
+    width: 300px;
+    margin-top: 10px;
+  }
+
+  .suggestions-wrapper {
+    max-height: 170px;
+  }
+
+  .search-page-header,
+  .search-btns-container,
+  .input-field.container,
+  .cancel-btn,
+  .search-btn {
+    margin-top: 20px;
+  }
+}
+
+
 
 @media (max-width: 991px) {
   .modal {
