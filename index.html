@@ -78,7 +78,7 @@
           </fieldset>
           <div class="search-btns-container">
             <button class="cancel-btn" type="button">ABBRECHEN</button>
-            <button type="submit" disabled class="search-btn" type="button">SUCHEN</button>
+            <button type="submit" disabled class="search-btn"  id="search-btn" type="button">SUCHEN</button>
           </div>
         </form>
       </div>
@@ -125,19 +125,11 @@
 let plzData;
 
 window.addEventListener("DOMContentLoaded", async () => {
-  try {
+
     const responsePlz = await fetch("./plz.json");
     plzData = await responsePlz.json();
   
-    if (data) {
-    
-    } else {
-      handleError();
-    }
-  } catch (error) {
-    console.error(error);
-    handleError();
-  }
+
  });
     const setupSearchForm = () => {
     const form = document.getElementById("city-search-form");
@@ -146,7 +138,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     const inputField = document.getElementById("city-search-input");
     const suggestionsDiv = document.getElementById("suggestions");
 
-  //form.addEventListener("submit", submitForm);
+  form.addEventListener("submit", submitForm);
   closeBtn.addEventListener("click", removeValue);
   cancelBtn.addEventListener("click", handleCancel);
   inputField.addEventListener("input", handleInput);
@@ -164,6 +156,106 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
   });
 }
+
+const submitForm = async (event) => {
+  event.preventDefault();
+  
+  const baseurl = (zipcode) => {
+    return `https://api.bild.de/historicalweatherdata/get_weatherdata_json_object?path=weatherdata/100y&file=plz_${zipcode}`;
+  };
+
+  async function getCityData() {
+    try {
+      const response = await fetch("https://api.bild.de/historicalweatherdata/get_weatherdata_json_object?path=weatherdata&file=PLZ");
+      const data = await response.json();
+
+      const cityMap = new Map();
+      const uniqueCities = new Set();
+      const uniqueCityZipList = [];
+
+      data.forEach((i) => {
+        cityMap.set(i.Postleitzahl, i.Name);
+
+        if (!uniqueCities.has(i.Name)) {
+          uniqueCities.add(i.Name);
+          uniqueCityZipList.push({ zip: i.Postleitzahl, city: i.Name });
+        }
+      });
+
+      return { cityMap, uniqueCityZipList };
+    } catch (error) {
+      console.error("Error fetching city data:", error);
+      return { cityMap: new Map(), uniqueCityZipList: [] }; // Return empty data in case of error
+    }
+  }
+
+  async function getZipByCityName(input) {
+    try {
+      const { uniqueCityZipList } = await getCityData();
+      const result = uniqueCityZipList.find((i) => i.city === input);
+      return result
+        ? { zip: result.zip, name: result.city }
+        : { name: input, zip: input }; // Use the input if city is not found
+    } catch (error) {
+      console.error("Error finding zip by city name:", error);
+    }
+  }
+
+  try {
+    const inputElement = document.querySelector("#city-search-input");
+    const city = inputElement.value;
+
+    const zipData = await getZipByCityName(city); // Fetch the zip code for the city
+    const zip = zipData ? zipData.zip : city; // Fallback to input city if no zip is found
+    
+    const response = await fetch(baseurl(zip));
+    if (!response.ok) {
+      throw new Error(`Failed to fetch weather data: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const element = document.querySelector("#tempChart");
+    if (!element) {
+      throw new Error("Chart element not found");
+    }
+
+    let myTempChart = tempChart({
+      element: element,
+      data,
+    });
+
+    if (!myTempChart || typeof myTempChart.remove !== "function") {
+      throw new Error("tempChart did not return a valid chart instance with a remove method");
+    }
+
+    // Modify the last data point
+    const newData = JSON.parse(JSON.stringify(data));
+    const lastDataPoint = newData[newData.length - 1];
+    if (lastDataPoint) {
+      lastDataPoint.value += 10;
+    }
+
+    // Remove old chart and create a new one
+    const oldChart = document.querySelector(".main-svg");
+    if (oldChart) oldChart.remove();
+
+    const newElement = document.createElement("div");
+    newElement.id = "tempChart";
+    element.parentNode.replaceChild(newElement, element);
+
+    myTempChart = tempChart({
+      element: newElement,
+      data: newData,
+    });
+
+    if (!myTempChart || typeof myTempChart.remove !== "function") {
+      throw new Error("tempChart did not return a valid chart instance with a remove method");
+    }
+  } catch (error) {
+    console.error("Error processing form submission:", error);
+  }
+};
+
 
 
 
@@ -292,7 +384,7 @@ const removeValue = (event) => {
 
 const handleCancel = () => {
   isError = false;
-  renderApp(backGroundWeather);
+  document.getElementsByClassName("search-page-container")[0].style.display = "none"
 };
 
 setupSearchForm()
