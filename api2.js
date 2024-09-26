@@ -9,7 +9,7 @@ const base_url = (zipcode) => {
  };
 
 const modal = document.getElementById("search-modal");
-const searchButton = document.getElementById("search-btn");
+const searchButton = document.getElementById("search-button");
 const searchInput = document.getElementsByClassName("search-input")[0];
 const modalInput = document.getElementsByClassName("modal-input")[0];
 const textSearch = document.getElementById("text-search");
@@ -21,88 +21,31 @@ const infoInput = document.getElementsByClassName("info-input")[0];
 const temperature = document.getElementById("temperature");
 const comparison = document.getElementById("comparison");
 const tempImage = document.getElementById("tempImage");
+const form = document.getElementById("city-search-form");
+const closeBtn = document.querySelector(".close");
+const cancelBtn = document.querySelector(".cancel-btn");
+const inputField = document.getElementById("city-search-input");
+const suggestionsDiv = document.getElementById("suggestions");
+const searchContainer = document.querySelector(".search-page-container");
+const searchText = document.querySelector(".search-text");
 
-// Get historical max temperatur for today's date
-async function getMaxTemp(lat, long) {
-  let dateToday = new Date();
-  let formattedDate = dateToday.toISOString().split("T")[0];
-  //let url = `https://api.brightsky.dev/weather?lat=${lat}&lon=${long}&date=${formattedDate}`;
-  const urlResponse = await fetch(url);
-  //const urlResponse = await fetch('Berlin.json');
-  if (!urlResponse.ok) {
-    throw new Error(`An error occurred: ${urlResponse.statusText}`);
-  }
-  const result = await urlResponse.json();
 
-  let maxTemperature = -Infinity;
-  let minTemperature = Infinity;
-  let sumTemperature = 0;
-  let count = 0;
-
-  const currentHour = new Date().getUTCHours();
-
-  for (let i = 0; i < result.weather.length; i++) {
-    const weatherObj = result.weather[i];
-    const hour = parseInt(weatherObj.timestamp.substr(11, 2));
-
-    const localHour = (hour + 2) % 24;
-
-    if (localHour <= currentHour + 2) {
-      const temperature = weatherObj.temperature;
-      sumTemperature += temperature;
-      count++;
-      if (temperature > maxTemperature) {
-        maxTemperature = temperature;
-      }
-      if (temperature < minTemperature) {
-        minTemperature = temperature;
-      }
-    } else {
-      break;
-    }
-  }
-
-  const avgTemperature = count > 0 ? sumTemperature / count : null;
-
-  return { maxTemperature, avgTemperature };
-}
-
-// Fetch and display comparison data
-(async () => {
-  try {
-    let avgMaxTemp = await getMaxTemp(lat, lon);
-    let difference = parseFloat(
-      avgMaxTemp.avgTemperature - avgMaxTemp.maxTemperature
-    ).toFixed(2);
-    temperature.textContent = Math.abs(difference);
-    comparison.textContent = difference > 0 ? " wärmer" : " kälter";
-    tempImage.src = `./assets/${difference > 0 ? "increase" : "decrease"}.svg`;
-  } catch (error) {
-    console.error("Error fetching temperature data:", error);
-  }
-})();
-
-function extractNumber(input) {
-  const match = input.match(/\((\d+)\)/);
-  return match ? match[1] : null;
-}
 
 // Fill the chart from zip code
-
-
-searchButton.onclick = function () {
-  modal.style.display = "block";
+searchButton.onclick = function (event) {
+  console.log("search")
+  searchContainer.style.display = "flex";
 };
 
-window.onclick = function (event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-};
+// window.onclick = function (event) {
+//   if (event.target == modal) {
+//     modal.style.display = "none";
+//   }
+// };
 
-textClose.onclick = function () {
-  modal.style.display = "none";
-};
+// textClose.onclick = function () {
+//   modal.style.display = "none";
+// };
 
 infoButton.onclick = function () {
   info.style.display = "block";
@@ -119,25 +62,26 @@ window.onclick = function (event) {
 
 
 // Get list of all the city and zip
-async function getCityData() {
-  const response = await fetch("https://api.bild.de/historicalweatherdata/get_weatherdata_json_object?path=weatherdata&file=PLZ");
-  const data = await response.json();
 
-  const cityMap = new Map();
-  const uniqueCities = new Set();
-  const uniqueCityZipList = [];
-
-  data.forEach((i) => {
-    cityMap.set(i.Postleitzahl, i.Name);
-
-    if (!uniqueCities.has(i.Name)) {
-      uniqueCities.add(i.Name);
-      uniqueCityZipList.push({ zip: i.Postleitzahl, city: i.Name });
-    }
-  });
-
-  return { cityMap, uniqueCityZipList };
-}
+// document.addEventListener("DOMContentLoaded", () => {
+//     form.addEventListener("submit", handleSubmit);
+//     closeBtn.addEventListener("click", removeValue);
+//     cancelBtn.addEventListener("click", handleCancel);
+//     inputField.addEventListener("input", handleInput);
+  
+//     document.addEventListener("click", (event) => {
+//       if (!suggestionsDiv.contains(event.target)) {
+//         suggestionsDiv.innerHTML = "";
+//         const inputValue = inputField.value.trim().toLowerCase();
+//         const matchedItem = plzData.find(
+//           (item) => item.Name.toLowerCase() === inputValue
+//         );
+//         if (matchedItem) {
+//           inputField.value = matchedItem.Name;
+//         }
+//       }
+//     });
+// })
 
 document.addEventListener("DOMContentLoaded", () => {
   const input = document.querySelector(".modal-input");
@@ -211,18 +155,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  input.addEventListener("input", showSuggestions);
+  // input.addEventListener("input", showSuggestions);
 
-  document.addEventListener("click", (event) => {
-    if (
-      !event.target.closest(".option") &&
-      !event.target.closest(".modal-input")
-    ) {
-      suggestionsContainer.style.display = "none";
-    }
-  });
+  // document.addEventListener("click", (event) => {
+  //   if (
+  //     !event.target.closest(".option") &&
+  //     !event.target.closest(".modal-input")
+  //   ) {
+  //     suggestionsContainer.style.display = "none";
+  //   }
+  // });
 
-  input.addEventListener("focus", showSuggestions);
+  // input.addEventListener("focus", showSuggestions);
 });
 
 // Function to get zip code by city name

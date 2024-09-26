@@ -5,6 +5,7 @@
 @font-face {
   font-family: 'Gotham Condensed Bold';
   src: url('./fonts/GothamCond-Bold.otf') format("opentype");
+  font-weight: 700;
 }
 @font-face {
   font-family: 'Gotham Narrow Black';
@@ -448,17 +449,19 @@ body {
 }
 
 
-
-
 .search-page-container {
+  margin: 0;
   background-color: #f3f2f2;
-  display: flex;
+  display: none;
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  max-width: 992px;
-  height: 100%;
-  height: 238px;
+  width: 100vw;
+  height: 100vh;
   padding: 0 50px;
   overflow-y: hidden;
 }
@@ -705,6 +708,7 @@ ul li {
   }
 
   .search-page-container {
+    display: none;
     height: 360px;
     justify-content: start;
     max-width: 576px;
@@ -723,7 +727,7 @@ ul li {
   }
 
   .cancel-btn,
-  .searchBtn {
+  .search-btn {
     width: 300px;
     justify-content: center;
     align-items: center;

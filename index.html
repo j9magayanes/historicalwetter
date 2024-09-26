@@ -121,4 +121,181 @@
     <script src="temp-chart.js"></script>
     <script src="index.js"></script>
     <script src="api2.js"></script>
+    <script>
+let plzData;
+
+window.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const responsePlz = await fetch("./plz.json");
+    plzData = await responsePlz.json();
+  
+    if (data) {
+    
+    } else {
+      handleError();
+    }
+  } catch (error) {
+    console.error(error);
+    handleError();
+  }
+ });
+    const setupSearchForm = () => {
+    const form = document.getElementById("city-search-form");
+    const closeBtn = document.querySelector(".close");
+    const cancelBtn = document.querySelector(".cancel-btn");
+    const inputField = document.getElementById("city-search-input");
+    const suggestionsDiv = document.getElementById("suggestions");
+
+  //form.addEventListener("submit", submitForm);
+  closeBtn.addEventListener("click", removeValue);
+  cancelBtn.addEventListener("click", handleCancel);
+  inputField.addEventListener("input", handleInput);
+
+  document.addEventListener("click", (event) => {
+    if (!suggestionsDiv.contains(event.target)) {
+      suggestionsDiv.innerHTML = "";
+      const inputValue = inputField.value.trim().toLowerCase();
+      const matchedItem = plzData.find(
+        (item) => item.Name.toLowerCase() === inputValue
+      );
+      if (matchedItem) {
+        inputField.value = matchedItem.Name;
+      }
+    }
+  });
+}
+
+
+
+const removeDuplicates = (data) => {
+  const uniqueCities = new Set();
+  return data.filter((item) => {
+    if (!uniqueCities.has(item.Name.toLowerCase())) {
+      uniqueCities.add(item.Name.toLowerCase());
+      return true;
+    }
+    return false;
+  });
+};
+
+const handleInput = (event) => {
+  const inputValue = event.target.value.trim();
+  let suggestions = [];
+  if (inputValue) {
+    if (/^\d+$/.test(inputValue)) {
+      console.log(plzData)
+      suggestions = plzData.filter((item) =>
+        item.Postleitzahl.startsWith(inputValue)
+      );
+      suggestions = removeDuplicates(suggestions);
+    } else {
+      suggestions = removeDuplicates(plzData).filter((item) =>
+        item.Name.toLowerCase().startsWith(inputValue.toLowerCase())
+      );
+    }
+  }
+
+  displaySuggestions(suggestions);
+};
+
+const displaySuggestions = (suggestions) => {
+  const suggestionsDiv = document.getElementById("suggestions");
+  const warningText = document.querySelector(".input-warning");
+  const searchBtn = document.querySelector(".search-btn");
+  suggestionsDiv.innerHTML = "";
+  if (suggestions.length > 0) {
+    warningText.style.display = "none";
+    searchBtn.disabled = false;
+    const ul = document.createElement("ul");
+    suggestions.forEach((suggestion) => {
+      const li = document.createElement("li");
+      const container = document.createElement("div");
+      const img = document.createElement("img");
+      const p = document.createElement("p");
+
+      container.classList.add("suggestion-container");
+      img.src = "./assets/icons/magnifying-gray.svg";
+      img.classList.add("suggestion-icon");
+      p.classList.add("suggestion-element");
+
+      p.textContent = suggestion.Name;
+
+      container.appendChild(img);
+      container.appendChild(p);
+      li.appendChild(container);
+      ul.appendChild(li);
+
+      container.setAttribute("tabindex", "-1");
+
+      container.addEventListener("click", () => {
+        document.getElementById("city-search-input").value = suggestion.Name;
+        suggestionsDiv.innerHTML = "";
+      });
+    });
+    suggestionsDiv.appendChild(ul);
+
+    document.addEventListener("keydown", handleKeyDown);
+  } else {
+    if (document.getElementById("city-search-input").value.length === 0) {
+      warningText.style.display = "none";
+      searchBtn.disabled = true;
+    } else {
+      warningText.style.display = "block";
+      searchBtn.disabled = true;
+    }
+  }
+};
+
+const handleKeyDown = (event) => {
+  const suggestionContainers = document.querySelectorAll(
+    ".suggestion-container"
+  );
+  if (suggestionContainers.length === 0) return;
+
+  if (event.key === "ArrowDown") {
+    currentFocus++;
+    if (currentFocus >= suggestionContainers.length) currentFocus = 0;
+    setActive(suggestionContainers);
+  } else if (event.key === "ArrowUp") {
+    currentFocus--;
+    if (currentFocus < 0) currentFocus = suggestionContainers.length - 1;
+    setActive(suggestionContainers);
+  } else if (event.key === "Enter") {
+    if (currentFocus > -1) {
+      suggestionContainers[currentFocus].click();
+      document.getElementById("suggestions").innerHTML = "";
+    }
+  }
+};
+
+const setActive = (suggestionContainers) => {
+  if (currentFocus >= suggestionContainers.length) {
+    currentFocus = 0;
+  } else if (currentFocus < 0) {
+    currentFocus = suggestionContainers.length - 1;
+  }
+
+  suggestionContainers.forEach((container, index) => {
+    if (index === currentFocus) {
+      container.classList.add("active");
+      container.focus();
+    } else {
+      container.classList.remove("active");
+    }
+  });
+};
+
+const removeValue = (event) => {
+  const inputField = event.target.previousElementSibling;
+  inputField.value = "";
+};
+
+const handleCancel = () => {
+  isError = false;
+  renderApp(backGroundWeather);
+};
+
+setupSearchForm()
+
+    </script>
 </body>
