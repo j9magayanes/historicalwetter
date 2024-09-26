@@ -195,6 +195,6 @@ async function getWeatherData(city) {
 textSearch.onclick = function() {
 
   
- // modal.style.display = "none";
+  document.getElementsByClassName("search-page-container")[0].style.display = "none"
 }
 
