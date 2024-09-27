@@ -359,13 +359,14 @@ body {
   position: fixed;
   z-index: 4;
   left: 0;
-  width: 934px;
-  height: 327px;
+  width: 95vw;
+  height: 100vh;
   overflow: auto;
   justify-items: center;
   background-color: #fefefe;
-  top: 30px;
-  left: 25px;
+  top: 9.17vh;
+  left: 2.52vw;
+  right:  2.52vw;
   flex-direction: column;
   border-radius: 20px;
 }
