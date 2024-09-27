@@ -1,23 +1,23 @@
 // Initial Zip and City
-let zip = "10115";
-let city = "Berlin";
-// What is the valid lat long for berlin
-let lat = 53.4661983935898;
-let lon = 9.69158914791978;
-const base_url = (zipcode) => {
-  return `https://api.bild.de/historicalweatherdata/get_weatherdata_json_object?path=weatherdata/100y&file=plz_${zipcode}`;
- };
+const zip = "10115";
+const city = "Berlin"; // City variable is defined but not used in this context
+const lat = 53.4661983935898;
+const lon = 9.69158914791978;
 
+const baseUrl = (zipcode) => {
+  return `https://api.bild.de/historicalweatherdata/get_weatherdata_json_object?path=weatherdata/100y&file=plz_${zipcode}`;
+};
+
+let plzData;
+
+// DOM Elements
 const modal = document.getElementById("search-page-container");
 const searchButton = document.getElementById("search-button");
-const searchInput = document.getElementsByClassName("search-input")[0];
+const searchInput = document.querySelector(".search-input");
 const modalInput = document.getElementsByClassName("modal-input")[0];
-const textSearch = document.getElementById("search-btn");
-const textClose = document.getElementsByClassName("modal-text-close")[0];
 const overlay = document.getElementById("overlay");
 const info = document.getElementById("info-modal");
 const infoButton = document.getElementById("info-btn");
-const infoInput = document.getElementsByClassName("info-input")[0];
 const temperature = document.getElementById("temperature");
 const comparison = document.getElementById("comparison");
 const tempImage = document.getElementById("tempImage");
@@ -26,175 +26,226 @@ const closeBtn = document.querySelector(".close");
 const cancelBtn = document.querySelector(".cancel-btn");
 const inputField = document.getElementById("city-search-input");
 const suggestionsDiv = document.getElementById("suggestions");
-const searchContainer = document.querySelector(".search-page-container");
 const searchText = document.querySelector(".search-text");
+let currentFocus = -1;
 
-
-
-// Fill the chart from zip code
-searchButton.onclick = function (event) {
-  console.log("search")
-  searchContainer.style.display = "flex";
-};
-
-infoButton.onclick = function () {
-  info.style.display = "block";
-  overlay.style.display = "block"; 
-};
-
-window.onclick = function (event) {
-  if (event.target == overlay) {
-    info.style.display = "none";
-    overlay.style.display = "none"; 
+// Fetch Postal Code Data
+window.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const responsePlz = await fetch("./plz.json");
+    plzData = await responsePlz.json();
+  } catch (error) {
+    console.error("Error fetching postal code data:", error);
   }
-};
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  const input = document.querySelector(".modal-input");
-  const suggestionsContainer = document.querySelector(
-    ".autocomplete-suggestions"
-  );
-
-  async function filterSuggestions(query) {
-    const cityMap = (await getCityData()).cityMap;
-    const suggestions = [];
-    const queryLower = query.toLowerCase();
-    const uniqueNames = new Set();
-  
-    for (const [zip, name] of cityMap.entries()) {
-      if (
-        name.toLowerCase().includes(queryLower) ||
-        zip.toLowerCase().includes(queryLower)
-      ) {
-        if (!uniqueNames.has(name.toLowerCase())) {
-          uniqueNames.add(name.toLowerCase());
-          suggestions.push(`${name}`);
-        }
-      }
-    }
-    return suggestions;
-  }
-  
 });
 
-// Function to get zip code by city name
-async function getZipByCityName(input) {
-  try {
-    const response = (await getCityData()).uniqueCityZipList;
-    console.log(response)
-    if (!response) {
-      throw new Error(`An error occurred`);
-    }
-    console.log(input)
-    const result = response.find(
-      (i) => i.city === input
-    );
-    return result
-      ? { zip: result.zip, name: result.city }
-      : { name: input, zip: input };
-  } catch (error) {
-    console.error("Error fetching the city data:", error);
-  }
-}
+// Setup Search Form Event Listeners
+const setupSearchForm = () => {
+  form.addEventListener("submit", submitForm);
+  closeBtn.addEventListener("click", clearInput);
+  cancelBtn.addEventListener("click", closeModal);
+  inputField.addEventListener("input", handleInput);
 
-async function getWeatherData(city) {
-  try {
-    const response = await fetch(base_url(city));
-    console.log(city)
-    //const response = await fetch('Berlin.json');
-    if (!response.ok) {
-      throw new Error(`An error occurred: ${response.statusText}`);
+  document.addEventListener("click", (event) => {
+    if (!suggestionsDiv.contains(event.target)) {
+      clearSuggestions();
     }
+  });
+};
+
+// Handle Search Button Click
+searchButton.onclick = function () {
+  console.log("search");
+  modal.style.display = "flex";
+};
+
+// Show Info Modal
+infoButton.onclick = function () {
+  info.style.display = "block";
+  overlay.style.display = "block";
+};
+
+// Close Modal on Overlay Click
+window.onclick = function (event) {
+  if (event.target === overlay) {
+    closeModal();
+  }
+};
+
+// Close Modal Function
+const closeModal = () => {
+  modal.style.display = "none";
+};
+
+// Handle Form Submission
+const submitForm = async (event) => {
+  event.preventDefault();
+
+  try {
+    const inputValue = inputField.value.trim();
+    const zipData = await getZipByCityName(inputValue);
+    const zip = zipData ? zipData.zip : inputValue; // Fallback to input if no zip is found
+    const response = await fetch(baseUrl(zip));
+    
+    if (!response.ok) throw new Error(`Failed to fetch weather data: ${response.status}`);
+
     const data = await response.json();
-    const element = document.querySelector("#tempChart");
-    if (!element) {
-      throw new Error("Chart element not found");
-    }
+    searchInput.textContent=inputValue
+    console.log(searchInput.textContent); 
+    updateTempChart(data);
 
-    let myTempChart = tempChart({
-      element: element,
-      data,
-    });
-
-    if (!myTempChart || typeof myTempChart.remove !== "function") {
-      throw new Error(
-        "tempChart did not return a valid chart instance with a remove method"
-      );
-    }
-
-    // Make a copy of the data and modify it
-    const newData = JSON.parse(JSON.stringify(data));
-    const lastDataPoint = newData[newData.length - 1];
-    if (lastDataPoint) {
-      lastDataPoint.value += 10;
-    }
-
-    // Remove old chart
-    const oldChart = document.getElementsByClassName("main-svg")[0];
-    if (oldChart) oldChart.remove();
-
-    // Recreate chart element
-    const newElement = document.createElement("div");
-    newElement.id = "tempChart";
-    element.parentNode.replaceChild(newElement, element);
-
-    // Create new chart with modified data
-    myTempChart = tempChart({
-      element: newElement,
-      data: newData,
-    });
-
-    if (!myTempChart || typeof myTempChart.remove !== "function") {
-      throw new Error(
-        "tempChart did not return a valid chart instance with a remove method"
-      );
-    }
   } catch (error) {
-    console.error("Error fetching the weather data:", error);
+    console.error("Error processing form submission:", error);
   }
-}
+};
 
-// Initial fetch for default city
+// Fetch Zip Code by City Name
+const getZipByCityName = async (input) => {
+  try {
+    const { uniqueCityZipList } = await getCityData();
+    console.log(uniqueCityZipList)
+    const result = uniqueCityZipList?.find((item) => item.Name.toLowerCase() === input.toLowerCase());
+    return result ? { zip: result.Postleitzahl, name: result.Name } : { name: input, zip: input };
+  } catch (error) {
+    console.error("Error finding zip by city name:", error);
+  }
+};
+
+// Get City Data
+const getCityData = async () => {
+  try {
+    const response = await  fetch("./plz.json");
+    const data = await response.json();
+
+    const uniqueCityZipList = Array.from(new Set(data.map(item => item.Name)))
+      .map(name => data.find(item => item.Name === name));
+
+    return { uniqueCityZipList };
+  } catch (error) {
+    console.error("Error fetching city data:", error);
+    return { uniqueCityZipList: [] };
+  }
+};
+
+// Update Temperature Chart
+const updateTempChart = (data) => {
+  const element = document.querySelector("#tempChart");
+  if (!element) throw new Error("Chart element not found");
+
+  const newData = JSON.parse(JSON.stringify(data));
+  const lastDataPoint = newData[newData.length - 1];
+  if (lastDataPoint) {
+    lastDataPoint.value += 10; // Modify the last data point
+  }
+
+  const oldChart = document.querySelector(".main-svg");
+  if (oldChart) oldChart.remove();
+
+  const newElement = document.createElement("div");
+  newElement.id = "tempChart";
+  element.parentNode.replaceChild(newElement, element);
+
+  const myTempChart = tempChart({
+    element: newElement,
+    data: newData,
+  });
+
+  if (!myTempChart || typeof myTempChart.remove !== "function") {
+    throw new Error("tempChart did not return a valid chart instance with a remove method");
+  }
+};
+
+// Handle Input Changes
+const handleInput = (event) => {
+  const inputValue = event.target.value.trim();
+  let suggestions = [];
+
+  if (inputValue) {
+    if (/^\d+$/.test(inputValue)) {
+      suggestions = plzData.filter((item) => item.Postleitzahl.startsWith(inputValue));
+    } else {
+      suggestions = plzData.filter((item) => item.Name.toLowerCase().startsWith(inputValue.toLowerCase()));
+    }
+    displaySuggestions(removeDuplicates(suggestions));
+  } else {
+    clearSuggestions();
+  }
+};
+
+// Display Suggestions
+const displaySuggestions = (suggestions) => {
+  suggestionsDiv.innerHTML = "";
+  if (suggestions.length > 0) {
+    const ul = document.createElement("ul");
+    suggestions.forEach((suggestion) => {
+      const li = document.createElement("li");
+      const container = document.createElement("div");
+      const img = document.createElement("img");
+      const p = document.createElement("p");
+
+      container.classList.add("suggestion-container");
+      img.src = "./assets/icons/magnifying-gray.svg";
+      img.classList.add("suggestion-icon");
+      p.classList.add("suggestion-element");
+      p.textContent = suggestion.Name;
+      container.appendChild(img);
+      container.appendChild(p);
+      li.appendChild(container);
+      ul.appendChild(li);
+
+      container.setAttribute("tabindex", "-1");
+      container.addEventListener("click", () => {
+        inputField.value = suggestion.Name;
+        clearSuggestions();
+      });
+    });
+    suggestionsDiv.appendChild(ul);
+  } else {
+    clearSuggestions();
+  }
+};
+
+// Clear Suggestions
+const clearSuggestions = () => {
+  suggestionsDiv.innerHTML = "";
+};
+
+// Remove Duplicates from Array
+const removeDuplicates = (data) => {
+  const uniqueNames = new Set();
+  return data.filter((item) => {
+    const nameLower = item.Name.toLowerCase();
+    if (!uniqueNames.has(nameLower)) {
+      uniqueNames.add(nameLower);
+      return true;
+    }
+    return false;
+  });
+};
+
+// Clear Input Field Value
+const clearInput = (event) => {
+  const inputField = event.target.previousElementSibling;
+  inputField.value = "";
+};
+
+// Initial Fetch for Default City
 (async () => {
   try {
-    // Ensure zip and base_url are defined
-    if (typeof zip === "undefined" || typeof base_url !== "function") {
-      throw new Error("zip or base_url is not defined");
-    }
+    const response = await fetch(baseUrl(zip));
+    if (!response.ok) throw new Error(`An error occurred: ${response.statusText}`);
 
-    // Fetch the data using zip
-    const response = await fetch(base_url(zip));
-    //const response = await fetch('Berlin.json');
-    if (!response.ok) {
-      throw new Error(`An error occurred: ${response.statusText}`);
-    }
-
-    // Parse the response data
     const data = await response.json();
-
-    console.log(data)
-    // Ensure the tempChart function and the element exist
-    const element = document.querySelector("#tempChart");
-    if (!element) {
-      throw new Error("Chart element not found");
-    }
-
-    // Create the chart with the fetched data
-    let myTempChart = tempChart({
-      element: element,
-      data,
-    });
-
-    console.log("Chart created successfully");
+    updateTempChart(data);
   } catch (error) {
     console.error("Error fetching the initial weather data:", error);
   }
 })();
 
-textSearch.onclick = function() {
+// Close Search Modal
+document.getElementById("search-btn").onclick = () => {
+  closeModal();
+};
 
-  
-  document.getElementsByClassName("search-page-container")[0].style.display = "none"
-}
-
+// Set up search form event listeners
+setupSearchForm();
