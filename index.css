@@ -211,7 +211,12 @@ position: relative;
 
 .swatch {
   display: flex;
-  align-items: center
+  flex-direction: column;
+}
+.swatch-row {
+  display: flex;
+  align-items: center; /* Align items side by side */
+  gap: 10px;
 }
 
 .swatch-label {
@@ -834,5 +839,8 @@ ul li {
     margin-top: 1rem;
     scale: 0.97;
   }
+  .swatch {
 
+   display: block;
+  }
 }
