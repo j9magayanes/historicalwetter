@@ -68,8 +68,14 @@ infoButton.onclick = function () {
 // Close Modal on Overlay Click
 window.onclick = function (event) {
   if (event.target === overlay) {
-    closeModal();
+    closeInfoOverlay();
   }
+};
+
+// Close Info Overlay Function
+const closeInfoOverlay = () => {
+  info.style.display = "none";
+  overlay.style.display = "none";
 };
 
 // Close Modal Function

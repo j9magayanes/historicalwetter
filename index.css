@@ -245,8 +245,19 @@ body {
   position: relative;
 }
 
+.swatch-transparent {
+  width: 27.94px;
+  height: 19.79px;
+  left: 0.5px;
+  gap: 0px;
+  opacity: 0px;
+  margin-right: 0.25em;
+  align-items: flex-end;
+  position: relative;
+}
+
 .dotted-line {
-  border-top: 1px dotted black;
+  border-top: 1px dotted  var(--clr-navy);
   position: absolute;
   top: 50%;
   width: 100%;
@@ -752,7 +763,20 @@ ul li {
   }
 }
 
+/* Media query for screens 656px and below */
+@media (max-width: 656px) {
+  .swatches-container {
+    align-items: center;
+    flex-flow: column wrap;
+    flex-direction: column;
+    gap: 10px;
+  }
 
+  .swatch {
+    display: flex;
+    align-items: center;
+  }
+}
 
 @media (max-width: 991px) {
   .modal {
@@ -792,3 +816,4 @@ ul li {
     border-radius: calc((9.99/ 992) * 100vw);
   }
 } 
+
