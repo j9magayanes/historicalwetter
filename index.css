@@ -70,19 +70,16 @@ body {
 }
 
 .card-body {
-  --padding-x: 2em;
-  --padding-y: 0.75em;
-  --gap: 0.75em;
-  padding: var(--padding-y) var(--padding-x);
+
+
+  padding: 0.75em 2em;
   display: flex;
   flex-direction: column;
-  gap: var(--gap);
+  gap: 0.75em;
 }
 
 .search-container {
-  position: relative; 
-  display: flex; 
-  align-items: center;
+position: relative;
 }
 
 .search {
@@ -93,6 +90,7 @@ body {
   --input-width: 12ch;
   display: flex;
   align-items: stretch;
+  left: 0;
   position: absolute; 
   z-index: 2; 
 }
@@ -163,7 +161,7 @@ body {
   line-height: 1;
   text-align: center;
   margin-inline: auto;
-  
+
 }
 
 .subline {
@@ -817,3 +815,24 @@ ul li {
   }
 } 
 
+
+@media (max-width: 800px) {
+  .question{
+    left: 0;
+    top: 12vh;
+    position: absolute; 
+    padding: 0.5rem 05rem;
+  }
+  .card-body{
+    padding: 2.75em 2em;
+    scale: 0.97;
+    gap: 0
+  }
+  .temp-chart{
+    gap: 0;
+    padding-top: 1rem;
+    margin-top: 1rem;
+    scale: 0.97;
+  }
+
+}
