@@ -605,7 +605,6 @@ function renderButtons() {
   function renderTooltip() {
     if (tooltipDatumIndex === undefined) {
       tooltip.classed('is-visible', false);
-      console.log("falsy")
     } else {
       const d = pointsData[tooltipDatumIndex]
       const src = `./assets/temp_${d.seriesId === 1 ? 'down' : 'up'}.svg`;
@@ -639,11 +638,11 @@ function renderButtons() {
         )
         .classed('is-visible', true);
       const transX = x(d[0]) - scrollContainer.node().scrollLeft;
-      const transXOffset = transX < noScrollWidth / 2 ? '0%' : '-100%';
+      const transXOffset = transX < noScrollWidth / 2 ? '20%' : '-120%';
       const transY = y(d[1]) - focusDotSize;
       tooltip.style(
         'transform',
-        `translate(calc(${transX}px + ${transXOffset}),calc(${transY}px - 100%))`
+        `translate(calc(${transX}px + ${transXOffset}),calc(${transY}px - 20%))`
       );
     }
   }
