@@ -190,7 +190,7 @@ const displaySuggestions = (suggestions) => {
       const p = document.createElement("p");
 
       container.classList.add("suggestion-container");
-      img.src = "./assets/icons/magnifying-gray.svg";
+      img.src = "./assets/magnifying_gray.svg";
       img.classList.add("suggestion-icon");
       p.classList.add("suggestion-element");
       p.textContent = suggestion.Name;
