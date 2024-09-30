@@ -92,7 +92,7 @@ position: relative;
   align-items: stretch;
   left: 0;
   position: absolute; 
-  z-index: 2; 
+  z-index: 1; 
 }
 
 .search-input {
@@ -132,7 +132,6 @@ position: relative;
 
 .vertical-line {
   border-left: 2px solid white;
-
   height: 80%;
 }
 
@@ -202,6 +201,11 @@ position: relative;
 
 .today > svg {
   height: var(--icon-size);
+}
+
+.bottom-legend {
+  display: flex;
+  justify-content: space-between;
 }
 
 .swatches-container {
@@ -452,11 +456,6 @@ position: relative;
   opacity: 0px;
   border: none;
   border-radius: 50%;
-}
-
-.bottom-legend {
-  display: flex;
-  justify-content: space-between;
 }
 
 #overlay {
@@ -815,34 +814,57 @@ ul li {
 } 
 
 
-@media (max-width: 800px) {
+@media (max-width: 656px) {
   .question{
-    left: 0;
+    left: 0; 
     top: 12vh;
     position: absolute; 
     padding-top: 0.25rem;
-    padding-left: .25rem;  }
-  .card-body{
+    padding-left: .25rem;  
+  }
+
+  .card-body {
     padding: 2.75em 2em;
-    scale: 0.97;
+    scale: 0.98;
     gap: 0
   }
-  .temp-chart{
+
+  .temp-chart {
     gap: 0;
     padding-top: 1rem;
     margin-top: 1rem;
+    padding-bottom: 0;
+    margin-bottom: 0;
     scale: 0.97;
   }
+
+  .bottom-legend {
+    align-items:flex-start;
+    justify-content:space-between;
+    scale: 0.97;
+    padding: 0;
+    margin: 0;
+    gap: 0;
+  } 
+
   .swatch {
     display: flex;
-    display: flex;
-    align-items: left;
+    align-items:flex-start;
     justify-content: flex-start;
     flex-direction: column;
   }
+
   .swatch-row {
     display: flex;
     justify-content: flex-start;
     align-items: left;
+    scale: 0.97;
+  }
+
+  .swatches-container {
+    align-items:flex-start;
+    justify-content:flex-start ;
+    flex-wrap: wrap;
+    scale: 0.97;
   }
 }

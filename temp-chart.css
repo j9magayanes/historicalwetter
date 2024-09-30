@@ -171,3 +171,16 @@
   padding-top: 4px;
   padding-left: 3px;
 }
+
+@media (max-width: 656px) { 
+  .temp-chart {
+    gap: 0
+  }
+  .scroll-left {
+    display: none;
+  }
+  
+  .scroll-right {
+    display: none;
+  }
+}
