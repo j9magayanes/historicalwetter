@@ -828,16 +828,16 @@ ul li {
     scale: 0.98;
     gap: 0
   }
- /* 
+ 
   .temp-chart {
     gap: 0;
-    padding-top: 1rem;
+    /* padding-top: 1rem;  */
     margin-top: 1rem;
     padding-bottom: 0;
     margin-bottom: 0;
-   scale: 0.97;
+scale: 0.97; 
   }
-*/
+
   .bottom-legend {
     align-items:flex-start;
     justify-content:space-between;
