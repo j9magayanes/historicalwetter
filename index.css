@@ -121,11 +121,19 @@ position: relative;
 
 .vertical-line-bg {
   background-color: var(--clr-red); 
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  align-items: center;
 }
 
 .vertical-line {
   border-left: 2px solid white;
-  height: 100%;
+
+  height: 80%;
 }
 
 .search-button > svg {
