@@ -211,12 +211,11 @@ position: relative;
 
 .swatch {
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
 }
 .swatch-row {
   display: flex;
-  align-items: center; /* Align items side by side */
-  gap: 10px;
+  align-items: left;
 }
 
 .swatch-label {
@@ -767,19 +766,6 @@ ul li {
 }
 
 /* Media query for screens 656px and below */
-@media (max-width: 656px) {
-  .swatches-container {
-    align-items: center;
-    flex-flow: column wrap;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .swatch {
-    display: flex;
-    align-items: center;
-  }
-}
 
 @media (max-width: 991px) {
   .modal {
@@ -826,8 +812,8 @@ ul li {
     left: 0;
     top: 12vh;
     position: absolute; 
-    padding: 0.5rem 05rem;
-  }
+    padding-top: 0.25rem;
+    padding-left: .25rem;  }
   .card-body{
     padding: 2.75em 2em;
     scale: 0.97;
@@ -840,7 +826,15 @@ ul li {
     scale: 0.97;
   }
   .swatch {
-
-   display: block;
+    display: flex;
+    display: flex;
+    align-items: left;
+    justify-content: flex-start;
+    flex-direction: column;
+  }
+  .swatch-row {
+    display: flex;
+    justify-content: flex-start;
+    align-items: left;
   }
 }
