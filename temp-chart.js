@@ -659,8 +659,8 @@ const overallHighestTempPoint = highestTempThisYearPoint.data.maxMaxThisYear > h
         enter
           .append('line')
           .attr('class', 'focus-line')
-          .style('stroke', 'gray') // Line color
-          .style('stroke-width', 2)
+          .style('stroke', '#727272') // Line color
+          .style('stroke-width', 1)
           .style('z-index', 0)
       )
       .attr('x1', (d) => x(d[0]) - scrollContainer.node().scrollLeft)
