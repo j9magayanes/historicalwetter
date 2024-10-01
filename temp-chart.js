@@ -518,13 +518,12 @@ function renderButtons() {
       return;
     }
   
-    console.log(validData); // Debug: Log the found valid data point
+    console.log(validData);
 
       // Find the lowest temperature point in pointsData
   const lowestTempPoint = pointsData.reduce((lowest, current) => {
-    // Assuming the temperature is stored in `current.data.temperature`
     return current.data.minMin < lowest.data.minMin ? current : lowest;
-  }, pointsData[0]); // Start with the first data point as the initial lowest
+  }, pointsData[0]);
 
  // Find the highest historical temperature point
  const highestTempPoint = pointsData.reduce((highest, current) => {
@@ -536,12 +535,15 @@ const highestTempThisYearPoint = pointsData.reduce((highest, current) => {
   return current.data.maxMaxThisYear > highest.data.maxMaxThisYear ? current : highest;
 }, pointsData[0]);
 
+const overallHighestTempPoint = highestTempThisYearPoint.data.maxMaxThisYear > highestTempPoint.data.maxMax
+? highestTempThisYearPoint
+: highestTempPoint;
+
   // If no valid data is found, exit early (optional safeguard)
   if (!lowestTempPoint) {
     console.warn('No valid data found for rendering.');
     return;
   }
-  console.log(lowestTempPoint);
   
     // Render the circle for the found valid data
     svg
@@ -576,7 +578,7 @@ const highestTempThisYearPoint = pointsData.reduce((highest, current) => {
       );
       svg
       .selectAll('.highest-temp-circle')
-      .data([highestTempPoint])
+      .data([overallHighestTempPoint])
       .join(
         (enter) =>
           enter
