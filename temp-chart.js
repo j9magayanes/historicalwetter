@@ -481,19 +481,17 @@ function renderButtons() {
 
   // Render points on load  
   function renderPoints() {
-    // Start with today's date
     let currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0); // Normalize to midnight
+    currentDate.setHours(0, 0, 0, 0); 
   
     let validData = null;
   
-    // Function to check if a data point has a valid `maxMaxThisYear` value
     function findValidData() {
       // Filter pointsData for the current date
       const currentData = pointsData.filter(d => {
-        const dataDate = new Date(d.data.date); // Adjust based on your data structure
-        dataDate.setHours(0, 0, 0, 0); // Normalize to midnight
-        return dataDate.getTime() === currentDate.getTime(); // Match the current date
+        const dataDate = new Date(d.data.date); 
+        dataDate.setHours(0, 0, 0, 0); 
+        return dataDate.getTime() === currentDate.getTime(); 
       });
   
       // Check if any of the data points have a valid `maxMaxThisYear` value
@@ -501,7 +499,7 @@ function renderButtons() {
         d =>
           d.data.maxMaxThisYear !== undefined &&
           d.data.maxMaxThisYear !== null &&
-          d.data.maxMaxThisYear !== "" // Ensure it's not an empty string
+          d.data.maxMaxThisYear !== ""
       );
   
       // If no valid data, step back one day and search again
@@ -521,11 +519,34 @@ function renderButtons() {
     }
   
     console.log(validData); // Debug: Log the found valid data point
+
+      // Find the lowest temperature point in pointsData
+  const lowestTempPoint = pointsData.reduce((lowest, current) => {
+    // Assuming the temperature is stored in `current.data.temperature`
+    return current.data.minMin < lowest.data.minMin ? current : lowest;
+  }, pointsData[0]); // Start with the first data point as the initial lowest
+
+ // Find the highest historical temperature point
+ const highestTempPoint = pointsData.reduce((highest, current) => {
+  return current.data.maxMax > highest.data.maxMax ? current : highest;
+}, pointsData[0]);
+
+// Find the highest temperature for the current year (`maxMaxThisYear`)
+const highestTempThisYearPoint = pointsData.reduce((highest, current) => {
+  return current.data.maxMaxThisYear > highest.data.maxMaxThisYear ? current : highest;
+}, pointsData[0]);
+
+  // If no valid data is found, exit early (optional safeguard)
+  if (!lowestTempPoint) {
+    console.warn('No valid data found for rendering.');
+    return;
+  }
+  console.log(lowestTempPoint);
   
     // Render the circle for the found valid data
     svg
       .selectAll('.point-circle')
-      .data([validData]) // Use the found valid data
+      .data([validData]) 
       .join(
         (enter) =>
           enter
@@ -535,6 +556,36 @@ function renderButtons() {
             .style('z-index', 5)
             .attr('fill', 'white')
             .attr('transform', (d) => `translate(${x(d[0])}, ${y(d.data.maxMaxThisYear)})`),
+        (update) => update,
+        (exit) => exit.remove()
+      );
+      svg
+      .selectAll('.lowest-temp-circle')
+      .data([lowestTempPoint])
+      .join(
+        (enter) =>
+          enter
+            .append('circle')
+            .attr('class', 'lowest-temp-circle')
+            .attr('r', focusDotSize)
+            .style('z-index', 5)
+            .attr('fill', 'var(--clr-series-2)') 
+            .attr('transform', (d) => `translate(${x(d[0])}, ${y(d.data.minMin)})`),
+        (update) => update,
+        (exit) => exit.remove()
+      );
+      svg
+      .selectAll('.highest-temp-circle')
+      .data([highestTempPoint])
+      .join(
+        (enter) =>
+          enter
+            .append('circle')
+            .attr('class', 'highest-temp-circle')
+            .attr('r', focusDotSize)
+            .style('z-index', 5)
+            .attr('fill', 'var(--clr-series-1)') 
+            .attr('transform', (d) => `translate(${x(d[0])}, ${y(d.data.maxMax)})`),
         (update) => update,
         (exit) => exit.remove()
       );
@@ -573,7 +624,7 @@ function renderButtons() {
           .attr('class', 'focus-circle-maxmax')
           .attr('r', focusDotSize)
       )
-      .attr('fill', (d) => '#174482')
+      .attr('fill', (d) => 'var(--clr-series-2')
       .attr(
         'transform',
         (d) =>
@@ -591,7 +642,7 @@ function renderButtons() {
           .attr('class', 'focus-circle-minmin')
           .attr('r', focusDotSize)
       )
-      .attr('fill', (d) => '#174482')
+      .attr('fill', (d) => 'var(--clr-series-2')
       .attr(
         'transform',
         (d) =>
@@ -699,10 +750,15 @@ function renderButtons() {
     // Flatten the days data
     const flattenedData = groupedData.flatMap(({ days }) => days);
   
-    // Find the latest day in the flattenedData
-    const latestDay = flattenedData.reduce((latest, current) => {
-      return current.date > latest.date ? current : latest;
-    }, { date: new Date(0) });
+    // Find the day with the highest temperature
+    const highestTemperatureDay = flattenedData.reduce((highest, current) => {
+      return current.temperature > highest.temperature ? current : highest;
+    }, { temperature: -Infinity });
+
+    // Find the day with the highest temperature
+    const lowestTemperatureDay = flattenedData.reduce((lowest, current) => {
+      return current.temperature > lowest.temperature ? current : lowest;
+    }, { temperature: Infinity });
   
     const todayData = flattenedData.filter(d => d.day === currentDay);
   
@@ -737,8 +793,9 @@ function renderButtons() {
       }).filter((p) => p[1] !== undefined),
     ];
   
-    return { groupedData, flattenedData, pointsData, displayData, latestDay };
-  }
+    return { groupedData, flattenedData, pointsData, displayData, highestTemperatureDay, lowestTemperatureDay };
+}
+
   
   function update(_) {
     data = _;
