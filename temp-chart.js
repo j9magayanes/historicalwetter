@@ -666,7 +666,7 @@ const overallHighestTempPoint = highestTempThisYearPoint.data.maxMaxThisYear > h
       .attr('x1', (d) => x(d[0]) - scrollContainer.node().scrollLeft)
       .attr('y1', (d) =>  y(Math.max(d.data.maxMax, d.data.maxMaxThisYear))) // Main data point
       .attr('x2', (d) => x(d[0]) - scrollContainer.node().scrollLeft)
-      .attr('y2', (d) => y(-20)); // Extend to y-axis (y = 0)
+      .attr('y2', (d) => y(-24)); // Extend to y-axis (y = 0)
   }
  
 
