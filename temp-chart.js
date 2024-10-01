@@ -652,7 +652,23 @@ const overallHighestTempPoint = highestTempThisYearPoint.data.maxMaxThisYear > h
             d.data.minMin
           )})`
       );
+      yAxisSvg
+      .selectAll('.focus-line')
+      .data(focusData)
+      .join((enter) =>
+        enter
+          .append('line')
+          .attr('class', 'focus-line')
+          .style('stroke', 'gray') // Line color
+          .style('stroke-width', 2)
+          .style('z-index', 0)
+      )
+      .attr('x1', (d) => x(d[0]) - scrollContainer.node().scrollLeft)
+      .attr('y1', (d) =>  y(Math.max(d.data.maxMax, d.data.maxMaxThisYear))) // Main data point
+      .attr('x2', (d) => x(d[0]) - scrollContainer.node().scrollLeft)
+      .attr('y2', (d) => y(-20)); // Extend to y-axis (y = 0)
   }
+ 
 
   // Render tooltip
   function renderTooltip() {
