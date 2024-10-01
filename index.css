@@ -815,7 +815,7 @@ ul li {
 
 
 @media (max-width: 656px) {
-/* .question{
+.question{
     left: 0; 
     top: 12vh;
     position: absolute; 
@@ -825,7 +825,6 @@ ul li {
 
   .card-body {
     padding: 2.75em 2em;
-    scale: 0.98;
     gap: 0
   }
  
@@ -834,8 +833,7 @@ ul li {
     margin-top: 1rem;
     padding-bottom: 0;
     margin-bottom: 0;
-    scale: 0.97; 
-  } */
+  } 
 
   .bottom-legend {
     align-items:flex-start;
