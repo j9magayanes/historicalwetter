@@ -227,48 +227,55 @@ position: relative;
 }
 .swatch-row {
   display: flex;
-  align-items: left;
+   align-items: center;
 }
 
 .swatch-label {
   margin-right: 24px;
 }
 
-.swatch-red {
-  width: 27.94px;
-  height: 2px;
-  top: 11.67px;
-  left: 0.5px;
-  gap: 0px;
-  border: 2px 0px 0px 0px;
-  opacity: 0px;
-  background-color: var(--clr-red);
-  margin-right: 0.25em;
-}
-
-.swatch-blue {
-  width: 27.94px;
-  height: 19.79px;
-  left: 0.5px;
-  gap: 0px;
-  opacity: 0px;
-  background-color: var(--clr-navy-light);
-  border-top: 3px solid var(--clr-navy) !important;
-  margin-right: 0.25em;
-  align-items: flex-end;
-  position: relative;
-}
-
+/* Common style for all swatches */
+.swatch-red,
+.swatch-blue,
 .swatch-transparent {
-  width: 27.94px;
-  height: 19.79px;
-  left: 0.5px;
-  gap: 0px;
-  opacity: 0px;
+  width: 27.94px;      /* Same width */
+  height: 19.79px;     /* Same height */
   margin-right: 0.25em;
-  align-items: flex-end;
   position: relative;
+  display: flex;
+  justify-content: center;  /* Align horizontally */
+  align-items: center;      /* Align vertically */
 }
+
+/* Specific styles for each swatch */
+
+/* Red swatch: center the red line vertically */
+/* Red swatch: center the red line vertically */
+.swatch-red {
+  background-color: transparent;  /* Keep background transparent */
+  width: 27.94px;  
+}
+
+.swatch-red::before {
+  content: '';
+  width: 27.94px;  
+  height: 2px; /* Red line height */
+  background-color: var(--clr-red); /* Red color */
+}
+
+
+
+/* Blue swatch: solid navy border on top */
+.swatch-blue {
+  background-color: var(--clr-navy-light); /* Light blue background */
+  border-top: 3px solid var(--clr-navy);   /* Navy border on top */
+}
+
+/* Transparent swatch: no background or border */
+.swatch-transparent {
+  background-color: transparent;
+}
+
 
 .dotted-line {
   border-top: 1px dotted  var(--clr-navy);
@@ -822,9 +829,11 @@ ul li {
     padding-top: 0.25rem;
     padding-left: .25rem;  
   }
+  /* 
 
   .card-body {
     padding: 2.75em 2em;
+    scale: 0.98;
     gap: 0
   }
  
@@ -833,7 +842,8 @@ ul li {
     margin-top: 1rem;
     padding-bottom: 0;
     margin-bottom: 0;
-  } 
+    scale: 0.97; 
+  } */
 
   .bottom-legend {
     align-items:flex-start;
@@ -863,5 +873,9 @@ ul li {
     justify-content:flex-start ;
     flex-wrap: wrap;
     scale: 0.97;
+  }
+
+  .swatch-blue, .swatch-transparent {
+    height: 13.67;
   }
 }

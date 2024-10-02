@@ -172,6 +172,11 @@
   padding-left: 3px;
 }
 
+.temp-today, .text-today, .temp-minMin, .temp-maxMax {
+  font-size: 26px;
+  padding: 20px;
+}
+
 @media (max-width: 656px) { 
   .temp-chart {
     gap: 0
