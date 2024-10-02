@@ -234,48 +234,38 @@ position: relative;
   margin-right: 24px;
 }
 
-/* Common style for all swatches */
 .swatch-red,
 .swatch-blue,
 .swatch-transparent {
-  width: 27.94px;      /* Same width */
-  height: 19.79px;     /* Same height */
+  width: 27.94px;     
+  height: 19.79px;     
   margin-right: 0.25em;
   position: relative;
   display: flex;
-  justify-content: center;  /* Align horizontally */
-  align-items: center;      /* Align vertically */
+  justify-content: center;
+  align-items: center;     
 }
 
-/* Specific styles for each swatch */
-
-/* Red swatch: center the red line vertically */
-/* Red swatch: center the red line vertically */
 .swatch-red {
-  background-color: transparent;  /* Keep background transparent */
+  background-color: transparent; 
   width: 27.94px;  
 }
 
 .swatch-red::before {
   content: '';
   width: 27.94px;  
-  height: 2px; /* Red line height */
-  background-color: var(--clr-red); /* Red color */
+  height: 2px;
+  background-color: var(--clr-red); 
 }
 
-
-
-/* Blue swatch: solid navy border on top */
 .swatch-blue {
-  background-color: var(--clr-navy-light); /* Light blue background */
-  border-top: 3px solid var(--clr-navy);   /* Navy border on top */
-}
+  background-color: var(--clr-navy-light); 
+  border-top: 3px solid var(--clr-navy);   
 
-/* Transparent swatch: no background or border */
+
 .swatch-transparent {
   background-color: transparent;
 }
-
 
 .dotted-line {
   border-top: 1px dotted  var(--clr-navy);
@@ -437,16 +427,15 @@ position: relative;
   height: 200px;
   border: 1px solid #ccc;
   border-top: none;
-  background-color: #FFFFFF; /* Black background */
-  color: #495057; /* White text for better contrast */
+  background-color: #FFFFFF; 
+  color: #495057; 
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   max-height: 150px;
   overflow-y: auto;
-  z-index: 1000; /* Ensure it overlays above other content */
-  list-style-type: none;
+  z-index: 1000; 
   padding: 10px;
   margin: 150px;
-  display: none; /* Hidden by default */
+  display: none; 
 }
 
 .option span {
@@ -472,8 +461,8 @@ position: relative;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-  z-index: 4; /* Place it behind the modal */
+  background-color: rgba(0, 0, 0, 0.5); 
+  z-index: 4; 
 }
 
 
