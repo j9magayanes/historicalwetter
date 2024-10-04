@@ -90,7 +90,7 @@ const submitForm = async (event) => {
   try {
     const inputValue = inputField.value.trim();
     const zipData = await getZipByCityName(inputValue);
-    const zip = zipData ? zipData.zip : inputValue; // Fallback to input if no zip is found
+    const zip = zipData ? zipData.zip : inputValue;
     const response = await fetch(baseUrl(zip));
     
     if (!response.ok) throw new Error(`Failed to fetch weather data: ${response.status}`);
@@ -141,7 +141,7 @@ const updateTempChart = (data) => {
   const newData = JSON.parse(JSON.stringify(data));
   const lastDataPoint = newData[newData.length - 1];
   if (lastDataPoint) {
-    lastDataPoint.value += 10; // Modify the last data point
+    lastDataPoint.value += 10; 
   }
 
   const oldChart = document.querySelector(".main-svg");
