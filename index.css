@@ -246,26 +246,28 @@ position: relative;
   align-items: center;     
 }
 
+s
 .swatch-red {
-  background-color: transparent; 
+  background-color: transparent;  
   width: 27.94px;  
 }
 
 .swatch-red::before {
   content: '';
   width: 27.94px;  
-  height: 2px;
+  height: 2px; 
   background-color: var(--clr-red); 
 }
 
 .swatch-blue {
   background-color: var(--clr-navy-light); 
   border-top: 3px solid var(--clr-navy);   
-
+}
 
 .swatch-transparent {
   background-color: transparent;
 }
+
 
 .dotted-line {
   border-top: 1px dotted  var(--clr-navy);
@@ -433,9 +435,10 @@ position: relative;
   max-height: 150px;
   overflow-y: auto;
   z-index: 1000; 
+  list-style-type: none;
   padding: 10px;
   margin: 150px;
-  display: none; 
+  display: none;
 }
 
 .option span {
@@ -868,3 +871,4 @@ ul li {
     height: 13.67;
   }
 }
+

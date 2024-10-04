@@ -110,7 +110,7 @@ function tempChart({ element, data }) {
 
   // Process and organize data
   function wrangle() {
-    ({ groupedData, flattenedData, pointsData, latestDay, displayData } = processData(data));
+    ({ groupedData, flattenedData, pointsData, latestDay, displayData, currentYear } = processData(data));
     totalDays = flattenedData.length;
 
     x.domain(d3.extent(flattenedData, xAccessor));
@@ -814,25 +814,23 @@ function tempChart({ element, data }) {
         .html(
           `<div class="tooltip-background">
             <div class=tooltip-row>
-            <img src="./assets/temp_up_red.svg"/><span>
-            ${valueFormat(
-            d.data.maxMaxThisYear
-          )}
+            <img src="./assets/temp_up_red.svg"/><span  class="tooltip-year">
+           ${currentYear}</span>
           <span class="tooltip-value">${valueFormat(
-            d[1]
-          )}°<span>
+            d.data.maxMaxThisYear
+          )}°</span>
             </div>
             <div class=tooltip-row>
-            <img src="./assets/temp_up_blue.svg"/><span>  ${yearFormat(d.data.maxMaxDate)
-          }<span class="tooltip-value">${valueFormat(
+            <img src="./assets/temp_up_blue.svg"/><span class="tooltip-year">  ${yearFormat(d.data.maxMaxDate)
+          }</span><span class="tooltip-value">${valueFormat(
             d.data.maxMax
-          )}°<span>
+          )}°</span>
             </div>
             <div class=tooltip-row>
-            <img src="./assets/temp_down.svg"/><span>${yearFormat(d.data.minMinDate)
-          }<span class="tooltip-value">${valueFormat(
+            <img src="./assets/temp_down.svg"/><span class="tooltip-year">${yearFormat(d.data.minMinDate)
+          }</span><span class="tooltip-value">${valueFormat(
             d.data.minMin
-          )}°<span>  
+          )}°</span> 
             </div>
             </div>`
         )
@@ -942,7 +940,7 @@ function tempChart({ element, data }) {
       }).filter((p) => p[1] !== undefined),
     ];
 
-    return { groupedData, flattenedData, pointsData, displayData, highestTemperatureDay, lowestTemperatureDay };
+    return { groupedData, flattenedData, pointsData, displayData, highestTemperatureDay, lowestTemperatureDay, currentYear };
   }
 
 
