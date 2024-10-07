@@ -824,10 +824,11 @@ ul li {
   
 
   .card-body {
-    padding: 2.75em 2em;
+    padding: 3.75em 3em;
     scale: 0.98;
     gap: 0
   }
+  
  /* 
   .temp-chart {
     gap: 0;
