@@ -63,9 +63,9 @@ function tempChart({ element, data }) {
     "Dezember",
   ];
 
-  // Scales for the chart
-  const x = d3.scaleUtc();
-  const y = d3.scaleLinear().range([height - marginBottom - 10, marginTop + 10]);
+    // Scales for the chart
+    const x = d3.scaleUtc();
+    const y = d3.scaleLinear().range([height - marginBottom, marginTop]);
 
   // Area and line generators
   const areaGenerator = d3
@@ -538,7 +538,7 @@ function tempChart({ element, data }) {
 
     // Set the x and y domain based on the data, which should remain consistent
     x.domain([d3.min(pointsData, d => d[0]), d3.max(pointsData, d => d[0])]);
-    y.domain([d3.min(pointsData, d => d.data.minMin), d3.max(pointsData, d => d.data.maxMax)]);
+    // y.domain([d3.min(pointsData, d => d.data.minMin), d3.max(pointsData, d => d.data.maxMax)]);
 
     // Find the lowest temperature point in pointsData
     const lowestTempPoint = pointsData.reduce((lowest, current) => {
@@ -799,7 +799,7 @@ function tempChart({ element, data }) {
       .attr('x1', (d) => x(d[0]) - scrollContainer.node().scrollLeft)
       .attr('y1', (d) => y(Math.max(d.data.maxMax, d.data.maxMaxThisYear))) 
       .attr('x2', (d) => x(d[0]) - scrollContainer.node().scrollLeft)
-      .attr('y2', (d) => y(-10)); 
+      .attr('y2', (d) => y(-24)); 
   }
 
 
