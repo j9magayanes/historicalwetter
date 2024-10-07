@@ -578,7 +578,8 @@ function tempChart({ element, data }) {
             .style('z-index', 5)
             .attr('fill', 'white')
             .attr('transform', (d) => `translate(${x(d[0])}, ${y(d.data.maxMaxThisYear)})`),
-        (update) => update,
+        (update) => update
+          .attr('transform', (d) => `translate(${x(d[0])}, ${y(d.data.maxMaxThisYear)})`),
         (exit) => exit.remove()
       );
 
