@@ -70,8 +70,6 @@ body {
 }
 
 .card-body {
-
-
   padding: 0.75em 2em;
   display: flex;
   flex-direction: column;
@@ -246,7 +244,7 @@ position: relative;
   align-items: center;     
 }
 
-s
+
 .swatch-red {
   background-color: transparent;  
   width: 27.94px;  
@@ -421,7 +419,10 @@ s
 .info-btn {
   background-color: transparent;
   border: none;
+  padding: 0;
+  margin: 0
 }
+
 
 .autocomplete-suggestions {
   position: absolute;
@@ -829,6 +830,11 @@ ul li {
     gap: 0
   }
   
+  #info-btn {
+    padding: 0;
+    margin: 0;
+  }
+
  /* 
   .temp-chart {
     gap: 0;
