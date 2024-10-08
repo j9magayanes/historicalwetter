@@ -90,7 +90,7 @@ position: relative;
   align-items: stretch;
   left: 0;
   position: absolute; 
-  z-index: 1; 
+  overflow: hidden;
 }
 
 .search-input {
@@ -420,7 +420,7 @@ position: relative;
   background-color: transparent;
   border: none;
   padding: 0;
-  margin: 0
+  margin:0
 }
 
 
@@ -820,7 +820,7 @@ ul li {
     top: 12vh;
     position: absolute; 
     padding-top: 0.25rem;
-    padding-left: .25rem;  
+    padding-left: 0.25rem;  
   }
   
 
@@ -828,11 +828,6 @@ ul li {
     padding: 3.75em 3em;
     scale: 0.98;
     gap: 0
-  }
-  
-  #info-btn {
-    padding: 0;
-    margin: 0;
   }
 
  /* 
@@ -847,7 +842,6 @@ ul li {
   .bottom-legend {
     align-items:flex-start;
     justify-content:space-between;
-    scale: 0.97;
     padding: 0;
     margin: 0;
     gap: 0;

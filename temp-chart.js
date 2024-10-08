@@ -184,6 +184,7 @@ function tempChart({ element, data }) {
       .selectAll('.y-axis-g')
       .data([0])
       .join((enter) => enter.append('g').attr('class', 'y-axis-g'))
+
       .attr('transform', `translate(${noScrollWidth - marginRight},0)`);
 
     g.selectAll('.bg-rect')
@@ -194,7 +195,7 @@ function tempChart({ element, data }) {
           .attr('class', 'bg-rect')
           .attr('height', height)
           .attr('x', dayDotSize)
-          .attr('width', marginRight - dayDotSize)
+          .attr('width', marginRight )
       );
 
     const ticks = y.ticks((height - marginTop - marginBottom) / 30);
@@ -319,7 +320,7 @@ function tempChart({ element, data }) {
     container.append('button')
       .attr('class', 'scroll-left')
       .style('position', 'absolute')
-      .style('right', `${containerWidth * 1}px`) 
+      .style('left', '-25px') 
       .style('bottom', `${containerHeight * 0.16}px`)
       .on('click', () => {
         const currentScrollLeft = scrollContainer.node().scrollLeft;
@@ -330,8 +331,8 @@ function tempChart({ element, data }) {
           });
         }
       })
-      .append('svg')
-      .attr('width', buttonSize)
+        .append('svg')
+        .attr('width', buttonSize)
       .attr('height', buttonSize)
       .attr('class', 'arrow-svg-left')
       .append('image')
@@ -341,8 +342,8 @@ function tempChart({ element, data }) {
     container.append('button')
       .attr('class', 'scroll-right')
       .style('position', 'absolute')
-      .style('left', `${containerWidth * 0.98}px`) 
-      .style('bottom', `${containerHeight * 0.16}px`) 
+      .style('right', '-7px') // Right position as a percentage for responsiveness
+      .style('bottom', '16%') // Bottom position as a percentage
       .on('click', () => {
         const currentScrollLeft = scrollContainer.node().scrollLeft;
         const maxScrollLeft = scrollContainer.node().scrollWidth - scrollContainer.node().offsetWidth;
@@ -359,7 +360,7 @@ function tempChart({ element, data }) {
       .attr('class', 'arrow-svg-right')
       .append('image')
       .attr('href', './assets/right_arrow.svg');
-  }
+}
 
   // Render x-axis
   function renderXAxis() {
