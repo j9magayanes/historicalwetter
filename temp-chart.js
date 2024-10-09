@@ -318,26 +318,23 @@ function renderButtons() {
     const currentScrollLeft = scrollContainer.node().scrollLeft;
     const maxScrollLeft = scrollContainer.node().scrollWidth - scrollContainer.node().offsetWidth;
 
-    // Update left button active state
     if (currentScrollLeft <= 0) {
       container.select('.scroll-left image')
-        .attr('href', './assets/left_arrow_inactive.svg'); // inactive state
+        .attr('href', './assets/left_arrow_inactive.svg');
     } else {
       container.select('.scroll-left image')
-        .attr('href', './assets/left_arrow_active.svg'); // active state
+        .attr('href', './assets/left_arrow_active.svg');
     }
 
-    // Update right button active state
     if (currentScrollLeft >= maxScrollLeft) {
       container.select('.scroll-right image')
-        .attr('href', './assets/right_arrow_inactive.svg'); // inactive state
+        .attr('href', './assets/right_arrow_inactive.svg');
     } else {
       container.select('.scroll-right image')
-        .attr('href', './assets/right_arrow_active.svg'); // active state
+        .attr('href', './assets/right_arrow_active.svg');
     }
   }
 
-  // Left button
   container.append('button')
     .attr('class', 'scroll-left')
     .style('position', 'absolute')
@@ -350,7 +347,7 @@ function renderButtons() {
           left: -Math.min(scrollContainer.node().offsetWidth / 2, currentScrollLeft),
           behavior: 'smooth',
         });
-        updateButtonState(); // Update button states after scrolling
+        updateButtonState();
       }
     })
     .append('svg')
@@ -358,9 +355,8 @@ function renderButtons() {
     .attr('height', buttonSize)
     .attr('class', 'arrow-svg-left')
     .append('image')
-    .attr('href', './assets/left_arrow_inactive.svg'); // Default to inactive
+    .attr('href', './assets/left_arrow_inactive.svg');
 
-  // Right button
   container.append('button')
     .attr('class', 'scroll-right')
     .style('position', 'absolute')
@@ -374,7 +370,7 @@ function renderButtons() {
           left: Math.min(scrollContainer.node().offsetWidth / 2, maxScrollLeft - currentScrollLeft),
           behavior: 'smooth',
         });
-        updateButtonState(); // Update button states after scrolling
+        updateButtonState();
       }
     })
     .append('svg')
@@ -382,12 +378,10 @@ function renderButtons() {
     .attr('height', buttonSize)
     .attr('class', 'arrow-svg-right')
     .append('image')
-    .attr('href', './assets/right_arrow_active.svg'); // Default to active
+    .attr('href', './assets/right_arrow_active.svg');
 
-  // Call function to update button state on initial render
   updateButtonState();
 
-  // Add scroll event listener to update button states when scrolling
   scrollContainer.on('scroll', updateButtonState);
 }
 
