@@ -897,6 +897,16 @@ function renderButtons() {
     renderTooltip();
   }
 
+  function handleScroll() {
+    tooltipDatumIndex = undefined;
+    renderFocus();
+    renderPoints()
+    renderTooltip();
+  }
+
+  scrollContainer.on('scroll', handleScroll);
+  scrollContainer.node().addEventListener('scroll', handleScroll);
+
   function processData(data) {
     const currentDate = new Date();
     const currentMonth = currentDate.getUTCMonth() + 1;
