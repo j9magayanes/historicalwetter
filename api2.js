@@ -24,6 +24,7 @@ const tempImage = document.getElementById("tempImage");
 const form = document.getElementById("city-search-form");
 const closeBtn = document.querySelector(".close");
 const cancelBtn = document.querySelector(".cancel-btn");
+const submitBtn = document.querySelector(".search-btn");
 const inputField = document.getElementById("city-search-input");
 const suggestionsDiv = document.getElementById("suggestions");
 const searchText = document.querySelector(".search-text");
@@ -181,7 +182,11 @@ const handleInput = (event) => {
 // Display Suggestions
 const displaySuggestions = (suggestions) => {
   suggestionsDiv.innerHTML = "";
+  const warningText = document.querySelector(".input-warning");
   if (suggestions.length > 0) {
+    console.log("with suggestions")
+    submitBtn.disabled = false;
+    warningText.style.display = "none";
     const ul = document.createElement("ul");
     suggestions.forEach((suggestion) => {
       const li = document.createElement("li");
@@ -207,7 +212,15 @@ const displaySuggestions = (suggestions) => {
     });
     suggestionsDiv.appendChild(ul);
   } else {
-    clearSuggestions();
+    if (document.getElementById("city-search-input").value.length === 0) {
+      warningText.style.display = "none";
+      submitBtn.disabled = true;
+      console.log("without suggestions")
+    } else {
+      warningText.style.display = "block";
+      submitBtn.disabled = true;
+      console.log("without suggestions1")
+    }
   }
 };
 
@@ -231,7 +244,7 @@ const removeDuplicates = (data) => {
 
 // Clear Input Field Value
 const clearInput = (event) => {
-  const inputField = event.target.previousElementSibling;
+
   inputField.value = "";
 };
 

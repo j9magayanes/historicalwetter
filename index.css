@@ -117,6 +117,17 @@ position: relative;
   border: none;
 }
 
+.input-warning {
+  position: absolute;
+  top: 103%;
+  left: 6%;
+  color: #dd0000;
+  font-family: "Gotham XNarrow Light";
+  font-weight: 400;
+  font-size: 1.125rem;
+  display: none;
+}
+
 .vertical-line-bg {
   background-color: var(--clr-red); 
   display: -ms-flexbox;
