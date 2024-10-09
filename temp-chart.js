@@ -656,10 +656,14 @@ function renderButtons() {
             .style('stroke', 'white')              
             .style('stroke-width', 1.5)            
             .style('paint-order', 'stroke') 
-            .text(d => d.data.maxMaxThisYear), 
+            .text(d => `${valueFormat(
+              d.data.maxMaxThisYear
+            )}°`), 
         (update) =>
           update
-            .text(d => d.data.maxMaxThisYear) 
+            .text(d => `${valueFormat(
+              d.data.maxMaxThisYear
+            )}°`) 
       )
       .attr('transform', (d) => `translate(${x(d[0]) + 10  }, ${y(d.data.maxMaxThisYear + 5)})`),
       (update) => update,
@@ -695,10 +699,14 @@ function renderButtons() {
               .attr('class', 'temp-minMin')
               .attr('dy', '.35em')
               .style('fill',  'var(--clr-series-2)')
-              .text(d => d.data.minMin), 
+              .text(d =>`${valueFormat(
+                d.data.minMin
+              )}°`), 
           (update) =>
             update
-              .text(d => d.data.minMin)
+              .text(d =>`${valueFormat(
+                d.data.minMin
+              )}°`)
         )
         .attr('transform', (d) => {
           const xPos = x(d[0]) 
@@ -725,10 +733,14 @@ function renderButtons() {
               .attr('class', 'temp-maxMax')
               .attr('dy', '.35em') 
               .style('fill',  'var(--clr-series-1)')
-              .text(d => d.data.maxMax),
+              .text(d =>`${valueFormat(
+              d.data.maxMax
+            )}°`),
           (update) =>
             update
-              .text(d => d.data.maxMax) 
+              .text(d =>`${valueFormat(
+                d.data.maxMax
+              )}°`)
         )
         .attr('transform', (d) => {
           const xPos = x(d[0]);  
