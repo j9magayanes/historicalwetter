@@ -460,12 +460,10 @@ position: relative;
 }
 
 .scroll-left, .scroll-right {
-  width: 24px;
-  height: 24px;
-  background-color: #999999;
   gap: 0px;
   opacity: 0px;
   border: none;
+  scale: 0.9;
   border-radius: 50%;
 }
 
