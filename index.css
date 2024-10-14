@@ -37,7 +37,6 @@
   --clr-red-light: #e3acac;
   --clr-navy: #184482;
   --clr-navy-light: #80caff;
-
   --fs-base: 16px;
 }
 
@@ -62,7 +61,6 @@ body {
 
 .card {
   --max-width: 1000px;
-
   --clr-background: var(--clr-gray-light);
   width: min(var(--max-width), 100vw);
   background-color: var(--clr-background);
@@ -177,7 +175,6 @@ position: relative;
   line-height: 1;
   text-align: center;
   margin-inline: auto;
-
 }
 
 .subline {
@@ -232,8 +229,8 @@ position: relative;
 
 .swatch {
   display: flex;
-  /* flex-direction: column; */
 }
+
 .swatch-row {
   display: flex;
    align-items: center;
