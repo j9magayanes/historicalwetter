@@ -8,8 +8,19 @@ function tempChart({ element, data }) {
     pointsData,
     totalDays;
 
-  // Chart dimensions and style constants
-  const height = 200;
+    function getChartHeight() {
+      const maxWidth = 656;
+      const maxHeight = 250;
+      const minHeight = 220;
+      
+      if (window.innerWidth < maxWidth) {
+        return (maxHeight / maxWidth) * window.innerWidth;
+      } else {
+        return minHeight;
+      }
+    }
+    
+  let height = getChartHeight(); 
   const focusDotSize = 4;
   const lineStrokeWidth = 2;
   const dayDotSize = 2;
@@ -33,8 +44,6 @@ function tempChart({ element, data }) {
   const y0Accessor = (d) => (Number.isFinite(d.minMin) ? d.minMin : undefined);
   const y3Accessor = (d) => (Number.isFinite(d.avgMax) ? d.avgMax : undefined);
   const y4Accessor = (d) => (Number.isFinite(d.avgMin) ? d.avgMin : undefined);
-
-
 
   // Formatting values for tooltip
   const valueFormat = new Intl.NumberFormat('de-DE', {
@@ -76,9 +85,6 @@ function tempChart({ element, data }) {
     .curve(d3.curveMonotoneX)
     .defined((d) => d[1] !== undefined);
   const lineGenerator = areaGenerator.lineY1();
-
-  // Clear any existing elements in the container
-
 
   // Create the main container
   const container = d3.select(element).attr("class", "temp-chart");
