@@ -213,7 +213,8 @@ position: relative;
 
 .bottom-legend {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .swatches-container {
@@ -226,7 +227,7 @@ position: relative;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 0 var(--gap-x);   
+  gap: 20 var(--gap-x);   
 }
 
 .swatch {
@@ -235,7 +236,7 @@ position: relative;
 
 .swatch-row {
   display: flex;
-   align-items: center;
+  align-items: center;
 }
 
 .swatch-label {
