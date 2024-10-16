@@ -860,13 +860,16 @@ body {
 
   .cancel-btn,
   .search-btn {
-    width: 300px;
+    width: calc((546 / 656) * 96vw);
+    height: calc((87 / 656) * 96vw);
     justify-content: center;
     align-items: center;
+    margin-bottom: calc((45 / 656) * 96vw);
   }
 
   .input-field-container {
-    margin-top: 10px;
+    margin-top: calc((55 / 656) * 96vw);
+    margin-bottom: calc((45 / 656) * 96vw);
     width: calc((546 / 656) * 96vw);
     height: calc((87 / 656) * 96vw);
   }
