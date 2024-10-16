@@ -8,19 +8,31 @@ function tempChart({ element, data }) {
     pointsData,
     totalDays;
 
-    function getChartHeight() {
-      const maxWidth = 656;
-      const maxHeight = 250;
-      const minHeight = 220;
-      
-      if (window.innerWidth < maxWidth) {
-        return (maxHeight / maxWidth) * window.innerWidth;
-      } else {
-        return minHeight;
-      }
+  // Function to calculate responsive height
+  function calculateHeight() {
+    const viewportWidth = window.innerWidth;
+  
+    // If viewport is greater than 656px, height should be 200px
+    if (viewportWidth > 656) {
+      return 200;
     }
-    
-  let height = getChartHeight(); 
+  
+    // Base height of 250px when viewport is exactly 656px
+    const maxHeight = 280;
+    const minHeight = 200; // Minimum height allowed
+    const minWidth = 400;  // Minimum width where height starts decreasing
+  
+    // For viewport width between 400 and 656px, scale the height between 220px and 250px
+    if (viewportWidth <= 656 && viewportWidth >= minWidth) {
+      return ((viewportWidth - minWidth) / (656 - minWidth)) * (maxHeight - minHeight) + minHeight;
+    }
+  
+    // For viewport width smaller than 400px, fix height at minHeight (220px)
+    return minHeight;
+  }
+
+  // Initial render
+  const height = calculateHeight();
   const focusDotSize = 4;
   const lineStrokeWidth = 2;
   const dayDotSize = 2;
@@ -162,10 +174,10 @@ function tempChart({ element, data }) {
       (d) => x(d[0]),
       (d) => y(d[1])
     );
-
+    const height = calculateHeight();
     // Set dimensions for y-axis and main SVG
     yAxisSvg.attr("width", noScrollWidth).attr("height", height);
-    svg.attr("width", scrollWidth).attr("height", height);
+    svg.attr("width", scrollWidth ).attr("height", height);
 
     // Render the chart
     renderChart();
