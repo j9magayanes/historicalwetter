@@ -290,11 +290,11 @@ position: relative;
   z-index: 100;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 104vw;
+  height: 104vh;
   overflow: auto;
   justify-items: center;
-  background-color: #fefefe;
+  background-color: red;
 }
 
 .modal-items {
@@ -509,7 +509,7 @@ position: relative;
 .inputFieldContainer,
 #citySearchForm {
   width: 100%;
-  max-width: 734px;
+  max-width: 992px;
 }
 
 .search-btns-container,
@@ -798,10 +798,6 @@ body {
     gap: 0
   }
 
-  .search-input {
-    font-size: calc((78 / 656) * 100vw);
-  }
-
  /* 
   .temp-chart {
     gap: 0;
@@ -847,13 +843,11 @@ body {
   }
 
   .search-page-header {
-    font-size: 2.5rem;
-    width: 322px;
+    font-size: calc((72 / 656) * 96vw);
   }
 
   .search-page-container {
     display: none;
-    height: 656px;
     justify-content: start;
     gap: 25px;
     padding: 0 0;
@@ -864,10 +858,6 @@ body {
     height: auto;
   }
 
-  #city-search-form {
-    width: 300px;
-  }
-
   .cancel-btn,
   .search-btn {
     width: 300px;
@@ -876,10 +866,15 @@ body {
   }
 
   .input-field-container {
-    width: 300px;
     margin-top: 10px;
+    width: calc((546 / 656) * 96vw);
+    height: calc((87 / 656) * 96vw);
   }
 
+  .search-input {
+    font-size: calc((78 / 656) * 100vw);
+  }
+ 
   .suggestions-wrapper {
     max-height: 170px;
   }
@@ -891,6 +886,7 @@ body {
   .search-btn {
     margin-top: 20px;
 }
+
 }
 
 /* @media (max-width: 586px) {
