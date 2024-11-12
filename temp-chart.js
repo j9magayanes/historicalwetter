@@ -8,19 +8,18 @@ function tempChart({ element, data }) {
     pointsData,
     totalDays;
 
-  // Function to calculate responsive height
   function calculateHeight() {
     const viewportWidth = window.innerWidth;
   
-    // If viewport is greater than 656px, height should be 200px
+    // If viewport is greater than 656px, height should be 250px
     if (viewportWidth > 656) {
-      return 200;
+      return 260;
     }
   
     // Base height of 250px when viewport is exactly 656px
     const maxHeight = 280;
     const minHeight = 200; // Minimum height allowed
-    const minWidth = 400;  // Minimum width where height starts decreasing
+    const minWidth = 450;  // Minimum width where height starts decreasing
   
     // For viewport width between 400 and 656px, scale the height between 220px and 250px
     if (viewportWidth <= 656 && viewportWidth >= minWidth) {
@@ -216,7 +215,7 @@ function tempChart({ element, data }) {
           .attr('width', marginRight )
       );
 
-    const ticks = y.ticks((height - marginTop - marginBottom) / 30);
+    const ticks = y.ticks((height - marginTop - marginBottom) / 22);
 
     g.selectAll('.tick')
       .data(ticks)
@@ -329,7 +328,7 @@ function tempChart({ element, data }) {
   
     const containerWidth = container.node().offsetWidth;
     const containerHeight = container.node().offsetHeight;
-    const buttonSize = 28;
+    const buttonSize = 30;
   
     function updateButtonState() {
       const currentScrollLeft = scrollContainer.node().scrollLeft;
@@ -359,7 +358,7 @@ function tempChart({ element, data }) {
       .attr('height', buttonSize)
       .style('position', 'absolute')
       .style('left', '-26.5px')
-      .style('bottom', `${containerHeight * 0.15}px`)
+      .style('bottom', '12%')
       .on('click', () => {
         const currentScrollLeft = scrollContainer.node().scrollLeft;
         if (currentScrollLeft > 0) {
@@ -383,7 +382,7 @@ function tempChart({ element, data }) {
       .attr('height', buttonSize)
       .style('position', 'absolute')
       .style('right', '-8.5px')
-      .style('bottom', '15%')
+      .style('bottom', '12%')
       .on('click', () => {
         const currentScrollLeft = scrollContainer.node().scrollLeft;
         const maxScrollLeft = scrollContainer.node().scrollWidth - scrollContainer.node().offsetWidth;
