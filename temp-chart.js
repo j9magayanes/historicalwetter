@@ -328,7 +328,7 @@ function tempChart({ element, data }) {
   
     const containerWidth = container.node().offsetWidth;
     const containerHeight = container.node().offsetHeight;
-    const buttonSize = 30;
+    const buttonSize = 26;
   
     function updateButtonState() {
       const currentScrollLeft = scrollContainer.node().scrollLeft;
@@ -859,7 +859,7 @@ function tempChart({ element, data }) {
       .attr('x1', (d) => x(d[0]) - scrollContainer.node().scrollLeft)
       .attr('y1', (d) => y(Math.max(d.data.maxMax, d.data.maxMaxThisYear))) 
       .attr('x2', (d) => x(d[0]) - scrollContainer.node().scrollLeft)
-      .attr('y2', (d) => y(-24)); 
+      .attr('y2', (d) => y(-28)); 
   }
 
 

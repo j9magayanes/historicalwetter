@@ -68,25 +68,30 @@ body {
 }
 
 .card-body {
-  padding: 0.75em 2em;
+  padding: 0em 2em 0em 3em;
   display: flex;
   flex-direction: column;
   gap: 0.75em;
 }
 
 .search-container {
-position: relative;
-display: flex;
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 47px;  
+
 }
 
 .search {
   --font-size: calc(var(--fs-base) * 2.5);
+  background-color: var(--clr-red);
   --padding-y: 0;
   --padding-x: 0.25em;
   --icon-size: calc(var(--font-size) * 0.75);
   --input-width: 12ch;
+  height: 47px;   
   display: flex;
-  align-items: stretch;
+  align-items: center; /* Center items vertically */
   left: 0;
   position: absolute; 
   overflow: hidden;
@@ -99,12 +104,13 @@ display: flex;
   line-height: 1;
   padding: var(--padding-y) var(--padding-x);
   font-family: "Gotham Condensed Bold";
-  background-color: var(--clr-red);
   color: var(--clr-white);
   border: none;
-  width: auto; 
+  width: auto;
+
   min-width: 4ch; 
   max-width: 30ch; 
+  vertical-align: middle;
 }
 
 .search-button {
@@ -129,20 +135,16 @@ display: flex;
   display: none;
 }
 
-.vertical-line-bg {
-  background-color: var(--clr-red); 
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  align-items: center;
-}
+
 
 .vertical-line {
-  border-left: 2px solid white;
-  height: 80%;
+  background-color: white;
+  height: 30px;
+  width: 2px;
+  padding-top: 30px;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
 }
 
 .search-button > svg {
