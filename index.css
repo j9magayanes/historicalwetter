@@ -79,7 +79,6 @@ body {
   display: flex;
   align-items: center;
   height: 47px;  
-
 }
 
 .search {
@@ -217,7 +216,7 @@ body {
 .bottom-legend {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 18px;
 }
 
 .swatches-container {
@@ -793,8 +792,8 @@ body {
    }
 
 .question{
-    left: 35px; 
-    top: calc((87 / 656) * 100vw);
+    left: 20px; 
+    top: calc((85 / 656) * 100vw);
     position: absolute; 
     padding-top: 0.25rem;
     padding-left: 0.25rem;  
@@ -802,7 +801,7 @@ body {
   }
   
   .card-body {
-    padding-top: calc((140 / 656) * 100vw);
+    padding-top: calc((18 / 656) * 100vw);
     scale: 0.98;
     gap: 0
   }
@@ -821,7 +820,7 @@ body {
     align-items:flex-start;
     justify-content:space-between;
     padding: 0;
-    margin-top: calc((50 / 656) * 100vw);
+    margin-top: calc((20 / 656) * 100vw);
     gap: 1;
   } 
 
@@ -889,6 +888,11 @@ body {
  
   .suggestions-wrapper {
     max-height: 170px;
+  }
+
+  .search-container .search {
+    height:calc((86 / 656) * 96vw);
+    background-color: #dd0000;
   }
 
   .search-page-header,

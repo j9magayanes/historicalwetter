@@ -30,6 +30,27 @@ const suggestionsDiv = document.getElementById("suggestions");
 const searchText = document.querySelector(".search-text");
 let currentFocus = -1;
 
+function reorderBottomLegend() {
+  const bottomLegend = document.querySelector('.bottom-legend');
+  const infoContent = document.getElementById('info-modal'); // target element to place .bottom-legend after
+  if (window.innerWidth <= 656) {
+    // Move bottom-legend after infoContent
+    if (infoContent && bottomLegend && !infoContent.nextElementSibling.isSameNode(bottomLegend)) {
+      infoContent.parentNode.insertBefore(bottomLegend, infoContent.nextSibling);
+    }
+  } else {
+    // Reset position if needed (e.g., append back to its original position)
+    const card = document.querySelector('.card');
+    if (card && bottomLegend && !card.firstElementChild.isSameNode(bottomLegend)) {
+      card.insertBefore(bottomLegend, card.firstElementChild.nextSibling);
+    }
+  }
+}
+
+// Call the function on initial load and on window resize
+window.addEventListener('load', reorderBottomLegend);
+window.addEventListener('resize', reorderBottomLegend);
+
 // Fetch Postal Code Data
 window.addEventListener("DOMContentLoaded", async () => {
   try {
