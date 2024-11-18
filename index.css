@@ -801,7 +801,7 @@ body {
   }
   
   .card-body {
-    padding-top: calc((18 / 656) * 100vw);
+    padding-top: calc((90 / 656) * 100vw);
     scale: 0.98;
     gap: 0
   }

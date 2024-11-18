@@ -8,30 +8,33 @@ function tempChart({ element, data }) {
     pointsData,
     totalDays;
 
-  function calculateHeight() {
-    const viewportWidth = window.innerWidth;
-  
-    // If viewport is greater than 656px, height should be 250px
-    if (viewportWidth > 656) {
-      return 260;
-    }
-  
-    // Base height of 250px when viewport is exactly 656px
-    const maxHeight = 260;
-    const minHeight = 200; 
-    const minWidth = 200; 
-  
-    // For viewport width between 400 and 656px, scale the height between 220px and 250px
-    if (viewportWidth <= 656 && viewportWidth >= minWidth) {
-      return ((viewportWidth - minWidth) / (656 - minWidth)) * (maxHeight - minHeight) + minHeight;
-    }
-  
-    // For viewport width smaller than 400px, fix height at minHeight (220px)
-    return minHeight;
-  }
-
-  // Initial render
-  const height = calculateHeight();
+    // function calculateHeight() {
+    //   const viewportWidth = window.innerWidth;
+    //   const maxHeight = 300;
+    //   const minHeight = 200;
+    //   const minWidth = 200;
+    //   const maxWidth = 656;
+    
+    //   if (viewportWidth > maxWidth) {
+    //     // Log the height when viewport is larger than maxWidth
+    //     console.log("Width > 656, height: 260");
+    //     return 260;
+    //   }
+    
+    //   if (viewportWidth <= maxWidth && viewportWidth >= minWidth) {
+    //     // Apply the dynamic height formula and log intermediate calculation
+    //     const calculatedHeight = ((viewportWidth - minWidth) / (maxWidth - minWidth)) * (maxHeight - minHeight) + minHeight;
+    //     console.log(`Calculated Height: ${calculatedHeight}`);
+    //     return calculatedHeight;
+    //   }
+    
+    //   // For widths smaller than 200px, return minHeight
+    //   console.log("Width < 200, height: 200");
+    //   return minHeight;
+    // }
+    
+    // Initial render
+    const height = 260;
   const focusDotSize = 4;
   const lineStrokeWidth = 2;
   const dayDotSize = 2;
@@ -116,7 +119,6 @@ function tempChart({ element, data }) {
   const swatchesContainer = container
     .append("div")
     .attr("class", "swatches-container");
-  // renderSwatches();
 
   // Tooltip element
   const tooltip = container.append("div").attr("class", "tip");
@@ -152,7 +154,8 @@ function tempChart({ element, data }) {
     if (!!noScrollWidth) resized();
   }
 
-  // Resize handler
+
+  // Handle resize logic
   function resized() {
     noScrollWidth = scrollContainer.node().clientWidth;
     const boundedWidth =
@@ -160,27 +163,32 @@ function tempChart({ element, data }) {
       marginRight -
       dayLabelsHeight / 2 +
       marginLeft;
+  
     const months = d3.bisect(thresholds, boundedWidth) + 1;
     const days = d3.sum(groupedData.slice(-months), (d) => d.days.length);
     scrollWidth =
       (boundedWidth / (days - 1)) * (totalDays - 1) + marginLeft + marginRight;
-
+  
+     
+    // Update x and y scales
     x.range([marginLeft, scrollWidth - marginRight]);
-
-    // Create Delaunay triangulation for interaction
+    y.range([height - marginBottom, marginTop]);
+  
+    // Update Delaunay triangulation
     delaunay = d3.Delaunay.from(
       pointsData,
       (d) => x(d[0]),
       (d) => y(d[1])
     );
-    const height = calculateHeight();
-    // Set dimensions for y-axis and main SVG
+  
+    // Update SVG dimensions
     yAxisSvg.attr("width", noScrollWidth).attr("height", height);
-    svg.attr("width", scrollWidth ).attr("height", height);
-
-    // Render the chart
+    svg.attr("width", scrollWidth).attr("height", height);
+  
+    // Re-render chart
     renderChart();
-
+  
+    // Ensure the scroll position is maintained
     scrollContainer.node().scrollLeft = scrollContainer.node().scrollWidth;
   }
 
@@ -518,30 +526,6 @@ function tempChart({ element, data }) {
       )
       .attr("x", (d) =>
         d3.mean([d.days[0], d.days[d.days.length - 1]], (d) => x(xAccessor(d)))
-      );
-  }
-
-  // Render color swatches for legend
-  function renderSwatches() {
-    swatchesContainer
-      .selectAll(".swatch")
-      .data(["30 Tage 2023/24", "30 Tage 1973-2022"])
-      .join((enter) =>
-        enter
-          .append("div")
-          .attr("class", "swatch")
-          .call((div) =>
-            div
-              .append("div")
-              .attr("class", "swatch-swatch")
-              .style("background-color", (_, i) => `var(--clr-series-${i + 1})`)
-          )
-          .call((div) =>
-            div
-              .append("div")
-              .attr("class", "swatch-label")
-              .text((d) => d)
-          )
       );
   }
 
