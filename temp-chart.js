@@ -668,12 +668,12 @@ function tempChart({ element, data }) {
             .style('paint-order', 'stroke') 
             .text(d => `${valueFormat(
               d.data.maxMaxThisYear
-            )}°`), 
+            )}°C`), 
         (update) =>
           update
             .text(d => `${valueFormat(
               d.data.maxMaxThisYear
-            )}°`) 
+            )}°C`) 
       )
       .attr('transform', (d) => `translate(${x(d[0]) + 10  }, ${y(d.data.maxMaxThisYear + 5)})`),
       (update) => update,
@@ -716,7 +716,7 @@ function tempChart({ element, data }) {
             update
               .text(d =>`${valueFormat(
                 d.data.minMin
-              )}°`)
+              )}°C`)
         )
         .attr('transform', (d) => {
           const xPos = x(d[0]) 
@@ -745,12 +745,12 @@ function tempChart({ element, data }) {
               .style('fill',  'var(--clr-series-1)')
               .text(d =>`${valueFormat(
               d.data.maxMax
-            )}°`),
+            )}°C`),
           (update) =>
             update
               .text(d =>`${valueFormat(
                 d.data.maxMax
-              )}°`)
+              )}°C`)
         )
         .attr('transform', (d) => {
           const xPos = x(d[0]);  
@@ -865,19 +865,19 @@ function tempChart({ element, data }) {
            ${currentYear}</span>
           <span class="tooltip-value">${valueFormat(
             d.data.maxMaxThisYear
-          )}°</span>
+          )}°C</span>
             </div>
             <div class=tooltip-row>
             <img src="./assets/temp_up_blue.svg"/><span class="tooltip-year">  ${yearFormat(d.data.maxMaxDate)
           }</span><span class="tooltip-value">${valueFormat(
             d.data.maxMax
-          )}°</span>
+          )}°C</span>
             </div>
             <div class=tooltip-row>
             <img src="./assets/temp_down.svg"/><span class="tooltip-year">${yearFormat(d.data.minMinDate)
           }</span><span class="tooltip-value">${valueFormat(
             d.data.minMin
-          )}°</span> 
+          )}°C</span> 
             </div>
             </div>`
         )

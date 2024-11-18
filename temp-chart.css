@@ -52,11 +52,11 @@
 }
 
 .temp-chart .x-axis-g .day-dot-circle {
-  fill: currentColor;
+  fill: #B6B5B5;
 }
 
 .temp-chart .x-axis-g .day-labels-line {
-  stroke: currentColor;
+  stroke: #B6B5B5;
   stroke-linecap: round;
 }
 

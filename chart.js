@@ -204,14 +204,14 @@ function tempChart({ element, data }) {
           enter
             .append('g')
             .attr('class', 'tick')
-            .call((g) => g.append('line').attr('stroke', 'currentColor'))
+            .call((g) => g.append('line').attr('stroke', '#B6B5B5'))
             .call((g) =>
               g
                 .append('text')
                 .attr('x', marginRight)
                 .attr('dy', '0.32em')
                 .attr('text-anchor', 'end')
-                .attr('fill', 'currentColor')
+                .attr('fill', '#B6B5B5')
             )
         )
         .attr('transform', (d) => `translate(0,${y(d)})`)
@@ -619,21 +619,21 @@ function tempChart({ element, data }) {
               )}
             <span class="tooltip-value">${valueFormat(
                 d[1]
-              )}°<span>
+              )}°C<span>
               </div>
               <div class=tooltip-row>
               <img src="./assets/temp_up_blue.svg"/><span>  ${
                 yearFormat(d.data.maxMaxDate)
               }<span class="tooltip-value">${valueFormat(
                 d.data.maxMax
-              )}°<span>
+              )}°C<span>
               </div>
               <div class=tooltip-row>
               <img src="./assets/temp_down.svg"/><span>${
                 yearFormat(d.data.minMinDate)
               }<span class="tooltip-value">${valueFormat(
                 d.data.minMin
-              )}°<span>  
+              )}°C<span>  
               </div>
               </div>`
           )
