@@ -8,33 +8,33 @@ function tempChart({ element, data }) {
     pointsData,
     totalDays;
 
-    // function calculateHeight() {
-    //   const viewportWidth = window.innerWidth;
-    //   const maxHeight = 300;
-    //   const minHeight = 200;
-    //   const minWidth = 200;
-    //   const maxWidth = 656;
+    function calculateHeight() {
+      const viewportWidth = window.innerWidth;
+      const maxHeight = 260;
+      const minHeight = 200;
+      const minWidth = 200;
+      const maxWidth = 656;
     
-    //   if (viewportWidth > maxWidth) {
-    //     // Log the height when viewport is larger than maxWidth
-    //     console.log("Width > 656, height: 260");
-    //     return 260;
-    //   }
+      if (viewportWidth > maxWidth) {
+        // Log the height when viewport is larger than maxWidth
+        console.log("Width > 656, height: 260");
+        return 260;
+      }
     
-    //   if (viewportWidth <= maxWidth && viewportWidth >= minWidth) {
-    //     // Apply the dynamic height formula and log intermediate calculation
-    //     const calculatedHeight = ((viewportWidth - minWidth) / (maxWidth - minWidth)) * (maxHeight - minHeight) + minHeight;
-    //     console.log(`Calculated Height: ${calculatedHeight}`);
-    //     return calculatedHeight;
-    //   }
+      if (viewportWidth <= maxWidth && viewportWidth >= minWidth) {
+        // Apply the dynamic height formula and log intermediate calculation
+        const calculatedHeight = ((viewportWidth - minWidth) / (maxWidth - minWidth)) * (maxHeight - minHeight) + minHeight;
+        console.log(`Calculated Height: ${calculatedHeight}`);
+        return calculatedHeight;
+      }
     
-    //   // For widths smaller than 200px, return minHeight
-    //   console.log("Width < 200, height: 200");
-    //   return minHeight;
-    // }
+      // For widths smaller than 200px, return minHeight
+      console.log("Width < 200, height: 200");
+      return minHeight;
+    }
     
-    // Initial render
-    const height = 260;
+  // Initial render
+  let height = calculateHeight();
   const focusDotSize = 4;
   const lineStrokeWidth = 2;
   const dayDotSize = 2;
@@ -88,13 +88,13 @@ function tempChart({ element, data }) {
 
     // Scales for the chart
     const x = d3.scaleUtc();
-    const y = d3.scaleLinear().range([height - marginBottom, marginTop]);
+    const y = d3.scaleLinear().range([calculateHeight() - marginBottom, marginTop]);
 
   // Area and line generators
   const areaGenerator = d3
     .area()
     .x((d) => x(d[0]))
-    .y0(height - marginBottom)
+    .y0(calculateHeight() - marginBottom)
     .y1((d) => y(d[1]))
     .curve(d3.curveMonotoneX)
     .defined((d) => d[1] !== undefined);
@@ -172,7 +172,7 @@ function tempChart({ element, data }) {
      
     // Update x and y scales
     x.range([marginLeft, scrollWidth - marginRight]);
-    y.range([height - marginBottom, marginTop]);
+    y.range([calculateHeight()- marginBottom, marginTop]);
   
     // Update Delaunay triangulation
     delaunay = d3.Delaunay.from(
@@ -182,8 +182,11 @@ function tempChart({ element, data }) {
     );
   
     // Update SVG dimensions
-    yAxisSvg.attr("width", noScrollWidth).attr("height", height);
-    svg.attr("width", scrollWidth).attr("height", height);
+    newheight = calculateHeight();
+    console.log("heigh calculated")
+    console.log(newheight);
+    yAxisSvg.attr("width", noScrollWidth).attr("height", calculateHeight());
+    svg.attr("width", scrollWidth).attr("height", calculateHeight());
   
     // Re-render chart
     renderChart();
@@ -218,12 +221,12 @@ function tempChart({ element, data }) {
         enter
           .append('rect')
           .attr('class', 'bg-rect')
-          .attr('height', height)
+          .attr('height', calculateHeight())
           .attr('x', dayDotSize)
           .attr('width', marginRight )
       );
 
-    const ticks = y.ticks((height - marginTop - marginBottom) / 22);
+    const ticks = y.ticks((calculateHeight() - marginTop - marginBottom) / 36);
 
     g.selectAll('.tick')
       .data(ticks)
@@ -422,7 +425,7 @@ function tempChart({ element, data }) {
       .selectAll(".x-axis-g")
       .data([0])
       .join((enter) => enter.append("g").attr("class", "x-axis-g"))
-      .attr("transform", `translate(0,${height - marginBottom})`);
+      .attr("transform", `translate(0,${calculateHeight() - marginBottom})`);
 
     g.selectAll(".day-dots-g")
       .data([0])

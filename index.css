@@ -802,6 +802,8 @@ body {
   
   .card-body {
     padding-top: calc((90 / 656) * 100vw);
+    padding-left: calc((27 / 656) * 100vw);
+    padding-right:calc((27 / 656) * 100vw) ;
     scale: 0.98;
     gap: 0
   }
@@ -904,6 +906,14 @@ body {
 }
 
 }
+
+/* @media (max-width: 500px) {
+  .card-body {
+    padding-top: calc((33 / 656) * 100vw);
+
+  }
+} */
+
 
 /* @media (max-width: 586px) {
   .layoutStyle {
