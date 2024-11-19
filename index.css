@@ -833,7 +833,7 @@ tr:nth-child(odd) {
   .bottom-legend {
     align-items:flex-start;
     justify-content:space-between;
-    padding: 0;
+    padding-left: 15px;
     margin-top: calc((20 / 656) * 100vw);
     gap: 1;
   } 
@@ -878,6 +878,11 @@ tr:nth-child(odd) {
   .search-btns-container {
     flex-direction: column-reverse;
     height: auto;
+  }
+
+  .swatches-container {
+    --font-size:  calc((32 / 656) * 96vw);
+    font-size: var(--font-size);
   }
 
   .cancel-btn,
@@ -928,4 +933,16 @@ tr:nth-child(odd) {
   .card-body {
     padding-top: calc((20 / 400) * 100vw);
   }
+
+  .bottom-legend {
+    margin-top: calc((3 / 400) * 96vw);
+    gap: 1;
+  } 
+}
+
+@media (max-width: 370px) { 
+  .bottom-legend {
+    margin-top: calc((-1 / 400) * 96vw);
+    gap: 1;
+  } 
 }

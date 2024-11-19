@@ -32,7 +32,7 @@ let currentFocus = -1;
 
 function reorderBottomLegend() {
   const bottomLegend = document.querySelector('.bottom-legend');
-  const infoContent = document.getElementById('info-modal'); // target element to place .bottom-legend after
+  const infoContent = document.getElementById('bottom-legend-container'); // target element to place .bottom-legend after
   if (window.innerWidth <= 656) {
     // Move bottom-legend after infoContent
     if (infoContent && bottomLegend && !infoContent.nextElementSibling.isSameNode(bottomLegend)) {
