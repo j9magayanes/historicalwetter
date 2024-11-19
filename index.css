@@ -794,7 +794,7 @@ tr:nth-child(odd) {
 
 /* Media query for screens 656px and below */
 @media (max-width: 656px) {
-body {
+  body {
     aspect-ratio: 1 / 1;  
     width: 100vw;        
     height: auto;     
@@ -803,7 +803,7 @@ body {
     overflow: hidden;  
    }
 
-.question{
+.question {
     left: 20px; 
     top: calc((85 / 656) * 100vw);
     position: absolute; 
@@ -915,84 +915,17 @@ body {
   .cancel-btn,
   .search-btn {
     margin-top: 20px;
+  }
 }
 
-}
-
-/* @media (max-width: 500px) {
+@media (max-width: 500px) { 
   .card-body {
-    padding-top: calc((33 / 656) * 100vw);
-
+    padding-top: calc((50 / 500) * 100vw);
   }
-} */
-
-
-/* @media (max-width: 586px) {
-  .layoutStyle {
-    flex-direction: column;
-  }
-
-  #container {
-    height: 360px;
-    max-width: 576px;
-    min-width: 360px;
-    overflow: hidden;
-  }
-
-  .search-container {
-    max-width: 656px;
-  }
-  #forecast-container {
-    margin-top: 25px;
-  }
-
-  #weather-video {
-    height: 100%;
-  }
-
-  .search-page-header {
-    font-size: 2.5rem;
-    width: 322px;
-  }
-
-  .search-page-container {
-    display: none;
-    height: 656px;
-    justify-content: start;
-    gap: 25px;
-    padding: 0 0;
-  }
-
-  .search-btns-container {
-    flex-direction: column-reverse;
-    height: auto;
-  }
-
-  #city-search-form {
-    width: 300px;
-  }
-
-  .cancel-btn,
-  .search-btn {
-    width: 300px;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .input-field-container {
-    width: 300px;
-    margin-top: 10px;
-  }
-
-  .suggestions-wrapper {
-    max-height: 170px;
-  }
-
-  .search-page-header,
-  .search-btns-container,
-  .input-field.container,
-  .cancel-btn,
-  .search-btn {
-    margin-top: 20px;
 }
-} */
+
+@media (max-width: 400px) { 
+  .card-body {
+    padding-top: calc((20 / 400) * 100vw);
+  }
+}

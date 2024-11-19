@@ -10,26 +10,23 @@ function tempChart({ element, data }) {
 
     function calculateHeight() {
       const viewportWidth = window.innerWidth;
-      const maxHeight = 260;
+      const maxHeight = 300;
       const minHeight = 200;
       const minWidth = 200;
       const maxWidth = 656;
     
       if (viewportWidth > maxWidth) {
         // Log the height when viewport is larger than maxWidth
-        console.log("Width > 656, height: 260");
         return 260;
       }
     
       if (viewportWidth <= maxWidth && viewportWidth >= minWidth) {
         // Apply the dynamic height formula and log intermediate calculation
         const calculatedHeight = ((viewportWidth - minWidth) / (maxWidth - minWidth)) * (maxHeight - minHeight) + minHeight;
-        console.log(`Calculated Height: ${calculatedHeight}`);
         return calculatedHeight;
       }
     
       // For widths smaller than 200px, return minHeight
-      console.log("Width < 200, height: 200");
       return minHeight;
     }
     
@@ -148,7 +145,6 @@ function tempChart({ element, data }) {
       yMin = Math.min(yMin - padding, -20
       );
       yMax += padding;
-      console.log(`${yMin},${yMax} `)
       return [yMin, yMax];
     }
     if (!!noScrollWidth) resized();
@@ -183,8 +179,6 @@ function tempChart({ element, data }) {
   
     // Update SVG dimensions
     newheight = calculateHeight();
-    console.log("heigh calculated")
-    console.log(newheight);
     yAxisSvg.attr("width", noScrollWidth).attr("height", calculateHeight());
     svg.attr("width", scrollWidth).attr("height", calculateHeight());
   
