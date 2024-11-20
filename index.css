@@ -937,7 +937,7 @@ tr:nth-child(odd) {
   .bottom-legend {
     margin-top: calc((3 / 400) * 96vw);
     gap: 1;
-  } 
+  }
 }
 
 @media (max-width: 370px) { 
