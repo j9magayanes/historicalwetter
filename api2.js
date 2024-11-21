@@ -18,6 +18,7 @@ const modalInput = document.getElementsByClassName("modal-input")[0];
 const overlay = document.getElementById("overlay");
 const info = document.getElementById("info-modal");
 const infoButton = document.getElementById("info-btn");
+const infoContainer = document.querySelector(".info-container");
 const temperature = document.getElementById("temperature");
 const comparison = document.getElementById("comparison");
 const tempImage = document.getElementById("tempImage");
@@ -32,40 +33,54 @@ let currentFocus = -1;
 
 function reorderBottomLegend() {
   const bottomLegend = document.querySelector('.bottom-legend');
-  const infoContent = document.getElementById('bottom-legend-container');
+  const bottomContainer = document.getElementById('bottom-legend-container');
+  const card = document.querySelector('.card');
   if (window.innerWidth <= 656) {
-    if (infoContent && bottomLegend && !infoContent.nextElementSibling.isSameNode(bottomLegend)) {
-      infoContent.parentNode.insertBefore(bottomLegend, infoContent.nextSibling);
+    if (bottomContainer && bottomLegend && !bottomContainer.nextElementSibling.isSameNode(bottomLegend)) {
+      bottomContainer.parentNode.insertBefore(bottomLegend, bottomContainer.nextSibling);
     }
   } else {
-    const card = document.querySelector('.card');
     if (card && bottomLegend && !card.firstElementChild.isSameNode(bottomLegend)) {
       card.insertBefore(bottomLegend, card.firstElementChild.nextSibling);
     }
   }
 }
 
-function reorderInfoIcon() {
-  const infoIcon = document.querySelector('.info-icon');
-  const question = document.querySelector('.question');
-  const bottomLegend = document.querySelector('.swatch');
+function showInfoIcon() {
+  const infoContainer = document.querySelector('.info-container');
+
+  if (!infoContainer) return; // Exit if .info-container is not found
 
   if (window.innerWidth <= 656) {
-    if (bottomLegend && infoIcon && !bottomLegend.nextElementSibling.isSameNode(infoIcon)) {
-      bottomLegend.parentNode.insertBefore(infoIcon, bottomLegend.nextSibling);
-    }
+    infoContainer.classList.remove('hidden'); // Show the info container
   } else {
-    if (question && infoIcon && !card.lastElementChild.isSameNode(infoIcon)) {
-      question.appendChild(infoIcon);
-    }
+    infoContainer.classList.add('hidden'); // Hide the info container
   }
 }
+
+// Add an event listener to handle screen resize
+window.addEventListener('resize', showInfoIcon);
+
+// Run the function initially to set the correct state
+showInfoIcon();
+
+
+// function reorderInfoIcon() {
+//   const infoIcon = document.querySelector('.info-icon');
+//   const bottomLegend = document.querySelector('.bottom-legend');
+//   const infoContainer = document.querySelector('.info-container');
+//   if (window.innerWidth <= 656) {
+//       infoContainer.parentNode.insertBefore(infoIcon, infoContainer.nextSibling);
+//   } else {
+//       bottomLegend.appendChild(infoIcon);
+//   }
+// }
 
 // Call the function on initial load and on window resize
 window.addEventListener('load', reorderBottomLegend);
 window.addEventListener('resize', reorderBottomLegend);
-window.addEventListener('load', reorderInfoIcon);
-window.addEventListener('resize', reorderInfoIcon);
+window.addEventListener('load', showInfoIcon);
+window.addEventListener('resize', showInfoIcon);
 
 
 // Fetch Postal Code Data
@@ -110,6 +125,11 @@ searchBar.style.visibility = "visible";
 
 // Show Info Modal
 infoButton.onclick = function () {
+  info.style.display = "block";
+  overlay.style.display = "block";
+};
+
+infoContainer.onclick = function () {
   info.style.display = "block";
   overlay.style.display = "block";
 };

@@ -219,7 +219,7 @@ body {
   margin-top: 18px;
 }
 
-.swatches-container {
+.swatch-container {
   --font-size:  calc(20px - ((992px - 100vw) * 0.01));
   --gap-x: 1em;
   --swatch-width: 1.5em;
@@ -387,6 +387,10 @@ body {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.hidden {
+    display: none;
 }
 
 .info-icon {
@@ -831,11 +835,14 @@ tr:nth-child(odd) {
   */
 
   .bottom-legend {
-    align-items:flex-start;
-    justify-content:space-between;
+    /* align-items:flex-start;
+    justify-content:space-between; */
     padding-left: 15px;
     margin-top: calc((20 / 656) * 100vw);
     gap: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
   } 
 
   .swatch {
@@ -852,7 +859,7 @@ tr:nth-child(odd) {
     scale: 0.97;
   }
 
-  .swatches-container {
+  .swatch-container {
     align-items:flex-start;
     justify-content:flex-start ;
     flex-wrap: wrap;
@@ -880,7 +887,7 @@ tr:nth-child(odd) {
     height: auto;
   }
 
-  .swatches-container {
+  .swatch-container {
     --font-size:  calc((32 / 656) * 96vw);
     font-size: var(--font-size);
   }
@@ -929,6 +936,12 @@ tr:nth-child(odd) {
   }
 }
 
+@media (max-width: 470px) { 
+  .bottom-legend {
+    margin-top: calc((20 / 450) * 96vw);
+  }
+}
+
 @media (max-width: 400px) { 
   .card-body {
     padding-top: calc((20 / 400) * 100vw);
@@ -936,13 +949,11 @@ tr:nth-child(odd) {
 
   .bottom-legend {
     margin-top: calc((3 / 400) * 96vw);
-    gap: 1;
   }
 }
 
 @media (max-width: 370px) { 
   .bottom-legend {
     margin-top: calc((-1 / 400) * 96vw);
-    gap: 1;
   } 
 }
