@@ -281,7 +281,7 @@ body {
 
 
 .dotted-line {
-  border-top: 1px dotted  var(--clr-navy);
+  border-top: 2px dotted  var(--clr-navy);
   position: absolute;
   top: 50%;
   width: 100%;
