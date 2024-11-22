@@ -14,19 +14,13 @@ function tempChart({ element, data }) {
       const minHeight = 200;
       const minWidth = 200;
       const maxWidth = 656;
-    
       if (viewportWidth > maxWidth) {
-        // Log the height when viewport is larger than maxWidth
         return 260;
       }
-    
       if (viewportWidth <= maxWidth && viewportWidth >= minWidth) {
-        // Apply the dynamic height formula and log intermediate calculation
         const calculatedHeight = ((viewportWidth - minWidth) / (maxWidth - minWidth)) * (maxHeight - minHeight) + minHeight;
         return calculatedHeight;
       }
-    
-      // For widths smaller than 200px, return minHeight
       return minHeight;
     }
     
