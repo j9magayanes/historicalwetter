@@ -498,13 +498,14 @@ padding-right: 26px;
   top: 0;
   left: 0;
   flex-direction: column;
-  justify-content: space-around;
+  /* justify-content: space-around; */
+  /* justify-content: center; */
   align-items: center;
   width: 100vw;
   height: 100vh;
   padding: 0 50px;
   overflow-y: hidden;
-  margin: -7px;
+
 }
 
 .search-page-header {
@@ -512,7 +513,7 @@ padding-right: 26px;
   font-family: 'Gotham Condensed Bold';
   font-weight: 700;
   font-size: 4rem;
-  margin: 0;
+  margin-top: 34px;
   text-align: center;
 }
 
@@ -521,6 +522,7 @@ padding-right: 26px;
 #citySearchForm {
   width: 100%;
   max-width: 992px;
+
 }
 
 .search-btns-container,
@@ -532,7 +534,7 @@ padding-right: 26px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 15px;
+  margin-top: 54px;
 }
 
 .input-field-container {
@@ -873,12 +875,18 @@ tr:nth-child(odd) {
 
   .search-page-header {
     font-size: calc((72 / 656) * 96vw);
+    margin-bottom: 0;
+    margin-bottom: 20px;
+  }
+
+  #city-search-form {
+
   }
 
   .search-page-container {
     display: none;
     justify-content: start;
-    gap: 25px;
+    gap: 0px;
     padding: 0 0;
   }
 
@@ -898,7 +906,7 @@ tr:nth-child(odd) {
     height: calc((87 / 656) * 96vw);
     justify-content: center;
     align-items: center;
-    margin-bottom: calc((45 / 656) * 96vw);
+    margin-bottom: calc((30 / 656) * 96vw);
   }
 
   .input-field-container {
@@ -933,13 +941,13 @@ tr:nth-child(odd) {
     background-color: #dd0000;
   }
 
-  .search-page-header,
+  /* .search-page-header,
   .search-btns-container,
   .input-field.container,
   .cancel-btn,
   .search-btn {
     margin-top: 20px;
-  }
+  } */
 }
 
 @media (max-width: 500px) { 
