@@ -510,7 +510,8 @@ function tempChart({ element, data }) {
         enter
           .append("text")
           .attr("class", "month-label-text")
-          .attr("fill", "currentColor")
+          .attr("fill", "#B6B5B5")
+          .attr("color", "#B6B5B5" )
           .attr("text-anchor", "middle")
           .attr("dy", "0.32em")
           .text((d) => monthNames[d.month - 1])

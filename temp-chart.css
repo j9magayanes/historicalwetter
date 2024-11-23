@@ -61,7 +61,7 @@
 }
 
 .temp-chart .x-axis-g .day-label-text {
-  color: var(--clr-white);
+  color: var(--clr-gray-light);
 }
 
 .temp-chart .swatches-container {

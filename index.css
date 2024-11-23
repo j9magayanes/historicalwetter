@@ -816,7 +816,7 @@ tr:nth-child(odd) {
   }
   
   .card-body {
-    padding-top: calc((90 / 656) * 100vw);
+    padding-top: calc((50 / 656) * 100vw);
     padding-left: calc((27 / 656) * 100vw);
     padding-right:calc((27 / 656) * 100vw) ;
     scale: 0.98;
@@ -911,13 +911,25 @@ tr:nth-child(odd) {
   .search-input {
     font-size: calc((78 / 656) * 100vw);
   }
+
+  .vertical-line {
+    height: calc((68 / 656) * 100vw);
+  }
+  .search-button > svg {
+    width: calc((52 / 656) * 100vw);
+    height: calc((52 / 656) * 100vw);
+  }
  
   .suggestions-wrapper {
     max-height: 170px;
   }
 
-  .search-container .search {
-    height:calc((86 / 656) * 96vw);
+  .search-container {
+    height: calc((86 / 656) * 96vw);
+  }
+
+ .search {
+    height: calc((86 / 656) * 96vw);
     background-color: #dd0000;
   }
 
