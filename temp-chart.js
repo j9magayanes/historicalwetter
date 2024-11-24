@@ -204,49 +204,55 @@ function tempChart({ element, data }) {
   }
 
   // Render y-axis grid
-  function renderYAxis() {
-    const g = yAxisSvg
-      .selectAll(".y-axis-g")
-      .data([0])
-      .join((enter) => enter.append("g").attr("class", "y-axis-g"))
+  // Render y-axis grid
+function renderYAxis() {
+  const g = yAxisSvg
+    .selectAll(".y-axis-g")
+    .data([0])
+    .join((enter) => enter.append("g").attr("class", "y-axis-g"))
+    .attr("transform", `translate(${noScrollWidth - marginRight},0)`);
 
-      .attr("transform", `translate(${noScrollWidth - marginRight},0)`);
+  g.selectAll(".bg-rect")
+    .data([0])
+    .join((enter) =>
+      enter
+        .append("rect")
+        .attr("class", "bg-rect")
+        .attr("height", calculateHeight())
+        .attr("x", dayDotSize)
+        .attr("width", marginRight)
+    );
 
-    g.selectAll(".bg-rect")
-      .data([0])
-      .join((enter) =>
-        enter
-          .append("rect")
-          .attr("class", "bg-rect")
-          .attr("height", calculateHeight())
-          .attr("x", dayDotSize)
-          .attr("width", marginRight)
-      );
+  const ticks = y.ticks((calculateHeight() - marginTop - marginBottom) / 36);
 
-    const ticks = y.ticks((calculateHeight() - marginTop - marginBottom) / 36);
-
-    g.selectAll(".tick")
-      .data(ticks)
-      .join((enter) =>
-        enter
-          .append("g")
-          .attr("class", "tick")
-          .call((g) => g.append("line").attr("stroke", "currentColor"))
-          .call((g) =>
-            g
-              .append("text")
-              .attr("x", marginRight)
-              .attr("dy", "0.32em")
-              .attr("text-anchor", "end")
-              .attr("fill", "currentColor")
-          )
+  g.selectAll(".tick")
+    .data(ticks)
+    .join((enter) =>
+      enter
+        .append("g")
+        .attr("class", "tick")
+        .call((g) => g.append("line").attr("stroke", "currentColor"))
+        .call((g) =>
+          g
+            .append("text")
+            .attr("x", marginRight)
+            .attr("dy", "0.32em")
+            .attr("text-anchor", "end")
+            .attr("fill", "currentColor")
+        )
+    )
+    .attr("transform", (d) => `translate(0,${y(d)})`)
+    .call((g) =>
+      g.select("line").attr("x1", -(noScrollWidth - marginLeft - marginRight))
+    )
+    .call((g) =>
+      g.select("text").html((d) =>
+        d === 0
+          ? `0<tspan dy="-0.4em" font-size="0.75em">°C</tspan>`
+          : d.toLocaleString()
       )
-      .attr("transform", (d) => `translate(0,${y(d)})`)
-      .call((g) =>
-        g.select("line").attr("x1", -(noScrollWidth - marginLeft - marginRight))
-      )
-      .call((g) => g.select("text").text((d) => d.toLocaleString()));
-  }
+    );
+}
 
   // Render series data (area and lines)
   function renderSeries() {
@@ -700,9 +706,15 @@ function tempChart({ element, data }) {
             .style("stroke", "white")
             .style("stroke-width", 1.5)
             .style("paint-order", "stroke")
-            .text((d) => `${valueFormat(d.data.maxMaxThisYear)}°C`),
+            .html(
+              (d) =>
+                `${valueFormat(d.data.maxMaxThisYear)}<tspan dy="-0.4em" font-size="0.75em">°C</tspan>`
+            ),
         (update) =>
-          update.text((d) => `${valueFormat(d.data.maxMaxThisYear)}°C`)
+          update.html(
+            (d) =>
+              `${valueFormat(d.data.maxMaxThisYear)}<tspan dy="-0.4em" font-size="0.75em">°C</tspan>`
+          )
       )
       .attr(
         "transform",
@@ -742,8 +754,8 @@ function tempChart({ element, data }) {
             .attr("class", "temp-minMin")
             .attr("dy", ".35em")
             .style("fill", "var(--clr-series-2)")
-            .text((d) => `${valueFormat(d.data.minMin)}°`),
-        (update) => update.text((d) => `${valueFormat(d.data.minMin)}°C`)
+            .html((d) => `${valueFormat(d.data.minMin)}<tspan dy="-0.4em" font-size="0.75em">°C</tspan>`),
+        (update) => update.html((d) => `${valueFormat(d.data.minMin)}<tspan dy="-0.4em" font-size="0.75em">°C</tspan>`)
       )
       .attr("transform", (d) => {
         const xPos = x(d[0]);
@@ -770,8 +782,8 @@ function tempChart({ element, data }) {
             .attr("class", "temp-maxMax")
             .attr("dy", ".35em")
             .style("fill", "var(--clr-series-1)")
-            .text((d) => `${valueFormat(d.data.maxMax)}°C`),
-        (update) => update.text((d) => `${valueFormat(d.data.maxMax)}°C`)
+            .html((d) => `${valueFormat(d.data.maxMax)}<tspan dy="-0.4em" font-size="0.75em">°C</tspan>`),
+        (update) => update.html((d) => `${valueFormat(d.data.maxMax)}<tspan dy="-0.4em" font-size="0.75em">°C</tspan>`)
       )
       .attr("transform", (d) => {
         const xPos = x(d[0]);
@@ -869,52 +881,6 @@ function tempChart({ element, data }) {
   }
 
   // Render tooltip
-  // function renderTooltip() {
-    
-  //   if (tooltipDatumIndex === undefined) {
-  //     tooltip.classed("is-visible", false);
-  //   } else {
-  //     const d = pointsData[tooltipDatumIndex];
-  //     const src = `./assets/temp_${d.seriesId === 1 ? "down" : "up"}.svg`;
-  //     tooltip
-  //       .html(
-  //         `<div class="tooltip-background">
-  //           <div class=tooltip-row>
-  //             <img src="./assets/temp_up_red.svg"/>
-  //             <span  class="tooltip-year">${currentYear}</span>
-  //             <span class="tooltip-value">${valueFormat(
-  //               d.data.maxMaxThisYear
-  //             )}°C</span>
-  //           </div>
-  //           <div class=tooltip-row>
-  //             <img src="./assets/temp_up_blue.svg"/>
-  //             <span class="tooltip-year">${yearFormat(
-  //               d.data.maxMaxDate
-  //             )}</span>
-  //             <span class="tooltip-value">${valueFormat(
-  //               d.data.maxMax
-  //             )}°C</span>
-  //           </div>
-  //           <div class=tooltip-row>
-  //           <img src="./assets/temp_down.svg"/><span class="tooltip-year">${yearFormat(
-  //             d.data.minMinDate
-  //           )}</span><span class="tooltip-value">${valueFormat(
-  //           d.data.minMin
-  //         )}°C</span> 
-  //           </div>
-  //           </div>`
-  //       )
-  //       .classed("is-visible", true);
-  //     const transX = x(d[0]) - scrollContainer.node().scrollLeft;
-  //     const transXOffset = transX < noScrollWidth / 2 ? "20%" : "-120%";
-  //     const transY = y(d[1]) - focusDotSize;
-  //     tooltip.style(
-  //       "transform",
-  //       `translate(calc(${transX}px + ${transXOffset}),calc(${transY}px - 20%))`
-  //     );
-  //   }
-  // }
-
   function renderTooltip() {
     if (tooltipDatumIndex === undefined) {
       tooltip.classed("is-visible", false);
