@@ -418,13 +418,9 @@ padding-right: 26px;
 
 #close-icon {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 34px;
+  right: 38px;
   cursor: pointer;
-  width: 24px;
-  height: 24px;
-  fill: #444;
-  transition: fill 0.3s;
 }
 
 .info-items {
