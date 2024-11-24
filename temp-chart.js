@@ -869,41 +869,99 @@ function tempChart({ element, data }) {
   }
 
   // Render tooltip
+  // function renderTooltip() {
+    
+  //   if (tooltipDatumIndex === undefined) {
+  //     tooltip.classed("is-visible", false);
+  //   } else {
+  //     const d = pointsData[tooltipDatumIndex];
+  //     const src = `./assets/temp_${d.seriesId === 1 ? "down" : "up"}.svg`;
+  //     tooltip
+  //       .html(
+  //         `<div class="tooltip-background">
+  //           <div class=tooltip-row>
+  //             <img src="./assets/temp_up_red.svg"/>
+  //             <span  class="tooltip-year">${currentYear}</span>
+  //             <span class="tooltip-value">${valueFormat(
+  //               d.data.maxMaxThisYear
+  //             )}°C</span>
+  //           </div>
+  //           <div class=tooltip-row>
+  //             <img src="./assets/temp_up_blue.svg"/>
+  //             <span class="tooltip-year">${yearFormat(
+  //               d.data.maxMaxDate
+  //             )}</span>
+  //             <span class="tooltip-value">${valueFormat(
+  //               d.data.maxMax
+  //             )}°C</span>
+  //           </div>
+  //           <div class=tooltip-row>
+  //           <img src="./assets/temp_down.svg"/><span class="tooltip-year">${yearFormat(
+  //             d.data.minMinDate
+  //           )}</span><span class="tooltip-value">${valueFormat(
+  //           d.data.minMin
+  //         )}°C</span> 
+  //           </div>
+  //           </div>`
+  //       )
+  //       .classed("is-visible", true);
+  //     const transX = x(d[0]) - scrollContainer.node().scrollLeft;
+  //     const transXOffset = transX < noScrollWidth / 2 ? "20%" : "-120%";
+  //     const transY = y(d[1]) - focusDotSize;
+  //     tooltip.style(
+  //       "transform",
+  //       `translate(calc(${transX}px + ${transXOffset}),calc(${transY}px - 20%))`
+  //     );
+  //   }
+  // }
+
   function renderTooltip() {
     if (tooltipDatumIndex === undefined) {
       tooltip.classed("is-visible", false);
     } else {
       const d = pointsData[tooltipDatumIndex];
       const src = `./assets/temp_${d.seriesId === 1 ? "down" : "up"}.svg`;
+      
+      // Create the tooltip rows
+      const tooltipHTML = `
+        <div class="tooltip-background">
+          <div class="tooltip-row">
+            <img src="./assets/temp_up_red.svg"/>
+            <span class="tooltip-year">${currentYear}</span>
+            <span class="tooltip-value">${valueFormat(d.data.maxMaxThisYear)}°C</span>
+          </div>
+          <div class="tooltip-row">
+            <img src="./assets/temp_up_blue.svg"/>
+            <span class="tooltip-year">${yearFormat(d.data.maxMaxDate)}</span>
+            <span class="tooltip-value">${valueFormat(d.data.maxMax)}°C</span>
+          </div>
+          <div class="tooltip-row">
+            <img src="./assets/temp_down.svg"/>
+            <span class="tooltip-year">${yearFormat(d.data.minMinDate)}</span>
+            <span class="tooltip-value">${valueFormat(d.data.minMin)}°C</span>
+          </div>
+        </div>`;
+      
+      // Render tooltip HTML and then sort rows
       tooltip
-        .html(
-          `<div class="tooltip-background">
-            <div class=tooltip-row>
-              <img src="./assets/temp_up_red.svg"/>
-              <span  class="tooltip-year">${currentYear}</span>
-              <span class="tooltip-value">${valueFormat(
-                d.data.maxMaxThisYear
-              )}°C</span>
-            </div>
-            <div class=tooltip-row>
-              <img src="./assets/temp_up_blue.svg"/>
-              <span class="tooltip-year">${yearFormat(
-                d.data.maxMaxDate
-              )}</span>
-              <span class="tooltip-value">${valueFormat(
-                d.data.maxMax
-              )}°C</span>
-            </div>
-            <div class=tooltip-row>
-            <img src="./assets/temp_down.svg"/><span class="tooltip-year">${yearFormat(
-              d.data.minMinDate
-            )}</span><span class="tooltip-value">${valueFormat(
-            d.data.minMin
-          )}°C</span> 
-            </div>
-            </div>`
-        )
+        .html(tooltipHTML)
         .classed("is-visible", true);
+      
+      // Sorting the rows after rendering
+      const tooltipBackground = tooltip.select('.tooltip-background').node();
+      const tooltipRows = Array.from(tooltipBackground.querySelectorAll('.tooltip-row'));
+      
+      const sortedRows = tooltipRows.sort((a, b) => {
+        const valueA = parseFloat(a.querySelector('.tooltip-value').textContent.replace('°C', ''));
+        const valueB = parseFloat(b.querySelector('.tooltip-value').textContent.replace('°C', ''));
+        return valueB - valueA; // Descending order
+      });
+      
+      // Re-append sorted rows to the tooltip-background
+      tooltipBackground.innerHTML = '';
+      sortedRows.forEach(row => tooltipBackground.appendChild(row));
+  
+      // Positioning the tooltip
       const transX = x(d[0]) - scrollContainer.node().scrollLeft;
       const transXOffset = transX < noScrollWidth / 2 ? "20%" : "-120%";
       const transY = y(d[1]) - focusDotSize;
@@ -913,7 +971,7 @@ function tempChart({ element, data }) {
       );
     }
   }
-
+  
   function mousemoved(event) {
     const [px, py] = d3.pointer(event, svg.node());
     if (
