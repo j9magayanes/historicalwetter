@@ -117,7 +117,7 @@
 
 .temp-chart .tooltip-background {
   background-color: rgba(255, 255, 255, 0.8);
-  width: 94px;
+  width: 97px;
   height: 63px;
   left: -0.11px;
   padding: 2.92px 5.85px;
@@ -170,7 +170,9 @@
 
 .tooltip-value {
   flex: 1; 
-  text-align: left; 
+  text-align: right;
+  display: inline-block;
+  width: 100%; 
   font-weight: bold;
 }
 

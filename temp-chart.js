@@ -8,22 +8,25 @@ function tempChart({ element, data }) {
     pointsData,
     totalDays;
 
-    function calculateHeight() {
-      const viewportWidth = window.innerWidth;
-      const maxHeight = 300;
-      const minHeight = 200;
-      const minWidth = 200;
-      const maxWidth = 656;
-      if (viewportWidth > maxWidth) {
-        return 260;
-      }
-      if (viewportWidth <= maxWidth && viewportWidth >= minWidth) {
-        const calculatedHeight = ((viewportWidth - minWidth) / (maxWidth - minWidth)) * (maxHeight - minHeight) + minHeight;
-        return calculatedHeight;
-      }
-      return minHeight;
+  function calculateHeight() {
+    const viewportWidth = window.innerWidth;
+    const maxHeight = 300;
+    const minHeight = 200;
+    const minWidth = 200;
+    const maxWidth = 656;
+    if (viewportWidth > maxWidth) {
+      return 260;
     }
-    
+    if (viewportWidth <= maxWidth && viewportWidth >= minWidth) {
+      const calculatedHeight =
+        ((viewportWidth - minWidth) / (maxWidth - minWidth)) *
+          (maxHeight - minHeight) +
+        minHeight;
+      return calculatedHeight;
+    }
+    return minHeight;
+  }
+
   // Initial render
   let height = calculateHeight();
   const focusDotSize = 4;
@@ -51,7 +54,7 @@ function tempChart({ element, data }) {
   const y4Accessor = (d) => (Number.isFinite(d.avgMin) ? d.avgMin : undefined);
 
   // Formatting values for tooltip
-  const valueFormat = new Intl.NumberFormat('de-DE', {
+  const valueFormat = new Intl.NumberFormat("de-DE", {
     maximumFractionDigits: 1,
   }).format;
 
@@ -59,7 +62,7 @@ function tempChart({ element, data }) {
   const yearFormat = (dateString) => {
     const date = new Date(dateString);
     return date.getUTCFullYear();
-  }
+  };
 
   // Month names for labels
   const monthNames = [
@@ -77,9 +80,11 @@ function tempChart({ element, data }) {
     "Dezember",
   ];
 
-    // Scales for the chart
-    const x = d3.scaleUtc();
-    const y = d3.scaleLinear().range([calculateHeight() - marginBottom, marginTop]);
+  // Scales for the chart
+  const x = d3.scaleUtc();
+  const y = d3
+    .scaleLinear()
+    .range([calculateHeight() - marginBottom, marginTop]);
 
   // Area and line generators
   const areaGenerator = d3
@@ -120,7 +125,14 @@ function tempChart({ element, data }) {
 
   // Process and organize data
   function wrangle() {
-    ({ groupedData, flattenedData, pointsData, latestDay, displayData, currentYear } = processData(data));
+    ({
+      groupedData,
+      flattenedData,
+      pointsData,
+      latestDay,
+      displayData,
+      currentYear,
+    } = processData(data));
     totalDays = flattenedData.length;
 
     x.domain(d3.extent(flattenedData, xAccessor));
@@ -136,14 +148,12 @@ function tempChart({ element, data }) {
       );
       const padding = (yMax - yMin) * 0.1;
       // Ensure the minimum y value does not exceed -10
-      yMin = Math.min(yMin - padding, -20
-      );
+      yMin = Math.min(yMin - padding, -20);
       yMax += padding;
       return [yMin, yMax];
     }
     if (!!noScrollWidth) resized();
   }
-
 
   // Handle resize logic
   function resized() {
@@ -153,32 +163,31 @@ function tempChart({ element, data }) {
       marginRight -
       dayLabelsHeight / 2 +
       marginLeft;
-  
+
     const months = d3.bisect(thresholds, boundedWidth) + 1;
     const days = d3.sum(groupedData.slice(-months), (d) => d.days.length);
     scrollWidth =
       (boundedWidth / (days - 1)) * (totalDays - 1) + marginLeft + marginRight;
-  
-     
+
     // Update x and y scales
     x.range([marginLeft, scrollWidth - marginRight]);
-    y.range([calculateHeight()- marginBottom, marginTop]);
-  
+    y.range([calculateHeight() - marginBottom, marginTop]);
+
     // Update Delaunay triangulation
     delaunay = d3.Delaunay.from(
       pointsData,
       (d) => x(d[0]),
       (d) => y(d[1])
     );
-  
+
     // Update SVG dimensions
     newheight = calculateHeight();
     yAxisSvg.attr("width", noScrollWidth).attr("height", calculateHeight());
     svg.attr("width", scrollWidth).attr("height", calculateHeight());
-  
+
     // Re-render chart
     renderChart();
-  
+
     // Ensure the scroll position is maintained
     scrollContainer.node().scrollLeft = scrollContainer.node().scrollWidth;
   }
@@ -197,46 +206,46 @@ function tempChart({ element, data }) {
   // Render y-axis grid
   function renderYAxis() {
     const g = yAxisSvg
-      .selectAll('.y-axis-g')
+      .selectAll(".y-axis-g")
       .data([0])
-      .join((enter) => enter.append('g').attr('class', 'y-axis-g'))
+      .join((enter) => enter.append("g").attr("class", "y-axis-g"))
 
-      .attr('transform', `translate(${noScrollWidth - marginRight},0)`);
+      .attr("transform", `translate(${noScrollWidth - marginRight},0)`);
 
-    g.selectAll('.bg-rect')
+    g.selectAll(".bg-rect")
       .data([0])
       .join((enter) =>
         enter
-          .append('rect')
-          .attr('class', 'bg-rect')
-          .attr('height', calculateHeight())
-          .attr('x', dayDotSize)
-          .attr('width', marginRight )
+          .append("rect")
+          .attr("class", "bg-rect")
+          .attr("height", calculateHeight())
+          .attr("x", dayDotSize)
+          .attr("width", marginRight)
       );
 
     const ticks = y.ticks((calculateHeight() - marginTop - marginBottom) / 36);
 
-    g.selectAll('.tick')
+    g.selectAll(".tick")
       .data(ticks)
       .join((enter) =>
         enter
-          .append('g')
-          .attr('class', 'tick')
-          .call((g) => g.append('line').attr('stroke', 'currentColor'))
+          .append("g")
+          .attr("class", "tick")
+          .call((g) => g.append("line").attr("stroke", "currentColor"))
           .call((g) =>
             g
-              .append('text')
-              .attr('x', marginRight)
-              .attr('dy', '0.32em')
-              .attr('text-anchor', 'end')
-              .attr('fill', 'currentColor')
+              .append("text")
+              .attr("x", marginRight)
+              .attr("dy", "0.32em")
+              .attr("text-anchor", "end")
+              .attr("fill", "currentColor")
           )
       )
-      .attr('transform', (d) => `translate(0,${y(d)})`)
+      .attr("transform", (d) => `translate(0,${y(d)})`)
       .call((g) =>
-        g.select('line').attr('x1', -(noScrollWidth - marginLeft - marginRight))
+        g.select("line").attr("x1", -(noScrollWidth - marginLeft - marginRight))
       )
-      .call((g) => g.select('text').text((d) => d.toLocaleString()));
+      .call((g) => g.select("text").text((d) => d.toLocaleString()));
   }
 
   // Render series data (area and lines)
@@ -248,165 +257,177 @@ function tempChart({ element, data }) {
       .y1((d) => y(d[2]));
 
     svg
-      .selectAll('.area-path-2')
+      .selectAll(".area-path-2")
       .data([
         flattenedData.map((d) => [xAccessor(d), y3Accessor(d), y4Accessor(d)]),
       ])
       .join((enter) =>
         enter
-          .append('path')
-          .attr('class', 'area-path-2')
-          .attr('fill', 'var(--clr-fill-series-2)')
+          .append("path")
+          .attr("class", "area-path-2")
+          .attr("fill", "var(--clr-fill-series-2)")
       )
-      .attr('d', areaGenerator);
+      .attr("d", areaGenerator);
     //avg max
     svg
-      .selectAll('.line-path-6')
+      .selectAll(".line-path-6")
       .data([flattenedData.map((d) => [xAccessor(d), y3Accessor(d)])])
       .join((enter) =>
         enter
-          .append('path')
-          .attr('class', 'line-path-6')
-          .attr('fill', 'none')
-          .attr('stroke', 'var(--clr-series-2)')
-          .attr('stroke-width', '2')
+          .append("path")
+          .attr("class", "line-path-6")
+          .attr("fill", "none")
+          .attr("stroke", "var(--clr-series-2)")
+          .attr("stroke-width", "2")
       )
-      .attr('d', lineGenerator);
+      .attr("d", lineGenerator);
 
     //maxmax this year
     svg
-      .selectAll('.line-path-1')
+      .selectAll(".line-path-1")
       .data([flattenedData.map((d) => [xAccessor(d), y1Accessor(d)])])
       .join((enter) =>
         enter
-          .append('path')
-          .attr('class', 'line-path-1')
-          .attr('fill', 'none')
-          .attr('stroke', 'var(--clr-series-1)')
-          .attr('stroke-width', lineStrokeWidth)
+          .append("path")
+          .attr("class", "line-path-1")
+          .attr("fill", "none")
+          .attr("stroke", "var(--clr-series-1)")
+          .attr("stroke-width", lineStrokeWidth)
       )
-      .attr('d', lineGenerator);
+      .attr("d", lineGenerator);
     //maxmax
     svg
-      .selectAll('.line-path-4')
+      .selectAll(".line-path-4")
       .data([flattenedData.map((d) => [xAccessor(d), y2Accessor(d)])])
-      .join(
-        (enter) =>
-          enter
-            .append('path')
-            .attr('class', 'line-path-4')
-            .attr('fill', 'none')
-            .attr('stroke', '#174482')
-            .attr('stroke-width', lineStrokeWidth)
-            .attr('stroke-dasharray', '2  3')
+      .join((enter) =>
+        enter
+          .append("path")
+          .attr("class", "line-path-4")
+          .attr("fill", "none")
+          .attr("stroke", "#174482")
+          .attr("stroke-width", lineStrokeWidth)
+          .attr("stroke-dasharray", "2  3")
       )
-      .attr('d', lineGenerator);
+      .attr("d", lineGenerator);
     //minmin
     svg
-      .selectAll('.line-path-5')
+      .selectAll(".line-path-5")
       .data([flattenedData.map((d) => [xAccessor(d), y0Accessor(d)])])
-      .join(
-        (enter) =>
-          enter
-            .append('path')
-            .attr('class', 'line-path-4')
-            .attr('fill', 'none')
-            .attr('stroke', '#174482')
-            .attr('stroke-width', lineStrokeWidth)
-            .attr('stroke-dasharray', '2 3')
+      .join((enter) =>
+        enter
+          .append("path")
+          .attr("class", "line-path-4")
+          .attr("fill", "none")
+          .attr("stroke", "#174482")
+          .attr("stroke-width", lineStrokeWidth)
+          .attr("stroke-dasharray", "2 3")
       )
-      .attr('d', lineGenerator);
-
+      .attr("d", lineGenerator);
   }
-
 
   // Render Buttons with Responsive Positioning
   function renderButtons() {
-    const container = d3.select(element).attr('class', 'temp-chart');
-    container.selectAll('.scroll-left, .scroll-right').remove();
-  
+    const container = d3.select(element).attr("class", "temp-chart");
+    container.selectAll(".scroll-left, .scroll-right").remove();
+
     const containerWidth = container.node().offsetWidth;
     const containerHeight = container.node().offsetHeight;
     const buttonSize = 26;
-  
+
     function updateButtonState() {
       const currentScrollLeft = scrollContainer.node().scrollLeft;
-      const maxScrollLeft = scrollContainer.node().scrollWidth - scrollContainer.node().offsetWidth;
-  
+      const maxScrollLeft =
+        scrollContainer.node().scrollWidth - scrollContainer.node().offsetWidth;
+
       if (currentScrollLeft <= 0) {
-        container.select('.scroll-left image')
-          .attr('href', './assets/left_active.svg');
+        container
+          .select(".scroll-left image")
+          .attr("href", "./assets/left_active.svg");
       } else {
-        container.select('.scroll-left image')
-          .attr('href', './assets/left_inactive.svg');
+        container
+          .select(".scroll-left image")
+          .attr("href", "./assets/left_inactive.svg");
       }
-  
+
       if (currentScrollLeft >= maxScrollLeft) {
-        container.select('.scroll-right image')
-          .attr('href', './assets/right_active.svg');
+        container
+          .select(".scroll-right image")
+          .attr("href", "./assets/right_active.svg");
       } else {
-        container.select('.scroll-right image')
-          .attr('href', './assets/right_inactive.svg');
+        container
+          .select(".scroll-right image")
+          .attr("href", "./assets/right_inactive.svg");
       }
     }
-  
+
     // Left scroll button as an SVG
-    const scrollLeft = container.append('svg')
-      .attr('class', 'scroll-left')
-      .attr('width', buttonSize)
-      .attr('height', buttonSize)
-      .style('position', 'absolute')
-      .style('left', '-26.5px')
-      .style('bottom', '12%')
-      .on('click', () => {
+    const scrollLeft = container
+      .append("svg")
+      .attr("class", "scroll-left")
+      .attr("width", buttonSize)
+      .attr("height", buttonSize)
+      .style("position", "absolute")
+      .style("left", "-26.5px")
+      .style("bottom", "12%")
+      .on("click", () => {
         const currentScrollLeft = scrollContainer.node().scrollLeft;
         if (currentScrollLeft > 0) {
           scrollContainer.node().scrollBy({
-            left: -Math.min(scrollContainer.node().offsetWidth / 2, currentScrollLeft),
-            behavior: 'smooth',
+            left: -Math.min(
+              scrollContainer.node().offsetWidth / 2,
+              currentScrollLeft
+            ),
+            behavior: "smooth",
           });
           updateButtonState();
         }
       });
-  
-    scrollLeft.append('image')
-      .attr('href', './assets/left_active.svg')
-      .attr('width', buttonSize)
-      .attr('height', buttonSize);
-  
+
+    scrollLeft
+      .append("image")
+      .attr("href", "./assets/left_active.svg")
+      .attr("width", buttonSize)
+      .attr("height", buttonSize);
+
     // Right scroll button as an SVG
-    const scrollRight = container.append('svg')
-      .attr('class', 'scroll-right')
-      .attr('width', buttonSize)
-      .attr('height', buttonSize)
-      .style('position', 'absolute')
-      .style('right', '-8.5px')
-      .style('bottom', '12%')
-      .on('click', () => {
+    const scrollRight = container
+      .append("svg")
+      .attr("class", "scroll-right")
+      .attr("width", buttonSize)
+      .attr("height", buttonSize)
+      .style("position", "absolute")
+      .style("right", "-8.5px")
+      .style("bottom", "12%")
+      .on("click", () => {
         const currentScrollLeft = scrollContainer.node().scrollLeft;
-        const maxScrollLeft = scrollContainer.node().scrollWidth - scrollContainer.node().offsetWidth;
+        const maxScrollLeft =
+          scrollContainer.node().scrollWidth -
+          scrollContainer.node().offsetWidth;
         if (currentScrollLeft < maxScrollLeft) {
           scrollContainer.node().scrollBy({
-            left: Math.min(scrollContainer.node().offsetWidth / 2, maxScrollLeft - currentScrollLeft),
-            behavior: 'smooth',
+            left: Math.min(
+              scrollContainer.node().offsetWidth / 2,
+              maxScrollLeft - currentScrollLeft
+            ),
+            behavior: "smooth",
           });
           updateButtonState();
         }
       });
-  
-    scrollRight.append('image')
-      .attr('href', './assets/right_arrow_active.svg')
-      .attr('width', buttonSize)
-      .attr('height', buttonSize);
-  
+
+    scrollRight
+      .append("image")
+      .attr("href", "./assets/right_arrow_active.svg")
+      .attr("width", buttonSize)
+      .attr("height", buttonSize);
+
     // Initial state
     updateButtonState();
-  
+
     // Listen for scroll events
-    scrollContainer.on('scroll', updateButtonState);
+    scrollContainer.on("scroll", updateButtonState);
   }
-  
-  
+
   // Render x-axis
   function renderXAxis() {
     const g = svg
@@ -511,7 +532,7 @@ function tempChart({ element, data }) {
           .append("text")
           .attr("class", "month-label-text")
           .attr("fill", "#B6B5B5")
-          .attr("color", "#B6B5B5" )
+          .attr("color", "#B6B5B5")
           .attr("text-anchor", "middle")
           .attr("dy", "0.32em")
           .text((d) => monthNames[d.month - 1])
@@ -529,7 +550,7 @@ function tempChart({ element, data }) {
 
     function findValidData() {
       // Filter pointsData for the current date
-      const currentData = pointsData.filter(d => {
+      const currentData = pointsData.filter((d) => {
         const dataDate = new Date(d.data.date);
         dataDate.setHours(0, 0, 0, 0);
         return dataDate.getTime() === currentDate.getTime();
@@ -537,7 +558,7 @@ function tempChart({ element, data }) {
 
       // Check if any of the data points have a valid `maxMaxThisYear` value
       validData = currentData.find(
-        d =>
+        (d) =>
           d.data.maxMaxThisYear !== undefined &&
           d.data.maxMaxThisYear !== null &&
           d.data.maxMaxThisYear !== ""
@@ -545,8 +566,8 @@ function tempChart({ element, data }) {
 
       // If no valid data, step back one day and search again
       if (!validData) {
-        currentDate.setDate(currentDate.getDate() - 1); 
-        findValidData(); 
+        currentDate.setDate(currentDate.getDate() - 1);
+        findValidData();
       }
     }
 
@@ -555,12 +576,15 @@ function tempChart({ element, data }) {
 
     // If no valid data is found, exit early (optional safeguard)
     if (!validData) {
-      console.warn('No valid data found for rendering.');
+      console.warn("No valid data found for rendering.");
       return;
     }
 
     // Set the x and y domain based on the data, which should remain consistent
-    x.domain([d3.min(pointsData, d => d[0]), d3.max(pointsData, d => d[0])]);
+    x.domain([
+      d3.min(pointsData, (d) => d[0]),
+      d3.max(pointsData, (d) => d[0]),
+    ]);
     // y.domain([d3.min(pointsData, d => d.data.minMin), d3.max(pointsData, d => d.data.maxMax)]);
 
     // Find the lowest temperature point in pointsData
@@ -575,192 +599,198 @@ function tempChart({ element, data }) {
 
     // Find the highest temperature for the current year (`maxMaxThisYear`)
     const highestTempThisYearPoint = pointsData.reduce((highest, current) => {
-      return current.data.maxMaxThisYear > highest.data.maxMaxThisYear ? current : highest;
+      return current.data.maxMaxThisYear > highest.data.maxMaxThisYear
+        ? current
+        : highest;
     }, pointsData[0]);
 
-    const overallHighestTempPoint = highestTempThisYearPoint.data.maxMaxThisYear > highestTempPoint.data.maxMax
-      ? highestTempThisYearPoint
-      : highestTempPoint;
+    const overallHighestTempPoint =
+      highestTempThisYearPoint.data.maxMaxThisYear >
+      highestTempPoint.data.maxMax
+        ? highestTempThisYearPoint
+        : highestTempPoint;
 
     // If no valid data is found, exit early (optional safeguard)
     if (!lowestTempPoint) {
-      console.warn('No valid data found for rendering.');
+      console.warn("No valid data found for rendering.");
       return;
     }
 
     // Re-render the points using the updated scales
     svg
-      .selectAll('.point-circle')
+      .selectAll(".point-circle")
       .data([validData])
       .join(
         (enter) =>
           enter
-            .append('circle')
-            .attr('class', 'point-circle')
-            .attr('r', focusDotSize)
-            .style('z-index', 5)
-            .attr('fill', 'white')
-            .attr('transform', (d) => `translate(${x(d[0])}, ${y(d.data.maxMaxThisYear)})`),
-        (update) => update
-          .attr('transform', (d) => `translate(${x(d[0])}, ${y(d.data.maxMaxThisYear)})`),
+            .append("circle")
+            .attr("class", "point-circle")
+            .attr("r", focusDotSize)
+            .style("z-index", 5)
+            .attr("fill", "white")
+            .attr(
+              "transform",
+              (d) => `translate(${x(d[0])}, ${y(d.data.maxMaxThisYear)})`
+            ),
+        (update) =>
+          update.attr(
+            "transform",
+            (d) => `translate(${x(d[0])}, ${y(d.data.maxMaxThisYear)})`
+          ),
         (exit) => exit.remove()
       );
 
-
     svg
-      .selectAll('.lowest-temp-circle')
+      .selectAll(".lowest-temp-circle")
       .data([lowestTempPoint])
       .join(
         (enter) =>
           enter
-            .append('circle')
-            .attr('class', 'lowest-temp-circle')
-            .attr('r', focusDotSize)
-            .style('z-index', 5)
-            .attr('fill', 'var(--clr-series-2)')
-            .attr('transform', (d) => `translate(${x(d[0])}, ${y(d.data.minMin)})`),
-        (update) => update
-          .attr('transform', (d) => `translate(${x(d[0])}, ${y(d.data.minMin)})`),
+            .append("circle")
+            .attr("class", "lowest-temp-circle")
+            .attr("r", focusDotSize)
+            .style("z-index", 5)
+            .attr("fill", "var(--clr-series-2)")
+            .attr(
+              "transform",
+              (d) => `translate(${x(d[0])}, ${y(d.data.minMin)})`
+            ),
+        (update) =>
+          update.attr(
+            "transform",
+            (d) => `translate(${x(d[0])}, ${y(d.data.minMin)})`
+          ),
         (exit) => exit.remove()
       );
 
     svg
-      .selectAll('.highest-temp-circle')
+      .selectAll(".highest-temp-circle")
       .data([overallHighestTempPoint])
       .join(
         (enter) =>
           enter
-            .append('circle')
-            .attr('class', 'highest-temp-circle')
-            .attr('r', focusDotSize)
-            .style('z-index', 5)
-            .attr('fill', 'var(--clr-series-1)')
-            .attr('transform', (d) => `translate(${x(d[0])}, ${y(d.data.maxMax)})`),
-        (update) => update
-          .attr('transform', (d) => `translate(${x(d[0])}, ${y(d.data.maxMax)})`),
+            .append("circle")
+            .attr("class", "highest-temp-circle")
+            .attr("r", focusDotSize)
+            .style("z-index", 5)
+            .attr("fill", "var(--clr-series-1)")
+            .attr(
+              "transform",
+              (d) => `translate(${x(d[0])}, ${y(d.data.maxMax)})`
+            ),
+        (update) =>
+          update.attr(
+            "transform",
+            (d) => `translate(${x(d[0])}, ${y(d.data.maxMax)})`
+          ),
         (exit) => exit.remove()
       );
 
     // Append text after circles
     svg
-      .selectAll('.temp-today')
-      .data([validData]) 
+      .selectAll(".temp-today")
+      .data([validData])
       .join(
         (enter) =>
           enter
-            .append('text')
-            .attr('class', 'temp-today')
-            .attr('dy', '.4em') 
-            .style('fill', 'var(--clr-series-1)')
-            .style('stroke', 'white')              
-            .style('stroke-width', 1.5)            
-            .style('paint-order', 'stroke') 
-            .text(d => `${valueFormat(
-              d.data.maxMaxThisYear
-            )}°C`), 
+            .append("text")
+            .attr("class", "temp-today")
+            .attr("dy", ".4em")
+            .style("fill", "var(--clr-series-1)")
+            .style("stroke", "white")
+            .style("stroke-width", 1.5)
+            .style("paint-order", "stroke")
+            .text((d) => `${valueFormat(d.data.maxMaxThisYear)}°C`),
         (update) =>
-          update
-            .text(d => `${valueFormat(
-              d.data.maxMaxThisYear
-            )}°C`) 
+          update.text((d) => `${valueFormat(d.data.maxMaxThisYear)}°C`)
       )
-      .attr('transform', (d) => `translate(${x(d[0]) + 10  }, ${y(d.data.maxMaxThisYear + 5)})`),
+      .attr(
+        "transform",
+        (d) => `translate(${x(d[0]) + 10}, ${y(d.data.maxMaxThisYear + 5)})`
+      ),
       (update) => update,
-      (exit) => exit.remove()
+      (exit) => exit.remove();
     svg
-    .selectAll('.text-today')
-    .data([validData]) 
-    .join(
-      (enter) =>
-        enter
-          .append('text')
-          .attr('class', 'text-today')
-          .attr('dy', '.9em')
-          .style('fill',  'var(--clr-series-1)')
-          .style('stroke', 'white')              
-          .style('stroke-width', 1.5)            
-          .style('paint-order', 'stroke')
-          .text("heute"),
-      (update) =>
-        update
-      .text("heute"), 
-    )
-    .attr('transform', (d) => `translate(${x(d[0]) + 10  }, ${y(d.data.maxMaxThisYear)})`),
-    (update) => update,
-    (exit) => exit.remove();
-        svg
-        .selectAll('.temp-minMin')
-        .data([lowestTempPoint]) 
-        .join(
-          (enter) =>
-            enter
-              .append('text')
-              .attr('class', 'temp-minMin')
-              .attr('dy', '.35em')
-              .style('fill',  'var(--clr-series-2)')
-              .text(d =>`${valueFormat(
-                d.data.minMin
-              )}°`), 
-          (update) =>
-            update
-              .text(d =>`${valueFormat(
-                d.data.minMin
-              )}°C`)
-        )
-        .attr('transform', (d) => {
-          const xPos = x(d[0]) 
-          const yPos = y(d.data.minMin);
-      
-          const textWidth = 30;  
-          const svgWidth = scrollContainer.node().clientWidth; 
-          const availableSpace = svgWidth - xPos;
-      
-        
-          const adjustedX = availableSpace < textWidth ? x(d[0]) - textWidth - 6 : xPos;
-      
-          return `translate(${adjustedX }, ${yPos})`;
-      }),
-        (update) => update,
-        (exit) => exit.remove();
-        svg
-        .selectAll('.temp-maxMax')
-        .data([highestTempPoint]) 
-        .join(
-          (enter) =>
-            enter
-              .append('text')
-              .attr('class', 'temp-maxMax')
-              .attr('dy', '.35em') 
-              .style('fill',  'var(--clr-series-1)')
-              .text(d =>`${valueFormat(
-              d.data.maxMax
-            )}°C`),
-          (update) =>
-            update
-              .text(d =>`${valueFormat(
-                d.data.maxMax
-              )}°C`)
-        )
-        .attr('transform', (d) => {
-          const xPos = x(d[0]);  
-          const yPos = y(d.data.maxMax);
-      
-          // Calculate available space on the right
-          const textWidth = 30;  
-          const svgWidth = scrollContainer.node().clientWidth; 
-          const availableSpace = svgWidth - xPos;
-      
-          // Move text to the left if not enough space on the right
-          const adjustedX = availableSpace < textWidth ? x(d[0]) - textWidth - 6 : xPos + 10;
-      
-          return `translate(${adjustedX }, ${yPos})`;
-      }),
-        (update) => update,
-        (exit) => exit.remove();
-  
-     
-  }
+      .selectAll(".text-today")
+      .data([validData])
+      .join(
+        (enter) =>
+          enter
+            .append("text")
+            .attr("class", "text-today")
+            .attr("dy", ".9em")
+            .style("fill", "var(--clr-series-1)")
+            .style("stroke", "white")
+            .style("stroke-width", 1.5)
+            .style("paint-order", "stroke")
+            .text("heute"),
+        (update) => update.text("heute")
+      )
+      .attr(
+        "transform",
+        (d) => `translate(${x(d[0]) + 10}, ${y(d.data.maxMaxThisYear)})`
+      ),
+      (update) => update,
+      (exit) => exit.remove();
+    svg
+      .selectAll(".temp-minMin")
+      .data([lowestTempPoint])
+      .join(
+        (enter) =>
+          enter
+            .append("text")
+            .attr("class", "temp-minMin")
+            .attr("dy", ".35em")
+            .style("fill", "var(--clr-series-2)")
+            .text((d) => `${valueFormat(d.data.minMin)}°`),
+        (update) => update.text((d) => `${valueFormat(d.data.minMin)}°C`)
+      )
+      .attr("transform", (d) => {
+        const xPos = x(d[0]);
+        const yPos = y(d.data.minMin);
 
+        const textWidth = 30;
+        const svgWidth = scrollContainer.node().clientWidth;
+        const availableSpace = svgWidth - xPos;
+
+        const adjustedX =
+          availableSpace < textWidth ? x(d[0]) - textWidth - 6 : xPos;
+
+        return `translate(${adjustedX}, ${yPos})`;
+      }),
+      (update) => update,
+      (exit) => exit.remove();
+    svg
+      .selectAll(".temp-maxMax")
+      .data([highestTempPoint])
+      .join(
+        (enter) =>
+          enter
+            .append("text")
+            .attr("class", "temp-maxMax")
+            .attr("dy", ".35em")
+            .style("fill", "var(--clr-series-1)")
+            .text((d) => `${valueFormat(d.data.maxMax)}°C`),
+        (update) => update.text((d) => `${valueFormat(d.data.maxMax)}°C`)
+      )
+      .attr("transform", (d) => {
+        const xPos = x(d[0]);
+        const yPos = y(d.data.maxMax);
+
+        // Calculate available space on the right
+        const textWidth = 30;
+        const svgWidth = scrollContainer.node().clientWidth;
+        const availableSpace = svgWidth - xPos;
+
+        // Move text to the left if not enough space on the right
+        const adjustedX =
+          availableSpace < textWidth ? x(d[0]) - textWidth - 6 : xPos + 10;
+
+        return `translate(${adjustedX}, ${yPos})`;
+      }),
+      (update) => update,
+      (exit) => exit.remove();
+  }
 
   // Render points on Focus /Click
   function renderFocus() {
@@ -768,17 +798,17 @@ function tempChart({ element, data }) {
       tooltipDatumIndex === undefined ? [] : [pointsData[tooltipDatumIndex]];
     // First circle for the main data point
     yAxisSvg
-      .selectAll('.focus-circle')
+      .selectAll(".focus-circle")
       .data(focusData)
       .join((enter) =>
         enter
-          .append('circle')
-          .attr('class', 'focus-circle')
-          .attr('r', focusDotSize)
+          .append("circle")
+          .attr("class", "focus-circle")
+          .attr("r", focusDotSize)
       )
-      .attr('fill', (d) => `var(--clr-series-${d.seriesId})`)
+      .attr("fill", (d) => `var(--clr-series-${d.seriesId})`)
       .attr(
-        'transform',
+        "transform",
         (d) =>
           `translate(${x(d[0]) - scrollContainer.node().scrollLeft}, ${y(
             d[1]
@@ -787,17 +817,17 @@ function tempChart({ element, data }) {
 
     // Second circle for the avgMax data point
     yAxisSvg
-      .selectAll('.focus-circle-maxmax')
+      .selectAll(".focus-circle-maxmax")
       .data(focusData)
       .join((enter) =>
         enter
-          .append('circle')
-          .attr('class', 'focus-circle-maxmax')
-          .attr('r', focusDotSize)
+          .append("circle")
+          .attr("class", "focus-circle-maxmax")
+          .attr("r", focusDotSize)
       )
-      .attr('fill', (d) => 'var(--clr-series-2')
+      .attr("fill", (d) => "var(--clr-series-2")
       .attr(
-        'transform',
+        "transform",
         (d) =>
           `translate(${x(d[0]) - scrollContainer.node().scrollLeft}, ${y(
             d.data.maxMax
@@ -805,82 +835,84 @@ function tempChart({ element, data }) {
       );
     // Third circle for the avgMin data point
     yAxisSvg
-      .selectAll('.focus-circle-minmin')
+      .selectAll(".focus-circle-minmin")
       .data(focusData)
       .join((enter) =>
         enter
-          .append('circle')
-          .attr('class', 'focus-circle-minmin')
-          .attr('r', focusDotSize)
+          .append("circle")
+          .attr("class", "focus-circle-minmin")
+          .attr("r", focusDotSize)
       )
-      .attr('fill', (d) => 'var(--clr-series-2')
+      .attr("fill", (d) => "var(--clr-series-2")
       .attr(
-        'transform',
+        "transform",
         (d) =>
           `translate(${x(d[0]) - scrollContainer.node().scrollLeft}, ${y(
             d.data.minMin
           )})`
       );
     yAxisSvg
-      .selectAll('.focus-line')
+      .selectAll(".focus-line")
       .data(focusData)
       .join((enter) =>
         enter
-          .append('line')
-          .attr('class', 'focus-line')
-          .style('stroke', '#727272') 
-          .style('stroke-width', 1)
-          .style('z-index', 0)
+          .append("line")
+          .attr("class", "focus-line")
+          .style("stroke", "#727272")
+          .style("stroke-width", 1)
+          .style("z-index", 0)
       )
-      .attr('x1', (d) => x(d[0]) - scrollContainer.node().scrollLeft)
-      .attr('y1', (d) => y(Math.max(d.data.maxMax, d.data.maxMaxThisYear))) 
-      .attr('x2', (d) => x(d[0]) - scrollContainer.node().scrollLeft)
-      .attr('y2', (d) => y(-28)); 
+      .attr("x1", (d) => x(d[0]) - scrollContainer.node().scrollLeft)
+      .attr("y1", (d) => y(Math.max(d.data.maxMax, d.data.maxMaxThisYear)))
+      .attr("x2", (d) => x(d[0]) - scrollContainer.node().scrollLeft)
+      .attr("y2", (d) => y(-28));
   }
-
 
   // Render tooltip
   function renderTooltip() {
     if (tooltipDatumIndex === undefined) {
-      tooltip.classed('is-visible', false);
+      tooltip.classed("is-visible", false);
     } else {
-      const d = pointsData[tooltipDatumIndex]
-      const src = `./assets/temp_${d.seriesId === 1 ? 'down' : 'up'}.svg`;
+      const d = pointsData[tooltipDatumIndex];
+      const src = `./assets/temp_${d.seriesId === 1 ? "down" : "up"}.svg`;
       tooltip
         .html(
           `<div class="tooltip-background">
             <div class=tooltip-row>
-            <img src="./assets/temp_up_red.svg"/><span  class="tooltip-year">
-           ${currentYear}</span>
-          <span class="tooltip-value">${valueFormat(
-            d.data.maxMaxThisYear
-          )}°C</span>
+              <img src="./assets/temp_up_red.svg"/>
+              <span  class="tooltip-year">${currentYear}</span>
+              <span class="tooltip-value">${valueFormat(
+                d.data.maxMaxThisYear
+              )}°C</span>
             </div>
             <div class=tooltip-row>
-            <img src="./assets/temp_up_blue.svg"/><span class="tooltip-year">  ${yearFormat(d.data.maxMaxDate)
-          }</span><span class="tooltip-value">${valueFormat(
-            d.data.maxMax
-          )}°C</span>
+              <img src="./assets/temp_up_blue.svg"/>
+              <span class="tooltip-year">${yearFormat(
+                d.data.maxMaxDate
+              )}</span>
+              <span class="tooltip-value">${valueFormat(
+                d.data.maxMax
+              )}°C</span>
             </div>
             <div class=tooltip-row>
-            <img src="./assets/temp_down.svg"/><span class="tooltip-year">${yearFormat(d.data.minMinDate)
-          }</span><span class="tooltip-value">${valueFormat(
+            <img src="./assets/temp_down.svg"/><span class="tooltip-year">${yearFormat(
+              d.data.minMinDate
+            )}</span><span class="tooltip-value">${valueFormat(
             d.data.minMin
           )}°C</span> 
             </div>
             </div>`
         )
-        .classed('is-visible', true);
+        .classed("is-visible", true);
       const transX = x(d[0]) - scrollContainer.node().scrollLeft;
-      const transXOffset = transX < noScrollWidth / 2 ? '20%' : '-120%';
+      const transXOffset = transX < noScrollWidth / 2 ? "20%" : "-120%";
       const transY = y(d[1]) - focusDotSize;
       tooltip.style(
-        'transform',
+        "transform",
         `translate(calc(${transX}px + ${transXOffset}),calc(${transY}px - 20%))`
       );
     }
   }
-
 
   function mousemoved(event) {
     const [px, py] = d3.pointer(event, svg.node());
@@ -893,7 +925,7 @@ function tempChart({ element, data }) {
     if (tooltipDatumIndex === i) return;
     tooltipDatumIndex = i;
     renderFocus();
-    renderPoints()
+    renderPoints();
     renderTooltip();
   }
 
@@ -904,26 +936,27 @@ function tempChart({ element, data }) {
   function mouseleft() {
     tooltipDatumIndex = undefined;
     renderFocus();
-    renderPoints()
+    renderPoints();
     renderTooltip();
   }
 
   function handleScroll() {
     tooltipDatumIndex = undefined;
     renderFocus();
-    renderPoints()
+    renderPoints();
     renderTooltip();
   }
 
-  scrollContainer.on('scroll', handleScroll);
-  scrollContainer.node().addEventListener('scroll', handleScroll);
+  scrollContainer.on("scroll", handleScroll);
+  scrollContainer.node().addEventListener("scroll", handleScroll);
 
   function processData(data) {
     const currentDate = new Date();
     const currentMonth = currentDate.getUTCMonth() + 1;
     const currentYear = currentDate.getFullYear();
     const startOfYear = new Date(currentDate.getFullYear(), 0, 1);
-    const numberOfDays = Math.floor((currentDate - startOfYear) / (1000 * 60 * 60 * 24)) + 1;
+    const numberOfDays =
+      Math.floor((currentDate - startOfYear) / (1000 * 60 * 60 * 24)) + 1;
     const currentDay = currentDate.getUTCDate() - 6;
 
     // Filter data for the last three months
@@ -944,51 +977,72 @@ function tempChart({ element, data }) {
     const flattenedData = groupedData.flatMap(({ days }) => days);
 
     // Find the day with the highest temperature
-    const highestTemperatureDay = flattenedData.reduce((highest, current) => {
-      return current.temperature > highest.temperature ? current : highest;
-    }, { temperature: -Infinity });
+    const highestTemperatureDay = flattenedData.reduce(
+      (highest, current) => {
+        return current.temperature > highest.temperature ? current : highest;
+      },
+      { temperature: -Infinity }
+    );
 
     // Find the day with the highest temperature
-    const lowestTemperatureDay = flattenedData.reduce((lowest, current) => {
-      return current.temperature > lowest.temperature ? current : lowest;
-    }, { temperature: Infinity });
+    const lowestTemperatureDay = flattenedData.reduce(
+      (lowest, current) => {
+        return current.temperature > lowest.temperature ? current : lowest;
+      },
+      { temperature: Infinity }
+    );
 
-    const todayData = flattenedData.filter(d => d.day === currentDay);
+    const todayData = flattenedData.filter((d) => d.day === currentDay);
 
     // Create arrays of pointsData containing x, y coordinates and series information
     const displayData = [
-      ...todayData.map((d) => {
-        const p = [xAccessor(d), y1Accessor(d)];
-        p.seriesId = 1;
-        p.data = d;
-        return p;
-      }).filter((p) => p[1] !== undefined),
-      ...todayData.map((d) => {
-        const p = [xAccessor(d), y2Accessor(d)];
-        p.seriesId = 2;
-        p.data = d;
-        return p;
-      }).filter((p) => p[1] !== undefined),
+      ...todayData
+        .map((d) => {
+          const p = [xAccessor(d), y1Accessor(d)];
+          p.seriesId = 1;
+          p.data = d;
+          return p;
+        })
+        .filter((p) => p[1] !== undefined),
+      ...todayData
+        .map((d) => {
+          const p = [xAccessor(d), y2Accessor(d)];
+          p.seriesId = 2;
+          p.data = d;
+          return p;
+        })
+        .filter((p) => p[1] !== undefined),
     ];
 
     const pointsData = [
-      ...flattenedData.map((d) => {
-        const p = [xAccessor(d), y1Accessor(d)];
-        p.seriesId = 1;
-        p.data = d;
-        return p;
-      }).filter((p) => p[1] !== undefined),
-      ...flattenedData.map((d) => {
-        const p = [xAccessor(d), y2Accessor(d)];
-        p.seriesId = 2;
-        p.data = d;
-        return p;
-      }).filter((p) => p[1] !== undefined),
+      ...flattenedData
+        .map((d) => {
+          const p = [xAccessor(d), y1Accessor(d)];
+          p.seriesId = 1;
+          p.data = d;
+          return p;
+        })
+        .filter((p) => p[1] !== undefined),
+      ...flattenedData
+        .map((d) => {
+          const p = [xAccessor(d), y2Accessor(d)];
+          p.seriesId = 2;
+          p.data = d;
+          return p;
+        })
+        .filter((p) => p[1] !== undefined),
     ];
 
-    return { groupedData, flattenedData, pointsData, displayData, highestTemperatureDay, lowestTemperatureDay, currentYear };
+    return {
+      groupedData,
+      flattenedData,
+      pointsData,
+      displayData,
+      highestTemperatureDay,
+      lowestTemperatureDay,
+      currentYear,
+    };
   }
-
 
   function update(_) {
     data = _;
