@@ -141,6 +141,11 @@ window.onclick = function (event) {
   }
 };
 
+document.getElementById("close-icon").addEventListener("click", () => {
+  document.getElementById("overlay").style.display = "none";
+  document.getElementById("info-modal").style.display = "none";
+});
+
 // Close Info Overlay Function
 const closeInfoOverlay = () => {
   info.style.display = "none";

@@ -416,6 +416,17 @@ padding-right: 26px;
   border-radius: 20px;
 }
 
+#close-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  fill: #444;
+  transition: fill 0.3s;
+}
+
 .info-items {
   display: flex;
   margin: 20px 75px;
