@@ -426,7 +426,6 @@ padding-right: 26px;
 .info-title {
   font-family: 'Gotham Condensed Bold';
   font-size: 40px;
-  font-weight: 700;
   line-height: 56.26px;
   display: flex;
 }
@@ -436,7 +435,6 @@ padding-right: 26px;
   line-height: 27.3px;
   margin-top: 28px;
   font-family: 'Gotham Narrow Book';
-  font-weight: 900;
 }
 
 .info-btn {
@@ -728,6 +726,15 @@ table {
  
 }
 
+col:nth-child(1) {
+  width: 444px;
+}
+
+col:nth-child(2),
+col:nth-child(3) {
+  width: 175px;
+}
+
 thead tr {
   height: 70px; /* Set height for the header row */
 }
@@ -763,8 +770,7 @@ tr:nth-child(odd) {
   background-color: #f9f9f9;
 }
 
-.column-header-text, .column-item-text {
-  /* font-weight: 700; */
+.column-header-text, .column-item-text, .column-data-text{
   font-family: 'Gotham Narrow Medium';
 }
 
@@ -891,6 +897,46 @@ tr:nth-child(odd) {
 
   #city-search-form {
 
+  }
+
+  col:nth-child(1) {
+    width: 250px;
+  }
+
+  col:nth-child(2) {
+    width: 150px;
+  }
+
+  col:nth-child(3) {
+    width: 136px;
+  }
+
+  th {
+    height: 66px;
+  }
+
+  td {
+    height: 45px;
+    font-size: calc((16 / 656) * 100vw);
+  }
+
+  .info-items{
+    margin: 20px 24px;
+  }
+
+  .info-title {
+    font-size: calc((32 / 656) * 100vw);
+    height: calc((42 / 656) * 100vw);
+  }
+
+  .info-details {
+    font-size: calc((21 / 656) * 100vw);
+    line-height: 1.2;
+    margin-top: calc((24 / 656) * 100vw);
+  }
+
+  .column-header-text {
+    font-size: calc((16 / 656) * 100vw);
   }
 
   .search-page-container {
