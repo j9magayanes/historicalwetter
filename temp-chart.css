@@ -9,7 +9,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--gap);
-  font-family: "Gotham Condensed Book";
+  /* font-family: 'Gotham Narrow Medium'; */
   position: relative;
 }
 
@@ -128,12 +128,18 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);
 }
 
 .focus-circle {
   stroke: white; 
   stroke-width: 1.83px;
 }
+
+.month-label-text {
+    font-family: 'Gotham Narrow Medium';
+    font-size: 18px;
+ }
 
 .point-circle {
   stroke: var(--clr-red); 
@@ -150,17 +156,18 @@
   display: flex;
   flex-direction: row;
   color: black;
-  font-family: "Gotham Narrow Book";
+  font-family: "Gotham Narrow";
   font-size: 18px;
   justify-content: space-between; 
   align-items: center; 
-  gap: 2px;
+
 }
 
 .tooltip-year {
   flex: 1; 
   text-align: left; 
   min-width: 0;
+
 }
 
 .tooltip-row img {
@@ -173,8 +180,10 @@
   flex: 1; 
   text-align: right;
   display: inline-block;
+  font-family: 'Gotham Narrow Bold';
   width: 100%; 
-  font-weight: bold;
+  padding-left: 8px;
+
 }
 
 .arrow-svg-left {
@@ -189,6 +198,14 @@
 .temp-today, .text-today, .temp-minMin, .temp-maxMax {
   font-size: 26px;
   padding: 20px;
+}
+
+.temp-maxMax, .temp-minMin {
+  font-family: 'Gotham Narrow' !important;
+}
+
+.temp-today, .text-today {
+  font-family: 'Gotham Narrow Medium' !important;
 }
 
 @media (max-width: 656px) { 
