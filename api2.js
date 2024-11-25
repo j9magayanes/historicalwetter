@@ -29,6 +29,7 @@ const submitBtn = document.querySelector(".search-btn");
 const inputField = document.getElementById("city-search-input");
 const suggestionsDiv = document.getElementById("suggestions");
 const searchText = document.querySelector(".search-text");
+const closeIcon = document.getElementById("close-icon")
 let currentFocus = -1;
 
 function reorderBottomLegend() {
@@ -63,18 +64,6 @@ window.addEventListener('resize', showInfoIcon);
 
 // Run the function initially to set the correct state
 showInfoIcon();
-
-
-// function reorderInfoIcon() {
-//   const infoIcon = document.querySelector('.info-icon');
-//   const bottomLegend = document.querySelector('.bottom-legend');
-//   const infoContainer = document.querySelector('.info-container');
-//   if (window.innerWidth <= 656) {
-//       infoContainer.parentNode.insertBefore(infoIcon, infoContainer.nextSibling);
-//   } else {
-//       bottomLegend.appendChild(infoIcon);
-//   }
-// }
 
 // Call the function on initial load and on window resize
 window.addEventListener('load', reorderBottomLegend);
@@ -141,7 +130,8 @@ window.onclick = function (event) {
   }
 };
 
-document.getElementById("close-icon").addEventListener("click", () => {
+// Close Modal on Overlay Close Icon
+closeIcon.addEventListener("click", () => {
   document.getElementById("overlay").style.display = "none";
   document.getElementById("info-modal").style.display = "none";
 });
@@ -253,6 +243,33 @@ const handleInput = (event) => {
   }
 };
 
+// Handle Key Down
+const handleKeyDown = (event) => {
+  const suggestionContainers = document.querySelectorAll(
+    ".suggestion-container"
+  );
+  if (suggestionContainers.length === 0) return;
+
+  if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+    event.preventDefault();
+
+    if (event.key === "ArrowDown") {
+      currentFocus++;
+      if (currentFocus >= suggestionContainers.length) currentFocus = 0;
+    } else if (event.key === "ArrowUp") {
+      currentFocus--;
+      if (currentFocus < 0) currentFocus = suggestionContainers.length - 1;
+    }
+
+    setActive(suggestionContainers);
+  } else if (event.key === "Enter") {
+    if (currentFocus > -1) {
+      suggestionContainers[currentFocus].click();
+      document.getElementById("suggestions").innerHTML = "";
+    }
+  }
+};
+
 // Display Suggestions
 const displaySuggestions = (suggestions) => {
   suggestionsDiv.innerHTML = "";
@@ -262,6 +279,7 @@ const displaySuggestions = (suggestions) => {
     submitBtn.disabled = false;
     warningText.style.display = "none";
     const ul = document.createElement("ul");
+
     suggestions.forEach((suggestion) => {
       const li = document.createElement("li");
       const container = document.createElement("div");
@@ -285,6 +303,7 @@ const displaySuggestions = (suggestions) => {
       });
     });
     suggestionsDiv.appendChild(ul);
+    document.addEventListener("keydown", handleKeyDown);
   } else {
     if (document.getElementById("city-search-input").value.length === 0) {
       warningText.style.display = "none";
