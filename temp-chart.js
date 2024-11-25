@@ -893,18 +893,18 @@ function renderYAxis() {
         <div class="tooltip-background">
           <div class="tooltip-row">
             <img src="./assets/temp_up_red.svg"/>
-            <span class="tooltip-year">${currentYear}</span>
-            <span class="tooltip-value">${valueFormat(d.data.maxMaxThisYear)}°C</span>
+            <span class="tooltip-year">${currentYear}  </span>
+            <span class="tooltip-value"> ${valueFormat(d.data.maxMaxThisYear)}°C</span>
           </div>
           <div class="tooltip-row">
             <img src="./assets/temp_up_blue.svg"/>
-            <span class="tooltip-year">${yearFormat(d.data.maxMaxDate)}</span>
-            <span class="tooltip-value">${valueFormat(d.data.maxMax)}°C</span>
+            <span class="tooltip-year">${yearFormat(d.data.maxMaxDate)}  </span>
+            <span class="tooltip-value"> ${valueFormat(d.data.maxMax)}°C</span>
           </div>
           <div class="tooltip-row">
             <img src="./assets/temp_down.svg"/>
-            <span class="tooltip-year">${yearFormat(d.data.minMinDate)}</span>
-            <span class="tooltip-value">${valueFormat(d.data.minMin)}°C</span>
+            <span class="tooltip-year">${yearFormat(d.data.minMinDate)}  </span>
+            <span class="tooltip-value"> ${valueFormat(d.data.minMin)}°C</span>
           </div>
         </div>`;
       
