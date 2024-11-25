@@ -220,7 +220,7 @@ body {
 }
 
 .swatch-container {
-  --font-size:  calc(20px - ((992px - 100vw) * 0.03));
+  --font-size:  calc(18px - ((992px - 100vw) * 0.03));
   --gap-x: 1em;
   --swatch-width: 1.5em;
   --swatch-height: 2px;
@@ -243,7 +243,7 @@ body {
 }
 
 .swatch-label {
-  margin-right: 24px;
+  margin-right: 32px;
 }
 
 .swatch-red,
@@ -862,7 +862,7 @@ tr:nth-child(odd) {
     /* align-items:flex-start;
     justify-content:space-between; */
     padding-left: 15px;
-    margin-top: calc((20 / 656) * 100vw);
+    margin-top: calc((18 / 656) * 100vw);
     gap: 1;
     display: flex;
     align-items: flex-end;

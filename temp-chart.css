@@ -65,7 +65,7 @@
 }
 
 .temp-chart .swatches-container {
-  --font-size: 1.25em;
+  --font-size:  calc((18 / 992) * 100vw);
   --gap-x: 1em;
   --swatch-width: 1.5em;
   --swatch-height: 2px;
