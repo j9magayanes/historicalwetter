@@ -954,9 +954,8 @@ tr:nth-child(odd) {
   }
 
   .info-details {
-    font-size: calc((21 / 656) * 100vw);
     line-height: 1.2;
-    margin-top: calc((24 / 656) * 96vw);
+    margin-top: 24px;
   }
 
   .column-header-text {
