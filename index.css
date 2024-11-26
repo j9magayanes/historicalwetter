@@ -774,7 +774,7 @@ th:last-child {
 }
 
 th, td {
-  padding: 8px;
+  padding: 16px;
   text-align: left;
 }
 
@@ -785,12 +785,13 @@ th {
 }
 
 tr:nth-child(even) {
-  background-color: #e0e0e0;
-
+  background-color:#E9ECEF;
 }
 
 tr:nth-child(odd) {
-  background-color: #f9f9f9;
+  /* background-color: #f9f9f9; */
+  background-color: #FFFFFF;
+  ;
 }
 
 .column-header-text, .column-item-text, .column-data-text{
