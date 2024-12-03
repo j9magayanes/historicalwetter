@@ -610,11 +610,21 @@ function renderYAxis() {
         : highest;
     }, pointsData[0]);
 
+    console.log(highestTempThisYearPoint.data.maxMaxThisYear);
+    console.log(highestTempPoint.data.maxMax)
+
+    console.log(highestTempThisYearPoint)
+    console.log(highestTempPoint)
+
     const overallHighestTempPoint =
       highestTempThisYearPoint.data.maxMaxThisYear >
       highestTempPoint.data.maxMax
         ? highestTempThisYearPoint
         : highestTempPoint;
+    
+        const isThisYearHigher =
+  highestTempThisYearPoint.data.maxMaxThisYear >
+  highestTempPoint.data.maxMax;
 
     // If no valid data is found, exit early (optional safeguard)
     if (!lowestTempPoint) {
@@ -682,15 +692,21 @@ function renderYAxis() {
             .attr("fill", "var(--clr-series-1)")
             .attr(
               "transform",
-              (d) => `translate(${x(d[0])}, ${y(d.data.maxMax)})`
+              (d) =>
+                `translate(${x(d[0])}, ${
+                  isThisYearHigher ? y(d.data.maxMaxThisYear) : y(d.data.maxMax)
+                })`
             ),
-        (update) =>
-          update.attr(
-            "transform",
-            (d) => `translate(${x(d[0])}, ${y(d.data.maxMax)})`
-          ),
-        (exit) => exit.remove()
-      );
+            (update) =>
+              update.attr(
+                "transform",
+                (d) =>
+                  `translate(${x(d[0])}, ${
+                    isThisYearHigher ? y(d.data.maxMaxThisYear) : y(d.data.maxMax)
+                  })`
+              ),
+            (exit) => exit.remove()
+          );
 
     // Append text after circles
     svg
@@ -766,15 +782,16 @@ function renderYAxis() {
         const availableSpace = svgWidth - xPos;
 
         const adjustedX =
-          availableSpace < textWidth ? x(d[0]) - textWidth - 6 : xPos;
+          availableSpace < textWidth ? x(d[0]) - textWidth - 40 : xPos + 10;
 
         return `translate(${adjustedX}, ${yPos})`;
       }),
       (update) => update,
       (exit) => exit.remove();
+
     svg
       .selectAll(".temp-maxMax")
-      .data([highestTempPoint])
+      .data([overallHighestTempPoint])
       .join(
         (enter) =>
           enter
@@ -782,12 +799,12 @@ function renderYAxis() {
             .attr("class", "temp-maxMax")
             .attr("dy", ".35em")
             .style("fill", "var(--clr-series-1)")
-            .html((d) => `${valueFormat(d.data.maxMax)}<tspan dy="-0.4em" font-size="0.75em">°C</tspan>`),
-        (update) => update.html((d) => `${valueFormat(d.data.maxMax)}<tspan dy="-0.4em" font-size="0.75em">°C</tspan>`)
+            .html((d) => `${valueFormat( isThisYearHigher ? d.data.maxMaxThisYear : d.data.maxMax)}<tspan dy="-0.4em" font-size="0.75em">°C</tspan>`),
+        (update) => update.html((d) => `${valueFormat( isThisYearHigher ? d.data.maxMaxThisYear : d.data.maxMax)}<tspan dy="-0.4em" font-size="0.75em">°C</tspan>`)
       )
       .attr("transform", (d) => {
         const xPos = x(d[0]);
-        const yPos = y(d.data.maxMax);
+        const yPos = y(isThisYearHigher ? d.data.maxMaxThisYear : d.data.maxMax);
 
         // Calculate available space on the right
         const textWidth = 30;
@@ -796,7 +813,7 @@ function renderYAxis() {
 
         // Move text to the left if not enough space on the right
         const adjustedX =
-          availableSpace < textWidth ? x(d[0]) - textWidth - 6 : xPos + 10;
+          availableSpace < textWidth ? x(d[0]) - textWidth - 40 : xPos + 10;
 
         return `translate(${adjustedX}, ${yPos})`;
       }),
