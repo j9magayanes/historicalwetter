@@ -3,6 +3,11 @@
   src: url('./fonts/GothamCond-Book.otf') format("opentype");
 }
 @font-face {
+  font-family: 'Gotham Condensed Black';
+  src: url('./fonts/GothamCond-Black.otf') format("opentype");
+  font-weight: 700;
+}
+@font-face {
   font-family: 'Gotham Condensed Bold';
   src: url('./fonts/GothamCond-Bold.otf') format("opentype");
   font-weight: 700;
@@ -31,7 +36,7 @@
 
 :root {
   --clr-white: #ffffff;
-  --clr-black: #000000;
+  --clr-black: #212529;
   --clr-gray: #999999;
   --clr-gray-light: #F3F2F2;
   --clr-red: #dd0000;
@@ -174,7 +179,7 @@ body {
 .question {
   --font-size: calc(var(--fs-base) * 2.25);
   --max-width: 24ch;
-  font-family: 'Gotham Condensed Bold';
+  font-family: 'Gotham Condensed Black';
   font-size: var(--font-size);
   max-width: var(--max-width);
   line-height: 1;
@@ -221,11 +226,11 @@ body {
 }
 
 .swatch-container {
-  --font-size:  calc(18px - ((992px - 100vw) * 0.03));
+  /* --font-size:  calc(18px - ((992px - 100vw) * 0.03)); */
   --gap-x: 1em;
   --swatch-width: 1.5em;
   --swatch-height: 2px;
-  font-size: var(--font-size);
+  font-size: 18px;
   line-height: 1;
   align-items: center;
   justify-content: center;
@@ -245,6 +250,7 @@ body {
 
 .swatch-label {
   margin-right: 32px;
+  /* font-family: 'Gotham Narrow Light'; */
 }
 
 .swatch-red,
