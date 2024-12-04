@@ -384,10 +384,9 @@ body {
 }
 
 .close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
+  color: #495057;
+  background-color: transparent;
+  margin-right: 15px;
 }
 
 .close:hover,
@@ -741,11 +740,11 @@ ul li {
 .input-warning {
   position: absolute;
   top: 103%;
-  left: 6%;
+  left: 2%;
   color: #dd0000;
   font-family: 'Gotham Narrow Light';
   font-weight: 400;
-  font-size: 1.125rem;
+  font-size: 12px;
   display: none;
 }
 

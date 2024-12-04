@@ -346,7 +346,14 @@ const removeDuplicates = (data) => {
 
 // Clear Input Field Value
 const clearInput = (event) => {
+  const inputField = event.target.previousElementSibling;
+  inputLegend.style.color = "";
+  inputField.value = "";
+};
 
+const removeValue = (event) => {
+  const inputField = event.target.previousElementSibling;
+  inputLegend.style.color = "";
   inputField.value = "";
 };
 
