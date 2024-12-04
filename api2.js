@@ -27,9 +27,11 @@ const closeBtn = document.querySelector(".close");
 const cancelBtn = document.querySelector(".cancel-btn");
 const submitBtn = document.querySelector(".search-btn");
 const inputField = document.getElementById("city-search-input");
+const inputFieldContainer = document.querySelector(".input-field-container");
 const suggestionsDiv = document.getElementById("suggestions");
 const searchText = document.querySelector(".search-text");
-const closeIcon = document.getElementById("close-icon")
+const closeIcon = document.getElementById("close-icon");
+const inputLegend = document.querySelector(".input-legend");
 let currentFocus = -1;
 
 function reorderBottomLegend() {
@@ -274,6 +276,7 @@ const handleKeyDown = (event) => {
 const displaySuggestions = (suggestions) => {
   suggestionsDiv.innerHTML = "";
   const warningText = document.querySelector(".input-warning");
+
   if (suggestions.length > 0) {
     console.log("with suggestions")
     submitBtn.disabled = false;
@@ -291,11 +294,14 @@ const displaySuggestions = (suggestions) => {
       img.classList.add("suggestion-icon");
       p.classList.add("suggestion-element");
       p.textContent = suggestion.Name;
+      inputLegend.style.color = "";
+      inputFieldContainer.style.borderColor = "";
       container.appendChild(img);
       container.appendChild(p);
       li.appendChild(container);
       ul.appendChild(li);
-
+      inputLegend.style.color = "";
+      inputFieldContainer.style.borderColor = "";
       container.setAttribute("tabindex", "-1");
       container.addEventListener("click", () => {
         inputField.value = suggestion.Name;
@@ -308,11 +314,14 @@ const displaySuggestions = (suggestions) => {
     if (document.getElementById("city-search-input").value.length === 0) {
       warningText.style.display = "none";
       submitBtn.disabled = true;
-      console.log("without suggestions")
+      inputLegend.style.color = "";
+      inputFieldContainer.style.borderColor = "";
     } else {
+      inputLegend.style.color = "#DD0000";
+      inputFieldContainer.style.borderColor = "#DD0000";
       warningText.style.display = "block";
       submitBtn.disabled = true;
-      console.log("without suggestions1")
+
     }
   }
 };
