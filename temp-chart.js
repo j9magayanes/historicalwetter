@@ -894,7 +894,7 @@ function renderYAxis() {
       .attr("x1", (d) => x(d[0]) - scrollContainer.node().scrollLeft)
       .attr("y1", (d) => y(Math.max(d.data.maxMax, d.data.maxMaxThisYear)))
       .attr("x2", (d) => x(d[0]) - scrollContainer.node().scrollLeft)
-      .attr("y2", (d) => y(-28));
+      .attr("y2", (d) => y(-33));
   }
 
   // Render tooltip
