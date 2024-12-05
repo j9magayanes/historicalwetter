@@ -2,33 +2,39 @@
   font-family: 'Gotham Condensed Book';
   src: url('./fonts/GothamCond-Book.otf') format("opentype");
 }
-@font-face {
-  font-family: 'Gotham Condensed Black';
-  src: url('./fonts/GothamCond-Black.otf') format("opentype");
-  font-weight: 700;
-}
+
 @font-face {
   font-family: 'Gotham Condensed Bold';
   src: url('./fonts/GothamCond-Bold.otf') format("opentype");
   font-weight: 700;
 }
+
 @font-face {
-  font-family: 'Gotham Narrow Black';
-  src: url('./fonts/GothamXNarrow-Black-Bold.otf') format("opentype");
-}
-@font-face {
-  font-family: 'Gotham Narrow Medium';
-  src: url('./fonts/GothamXNarrow-Medium.otf') format("opentype");
+  font-family: 'Gotham Condensed Black';
+  src: url('./fonts/GothamCond-Black.otf') format("opentype");
+  font-weight: 700;
 }
 
 @font-face {
   font-family: 'Gotham Narrow Light';
   src: url('./fonts/GothamXNarrow-Light.otf') format("opentype");
 }
+
 @font-face {
-  font-family: 'Gotham Narrow';
+  font-family: 'Gotham Narrow Medium';
+  src: url('./fonts/GothamXNarrow-Medium.otf') format("opentype");
+}
+
+@font-face {
+  font-family: 'Gotham Narrow Book';
   src: url('./fonts/GothamXNarrow-Book.otf') format("opentype");
 }
+
+@font-face {
+  font-family: 'Gotham Narrow Black';
+  src: url('./fonts/GothamXNarrow-Black-Bold.otf') format("opentype");
+}
+
 @font-face {
   font-family: 'Gotham Narrow Bold';
   src: url('./fonts/GothamXNarrow-Bold.otf') format("opentype");
@@ -112,10 +118,19 @@ body {
   color: var(--clr-white);
   border: none;
   width: auto;
-
   min-width: 4ch; 
   max-width: 30ch; 
   vertical-align: middle;
+}
+
+.vertical-line {
+  background-color: white;
+  height: 30px;
+  width: 2px;
+  padding-top: 30px;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
 }
 
 .search-button {
@@ -126,7 +141,17 @@ body {
   background-color: var(--clr-red);
   color: var(--clr-black);
   border: none;
+}
 
+.question {
+  --font-size: calc(var(--fs-base) * 2.25);
+  --max-width: 24ch;
+  font-family: 'Gotham Condensed Black';
+  font-size: var(--font-size);
+  max-width: var(--max-width);
+  line-height: 1;
+  text-align: center;
+  margin-inline: auto;
 }
 
 .input-warning {
@@ -138,18 +163,6 @@ body {
   font-weight: 400;
   font-size: 1.125rem;
   display: none;
-}
-
-
-
-.vertical-line {
-  background-color: white;
-  height: 30px;
-  width: 2px;
-  padding-top: 30px;
-  vertical-align: middle;
-  display: flex;
-  align-items: center;
 }
 
 .search-button > svg {
@@ -174,17 +187,6 @@ body {
   align-items: center;
   text-align: center;
   top: calc(14px + ((992px - 100vw) * 0.05));
-}
-
-.question {
-  --font-size: calc(var(--fs-base) * 2.25);
-  --max-width: 24ch;
-  font-family: 'Gotham Condensed Black';
-  font-size: var(--font-size);
-  max-width: var(--max-width);
-  line-height: 1;
-  text-align: center;
-  margin-inline: auto;
 }
 
 .subline {
@@ -447,7 +449,7 @@ padding-right: 26px;
   font-size: 21px;
   line-height: 27.3px;
   margin-top: 28px;
-  font-family: 'Gotham Narrow';
+  font-family: 'Gotham Narrow Book';
 }
 
 .info-btn {
